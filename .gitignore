@@ -1,0 +1,10 @@
+*.php
+e/
+ecachefiles/
+s/
+t/
+.htaccess
+.user.ini
+*.zip
+*.tar
+*.rar
