@@ -1,10 +1,16 @@
 *.php
 e/
 ecachefiles/
+search/
 s/
 t/
 .htaccess
 .user.ini
+.gitignore
+web.config
 *.zip
 *.tar
 *.rar
+*.gz
+web.config
+CNAME
