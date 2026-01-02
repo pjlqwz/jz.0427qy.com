@@ -4,6 +4,7 @@ ecachefiles/
 search/
 s/
 t/
+z/
 .htaccess
 .user.ini
 .gitignore
