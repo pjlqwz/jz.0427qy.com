@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>购物车 · 拾光小馆</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  .c-shop {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .c-shop .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink4); }
+  .c-shop .mode {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 12px; color: var(--brandInk);
+  }
+  .c-shop .mode svg { width: 13px; height: 13px; }
+
+  .c-list { margin: 0 14px; background: #fff; border-radius: var(--r); box-shadow: var(--sh); overflow: hidden; }
+  .c-row { display: flex; gap: 10px; padding: 13px 12px 13px 14px; align-items: stretch; }
+  .c-row + .c-row { border-top: 1px solid var(--line2); }
+  .c-row .thumb { width: 76px; height: 76px; }
+  .c-mid { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .c-name { font-size: 14.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-spec {
+    margin-top: 3px; font-size: 11.5px; color: var(--ink3);
+    background: #f6f2ed; align-self: flex-start;
+    padding: 2px 7px; border-radius: 5px;
+  }
+  .c-bottom { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; }
+  .c-del {
+    color: var(--red); font-size: 12px;
+    border: 1px solid #f3d6d2; background: #fdf3f2;
+    height: 26px; padding: 0 12px; border-radius: 6px;
+  }
+
+  /* 复选框 */
+  .cb {
+    flex: 0 0 auto;
+    width: 21px; height: 21px;
+    align-self: center;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink4);
+    display: grid; place-items: center;
+    transition: all .16s ease;
+  }
+  .cb svg { width: 13px; height: 13px; opacity: 0; transform: scale(.6); transition: all .16s ease; color: #fff; }
+  .cb.is-on { background: var(--brand); border-color: var(--brand); }
+  .cb.is-on svg { opacity: 1; transform: none; }
+
+  /* 凑单条 */
+  .c-fill {
+    margin: 10px 14px 0;
+    padding: 11px 13px;
+    border-radius: 12px;
+    background: linear-gradient(100deg, #fdf2e7, #fbe6d4);
+    border: 1px solid #f7dcc6;
+  }
+  .c-fill .t { font-size: 12px; color: #8c5326; display: flex; justify-content: space-between; }
+  .c-fill .t b { color: var(--brandInk); font-weight: 700; }
+  .c-fill .pbar { height: 4px; border-radius: 2px; background: #f2ddca; margin-top: 8px; overflow: hidden; }
+  .c-fill .pbar i { display: block; height: 100%; border-radius: 2px; background: linear-gradient(90deg, #f2a05c, #e0632c); transition: width .4s ease; }
+  .c-fill.is-done .t { color: #227d54; }
+  .c-fill.is-done .pbar i { background: linear-gradient(90deg, #57c08c, #2e9e6b); }
+
+  /* 推荐 */
+  .c-rec { display: flex; gap: 10px; padding: 0 14px 4px; overflow-x: auto; scrollbar-width: none; }
+  .c-rec::-webkit-scrollbar { display: none; }
+  .c-rec .r {
+    flex: 0 0 116px;
+    background: #fff; border-radius: 12px;
+    box-shadow: var(--sh);
+    padding: 8px 8px 9px;
+  }
+  .c-rec .r .thumb { width: 100%; height: 74px; border-radius: 8px; }
+  .c-rec .r .thumb svg { width: 30%; height: 30%; }
+  .c-rec .nm { margin-top: 7px; font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-rec .foot { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
+
+  /* 结算条 */
+  .c-bar .total { flex: 1; min-width: 0; }
+  .c-bar .total .lbl { font-size: 11px; color: var(--ink3); }
+  .c-bar .selall { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink2); }
+  .nav .nav-side:last-child { flex: 0 0 auto; }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--solid">
+    <div class="nav-side" style="justify-content:flex-start"></div>
+    <div class="nav-title">购物车</div>
+    <div class="nav-side">
+      <button class="nav-btn" id="editBtn" style="width:auto;padding:0 9px;font-size:13px;color:var(--ink2);white-space:nowrap">编辑</button>
+    </div>
+  </nav>
+
+  <main class="mp-main" id="scroller">
+    <div id="body"></div>
+    <div style="height:16px"></div>
+  </main>
+
+  <div class="bar c-bar" id="bar"></div>
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  let editing = false;
+  let selSet = null;            // null = 全选
+  const body = document.getElementById('body');
+  const bar = document.getElementById('bar');
+
+  function keys() { return QY.cart.list().map(i => i.key); }
+  function selected() {
+    const ks = keys();
+    return selSet === null ? ks : ks.filter(k => selSet.has(k));
+  }
+  function isSel(k) { return selSet === null || selSet.has(k); }
+
+  function itemRow(it, i) {
+    return `<div class="c-row" data-key="${QY.esc(it.key)}">
+      ${editing ? '' : `<button class="cb ${isSel(it.key) ? 'is-on' : ''}" data-sel="${i}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>`}
+      <div class="thumb ${it.cls}"><svg viewBox="0 0 24 24" fill="currentColor">${ICO[it.ico] || ICO.bowl}</svg></div>
+      <div class="c-mid">
+        <div class="c-name">${QY.esc(it.name)}</div>
+        <div class="c-spec">${QY.esc(it.specText)}</div>
+        <div class="c-bottom">
+          <span class="price price--sm"><i>¥</i><b>${QY.money(it.unit)}</b></span>
+          ${editing
+            ? `<button class="c-del" data-del="${i}">删除</button>`
+            : `<div class="stepper" data-step="${i}">
+                 <button data-minus aria-label="减少"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+                 <span>${it.qty}</span>
+                 <button class="is-plus" data-plus aria-label="增加"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+               </div>`}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function render() {
+    const list = QY.cart.list();
+
+    if (!list.length) {
+      body.innerHTML = `
+        <div class="empty" style="padding-top:70px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2.6 3.6h2.2l2.5 10.1a1.8 1.8 0 0 0 1.75 1.37h8.1a1.8 1.8 0 0 0 1.75-1.33l1.5-5.6H6.2"/>
+            <circle cx="9.4" cy="19.6" r="1.4"/><circle cx="17.4" cy="19.6" r="1.4"/>
+          </svg>
+          <div class="empty-t">购物车还是空的</div>
+          <div class="empty-s">去挑一份今天想吃的</div>
+          <a class="btn btn--primary btn--sm" href="home.html#menu" style="margin-top:16px">去点餐</a>
+        </div>`;
+      bar.style.display = 'none';
+      renderRec();
+      return;
+    }
+    bar.style.display = '';
+
+    const goods = list.filter(i => isSel(i.key)).reduce((n, i) => n + i.unit * i.qty, 0);
+    const gap = Math.max(0, PROMO.threshold - QY.cart.amount());
+    const pct = Math.min(100, Math.round(QY.cart.amount() / PROMO.threshold * 100));
+
+    body.innerHTML = `
+      <div class="c-shop">
+        <b style="font-size:13.5px">${QY.esc(SHOP.name)} ${QY.esc(SHOP.branch)}</b>
+        <span class="dot"></span>
+        <span class="muted small">${QY.esc(MODE_WORD)}</span>
+        <a class="mode" href="checkout.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3.5l9 7"/><path d="M5.6 9.6V19a1.4 1.4 0 0 0 1.4 1.4h10A1.4 1.4 0 0 0 18.4 19V9.6"/></svg>
+          去结算 ›
+        </a>
+      </div>
+
+      <div class="c-fill ${gap === 0 ? 'is-done' : ''}">
+        <div class="t">
+          <span>${gap === 0 ? '已满 ¥50，结算自动减 ¥5' : `再买 <b>¥${QY.money(gap)}</b> 可减 ¥5`}</span>
+          <span>¥${QY.money(QY.cart.amount())} / 50</span>
+        </div>
+        <div class="pbar"><i style="width:${pct}%"></i></div>
+      </div>
+
+      <div class="c-list" style="margin-top:10px">
+        ${list.map(itemRow).join('')}
+      </div>
+
+      <div class="sec"><span class="sec-t">再来一份</span><span class="sec-s">老顾客常一起点</span></div>
+      <div class="c-rec" id="rec"></div>`;
+
+    renderRec();
+    renderBar();
+    QY.renderBadge();
+  }
+
+  function renderRec() {
+    const host = document.getElementById('rec');
+    if (!host) return;
+    const inCart = new Set(QY.cart.list().map(i => i.id));
+    const rec = PRODUCTS.filter(p => !inCart.has(p.id)).slice(0, 5);
+    host.innerHTML = rec.map(p => `
+      <div class="r" data-pid="${p.id}">
+        <div class="thumb ${p.cls}"><svg viewBox="0 0 24 24" fill="currentColor">${ICO[p.ico] || ICO.bowl}</svg></div>
+        <div class="nm">${QY.esc(p.name)}</div>
+        <div class="foot">
+          <span class="price price--sm"><i>¥</i><b>${p.price}</b></span>
+          <button class="add-btn" data-add="${p.id}" style="width:24px;height:24px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>`).join('');
+  }
+
+  function renderBar() {
+    const list = QY.cart.list();
+    const ks = selected();
+    const goods = list.filter(i => ks.includes(i.key)).reduce((n, i) => n + i.unit * i.qty, 0);
+    const allOn = ks.length === list.length && list.length > 0;
+
+    bar.innerHTML = editing
+      ? `<div class="selall"><button class="cb ${allOn ? 'is-on' : ''}" data-selall>
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>全选</div>
+         <div style="flex:1"></div>
+         <button class="btn btn--ghost btn--sm" id="delSel" style="height:40px;padding:0 18px;color:var(--red);border-color:#f3d6d2">删除所选 (${ks.length})</button>`
+      : `<div class="selall"><button class="cb ${allOn ? 'is-on' : ''}" data-selall>
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>全选</div>
+         <div class="total" style="text-align:right">
+           <div class="lbl">合计${(() => { const q = list.filter(i => ks.includes(i.key)).reduce((n, i) => n + i.qty, 0); return q ? ` · ${q} 件` : ''; })()}</div>
+           <span class="price"><i>¥</i><b>${QY.money(goods)}</b></span>
+         </div>
+         <button class="btn btn--primary" id="goPay" ${ks.length ? '' : 'disabled'}>去结算${ks.length ? `(${ks.length})` : ''}</button>`;
+  }
+
+  /* ---------- 事件 ---------- */
+  document.getElementById('editBtn').addEventListener('click', e => {
+    if (!QY.cart.list().length) return QY.toast('购物车是空的', 1200);
+    editing = !editing;
+    e.target.textContent = editing ? '完成' : '编辑';
+    render();
+  });
+
+  body.addEventListener('click', e => {
+    const sb = e.target.closest('[data-sel]');
+    if (sb) {
+      const k = QY.cart.list()[+sb.dataset.sel].key;
+      if (selSet === null) selSet = new Set(keys());
+      selSet.has(k) ? selSet.delete(k) : selSet.add(k);
+      render();
+      return;
+    }
+    const min = e.target.closest('[data-minus]');
+    const plus = e.target.closest('[data-plus]');
+    if (min || plus) {
+      const idx = +(e.target.closest('[data-step]')).dataset.step;
+      const it = QY.cart.list()[idx];
+      const q = it.qty + (plus ? 1 : -1);
+      if (q <= 0) { QY.cart.remove(it.key); QY.toast('已移出购物车', 1200); }
+      else QY.cart.setQty(it.key, q);
+      render();
+      return;
+    }
+    const del = e.target.closest('[data-del]');
+    if (del) {
+      const it = QY.cart.list()[+del.dataset.del];
+      QY.cart.remove(it.key);
+      QY.toast('已删除', 1100);
+      render();
+      return;
+    }
+    const add = e.target.closest('[data-add]');
+    if (add) {
+      QY.cart.add(add.dataset.add);
+      QY.toast('已加入购物车');
+      render();
+      return;
+    }
+    const rec = e.target.closest('.c-rec .r');
+    if (rec) location.href = 'product.html?id=' + rec.dataset.pid;
+  });
+
+  bar.addEventListener('click', e => {
+    if (e.target.closest('[data-selall]')) {
+      const ks = keys();
+      const allOn = (selSet === null ? ks : ks.filter(k => selSet.has(k))).length === ks.length;
+      selSet = allOn ? new Set() : null;
+      render();
+      return;
+    }
+    if (e.target.closest('#delSel')) {
+      const ks = selected();
+      ks.forEach(k => QY.cart.remove(k));
+      selSet = null;
+      QY.toast(`已删除 ${ks.length} 项`, 1200);
+      render();
+      return;
+    }
+    if (e.target.closest('#goPay')) {
+      QY.store.set('checkoutKeys', selected());
+      location.href = 'checkout.html';
+    }
+  });
+
+  render();
+  QY.tabbar('cart');
+})();
+</script>
+</body>
+</html>

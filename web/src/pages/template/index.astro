@@ -1,0 +1,722 @@
+---
+// 成品站超市 /template/（锦州站 · 2026-10-22）
+//
+// ★★ 与总站的形式区别：总站给每个模板生成一个详情页（60 个 URL），
+//    本站**只生成这一个列表页**，卡片的「详情 + 真站」在一个全屏框架层里给出。
+//    理由：城市站复制出 60 个内容相同的详情页 = 一批重复页面，会拖累主站权重；
+//    而客户真正需要的（看图、点开翻真站、知道要改什么）在这个框架层里一样都不缺。
+//    需要长文方案时，层里给一条去主站看完整方案的链。
+//
+// 演示站走 demo 域名的慢链路，必须带兜底（总站实测经验）：
+// 12 秒还没 load 就把退路写在脸上，18 秒强制显示——跨域 iframe 的 load 会被站内慢图拖住。
+import Base from '../../layouts/Base.astro';
+import { TEMPLATES, TEL } from '../../data/templates.js';
+import { shotOf } from '../../lib/tpl-shot.js';
+import { SITE } from '../../config/site.js';
+
+const all = TEMPLATES.map((t) => ({ ...t, ...shotOf(t) }));
+const liveCount = all.filter((t) => t.live).length;
+
+const label = (s) => s.split('-').join(' · ');
+
+// 行业聚合（口径与总站一致，改一处两边都要改）：
+// 组按条目数降序 → 客户往下滚先看到库里最厚的几类；条数相同按名称码点序。
+// ★ 禁用 localeCompare：依赖 Node ICU 版本，不同构建机顺序会飘。
+// 组内把「能看真站」的提到前面：真站截图是满铺网页，组头几张视觉最统一。
+const groups = [...new Set(all.map((t) => t.industry))]
+  .map((name) => {
+    const items = all.filter((t) => t.industry === name);
+    items.sort((a, b) => Number(b.live) - Number(a.live));
+    return { name, items, n: items.length, live: items.filter((t) => t.live).length };
+  })
+  .sort((a, b) => b.n - a.n || (a.name < b.name ? -1 : 1));
+
+// eager / lazy 必须用跨组连续序号，不能用组内下标
+// （否则每组前 6 张都 eager，18 组 = 108 张，懒加载等于废掉）
+let seq = 0;
+for (const g of groups) for (const t of g.items) t.seq = seq++;
+
+// 锦州本地常见行业 → 模板库里的分类。
+// 城市站的意义就在这：客户看到的是「锦州这些产业」而不是一堆通用分类名。
+// 依据锦州官方产业口径（市工信局、市发改委），不凭印象编。
+const JZ_HOT = [
+  { k: '机械-设备-制造', why: '特种合金 · 装备制造 · 汽配' },
+  { k: '化工-环保-能源', why: '石化及精细化工' },
+  { k: '食品-果蔬-日用', why: '农副产品 · 锦州苹果' },
+  { k: '物流-交通-搬运', why: '锦州港 · 粮食物流' },
+  { k: '餐饮-酒店-旅游', why: '文旅研学 · 滨海旅游' },
+].filter((x) => groups.some((g) => g.name === x.k));
+
+// 弹层要用的字段（精简版，不把整条 intro 都塞进 HTML）
+const PICK = all.map((t) => ({
+  id: t.id,
+  h1: t.h1,
+  slug: t.slug,
+  demo: t.demo,
+  live: t.live,
+  src: t.src,
+  color: t.color,
+  industry: t.industry,
+  lead: t.lead,
+  pages: t.pages,
+  scenes: t.scenes,
+  notFor: t.notFor,
+  advice: t.advice,
+}));
+const pickMap = Object.fromEntries(PICK.map((p) => [p.id, p]));
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '成品站超市',
+  description: `${all.length} 个成品站，覆盖 ${groups.length} 个行业，${liveCount} 个可直接查看真实演示站。锦州企业按行业挑，选中后按栏目和功能报价。`,
+  url: `${SITE.domain}/template/`,
+  isPartOf: { '@type': 'WebSite', url: `${SITE.domain}/` },
+};
+---
+
+<Base
+  title={`成品站超市 · ${all.length} 个成品站可选，${liveCount} 个能当场看真站｜千羽网络`}
+  description={`${all.length} 个成品站按行业分好类，${liveCount} 个可以直接点开看真实演示站。锦州企业挑一个顺眼的当起点，告诉我想改哪里，按栏目和功能报价。`}
+  canonical={`${SITE.domain}/template/`}
+  keywords="锦州成品站超市,锦州网站建设,网站成品,企业官网案例,响应式网站,锦州做网站"
+  jsonld={jsonld}
+  kefuTitle="帮你挑站"
+  kefuSub="说行业和栏目，我圈三个最接近的"
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumbs"><a href="/">首页</a> › <a href="/prodect/wzjs.html">网站建设</a> › 成品站超市</nav>
+      <div class="sec-head">
+        <span class="kicker">成品站超市</span>
+        <h1>挑一个顺眼的，剩下的交给改</h1>
+        <p>
+          这里摆的是千羽做过的站点结构，按行业分好类。<b>{liveCount} 个能直接点开看真站</b>——不是在纸上描述，是在这里就能翻页、点菜单。
+          看中哪个，告诉我想改成什么样，价格按你的栏目和功能算，不按模板标价。
+        </p>
+      </div>
+
+      <div class="shop-bar">
+        <div class="shop-search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <input type="search" id="shop-q" placeholder="搜行业或关键词，比如「装修」「茶叶」" autocomplete="off" />
+          <button type="button" id="shop-clear" aria-label="清空搜索" hidden>×</button>
+        </div>
+        <p class="shop-count" id="shop-count">共 {all.length} 个站 · {liveCount} 个可看真站</p>
+      </div>
+
+      <!-- 锦州本地快捷入口：客户第一眼看到的是自己这行的产业，不是一堆通用分类 -->
+      <div class="jz-hot">
+        <span class="jz-hot-t">锦州常见</span>
+        <div class="jz-hot-b">
+          {JZ_HOT.map((x) => (
+            <button type="button" data-jump={x.k}>
+              <b>{label(x.k)}</b>
+              <i>{x.why}</i>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="tpl-filter" role="tablist">
+        <button class="is-on" type="button" data-ind="*">全部 <i>{all.length}</i></button>
+        {groups.map((g) => (
+          <button type="button" data-ind={g.name}>{label(g.name)} <i>{g.n}</i></button>
+        ))}
+      </div>
+
+      <div class="tpl-groups" id="tpl-grid">
+        {groups.map((g) => (
+          <section class="tpl-grp" data-grp={g.name}>
+            <div class="tpl-grp-h">
+              <h2>{label(g.name)}</h2>
+              <span>{g.n} 个{g.live ? ` · ${g.live} 个能看真站` : ''}</span>
+              <button type="button" class="tpl-grp-only" data-jump={g.name}>只看这 {g.n} 个</button>
+            </div>
+            <div class="tpl-grid">
+              {g.items.map((t) => (
+                <a
+                  class="tpl-card"
+                  href={`${SITE.mainDomain}/template/${t.slug}.html`}
+                  target="_blank"
+                  rel="noopener"
+                  data-open={t.id}
+                  data-ind={t.industry}
+                  data-key={`${t.h1} ${t.industry} ${t.color} ${t.lead}`}
+                >
+                  <div class="tpl-thumb">
+                    <img
+                      src={t.thumb}
+                      alt={`${t.h1}的页面效果`}
+                      width="520"
+                      height="325"
+                      loading={t.seq < 6 ? 'eager' : 'lazy'}
+                      fetchpriority={t.seq < 3 ? 'high' : 'auto'}
+                      decoding="async"
+                    />
+                    {t.live && <span class="tpl-live">可看真站</span>}
+                    <span class="tpl-hover">当场看这个站 →</span>
+                  </div>
+                  <div class="tpl-card-b">
+                    <b>{t.h1}</b>
+                    <span>{t.pages.length} 个栏目 · {t.color}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <p class="shop-empty" id="shop-empty" hidden>没有匹配的站。换个词试试，或者直接打电话让我帮你挑。</p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap cta-inner">
+      <div class="cta-copy">
+        <span class="kicker kicker-light">挑不出来</span>
+        <h2>说你做什么生意，我帮你圈三个</h2>
+        <p>不用一个个翻。把行业、主要客户、必须有的栏目说一遍，我直接告诉你哪三个最接近、各要改什么。</p>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href={`tel:${TEL}`}>电话 / 微信 186-2427-4046</a>
+        </div>
+      </div>
+      <div class="cta-qr">
+        <img src="/images/wecom-qr.png" alt="企业微信二维码" width="132" height="132" loading="lazy" />
+        <span>企业微信扫码咨询</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 全站共用的预览框架层 ============ -->
+  <!-- 一个层搞定「看真站 + 看要点」，本站因此不需要 60 个详情页 URL -->
+  <div class="pvf" id="pv" hidden>
+    <div class="pvf-mask" data-close></div>
+    <div class="pvf-box" role="dialog" aria-modal="true" aria-label="成品站预览">
+      <div class="pvf-top">
+        <div class="pvf-top-l">
+          <b id="pv-name">成品站预览</b>
+          <span id="pv-meta"></span>
+        </div>
+        <div class="pvf-top-r">
+          <button type="button" class="pvf-live" id="pv-live" hidden>加载真实演示站</button>
+          <div class="pvf-seg" id="pv-seg">
+            <button type="button" class="is-on" data-vw="pc">电脑</button>
+            <button type="button" data-vw="mb">手机</button>
+          </div>
+          <button type="button" class="pvf-x" data-close aria-label="关闭预览">✕</button>
+        </div>
+      </div>
+      <div class="pvf-main">
+        <div class="pvf-stage" id="pv-stage">
+          <div class="pvf-loading" id="pv-loading">
+            <span class="pvf-spin"></span>
+            <p id="pv-tip">正在打开真实演示站…</p>
+          </div>
+        </div>
+        <aside class="pvf-side">
+          <p class="pvf-lead" id="pv-lead"></p>
+          <div class="pvf-block">
+            <h3>自带栏目</h3>
+            <div class="pvf-chips" id="pv-pages"></div>
+          </div>
+          <div class="pvf-block">
+            <h3>什么情况下选它</h3>
+            <ul id="pv-scenes"></ul>
+          </div>
+          <div class="pvf-block">
+            <h3>千羽的建站建议</h3>
+            <ol id="pv-advice"></ol>
+          </div>
+          <div class="pvf-block pvf-warn">
+            <h3>不适合的情况</h3>
+            <p id="pv-notfor"></p>
+          </div>
+          <div class="pvf-acts">
+            <a class="btn btn-primary" href={`tel:${TEL}`}>就按这个改，报价给我</a>
+            <a class="pvf-more" id="pv-more" href={`${SITE.mainDomain}/template/`} target="_blank" rel="noopener">
+              看这个站的完整方案 ↗
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script type="application/json" id="tpl-pick" set:html={JSON.stringify(pickMap)} />
+
+<script>
+  const bar = document.querySelector('.tpl-filter');
+  const grid = document.getElementById('tpl-grid');
+  const q = document.getElementById('shop-q') as HTMLInputElement | null;
+  const clearBtn = document.getElementById('shop-clear');
+  const countEl = document.getElementById('shop-count');
+  const emptyEl = document.getElementById('shop-empty');
+
+  let curInd = '*';
+  let curQ = '';
+
+  const apply = () => {
+    if (!grid) return;
+    const kw = curQ.trim().toLowerCase();
+    let shown = 0;
+    grid.querySelectorAll<HTMLElement>('.tpl-grp').forEach((g) => {
+      let gShown = 0;
+      g.querySelectorAll<HTMLElement>('.tpl-card').forEach((c) => {
+        const okInd = curInd === '*' || c.dataset.ind === curInd;
+        const okKw = !kw || (c.dataset.key || '').toLowerCase().includes(kw);
+        const on = okInd && okKw;
+        c.style.display = on ? '' : 'none';
+        if (on) gShown++;
+      });
+      g.hidden = gShown === 0;
+      shown += gShown;
+    });
+    if (countEl) {
+      const total = grid.querySelectorAll('.tpl-card').length;
+      countEl.textContent =
+        kw || curInd !== '*' ? `筛出 ${shown} / ${total} 个站` : countEl.dataset.base || countEl.textContent;
+    }
+    if (emptyEl) emptyEl.hidden = shown > 0;
+  };
+
+  const pickInd = (ind: string) => {
+    curInd = ind;
+    bar?.querySelectorAll('button').forEach((b) => {
+      const on = (b as HTMLElement).dataset.ind === ind;
+      b.classList.toggle('is-on', on);
+    });
+    apply();
+    const r = grid?.getBoundingClientRect();
+    if (grid && r && (r.top < 80 || r.top > 200)) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  if (countEl) countEl.dataset.base = countEl.textContent || '';
+
+  bar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn) return;
+    pickInd((btn as HTMLElement).dataset.ind || '*');
+  });
+
+  grid?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('.tpl-grp-only');
+    if (!btn) return;
+    pickInd(btn.dataset.jump || '*');
+  });
+
+  document.querySelector('.jz-hot-b')?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-jump]');
+    if (!btn) return;
+    pickInd(btn.dataset.jump || '*');
+  });
+
+  q?.addEventListener('input', () => {
+    curQ = q.value;
+    if (clearBtn) (clearBtn as HTMLElement).hidden = !curQ;
+    apply();
+  });
+
+  clearBtn?.addEventListener('click', () => {
+    if (q) q.value = '';
+    curQ = '';
+    clearBtn.hidden = true;
+    apply();
+  });
+
+  /* ============ 预览框架层 ============ */
+  const PICK = JSON.parse(document.getElementById('tpl-pick')?.textContent || '{}');
+  const pv = document.getElementById('pv');
+  const stage = document.getElementById('pv-stage');
+  const loading = document.getElementById('pv-loading');
+  const tip = document.getElementById('pv-tip');
+  const pvMore = document.getElementById('pv-more') as HTMLAnchorElement | null;
+  const pvLive = document.getElementById('pv-live') as HTMLButtonElement | null;
+  let frame: HTMLIFrameElement | null = null;
+  let still: HTMLImageElement | null = null;
+  let t12: number | undefined, t18: number | undefined;
+  let curVw = 'pc';
+  let cur: any = null;
+
+  const clearTimers = () => {
+    if (t12) window.clearTimeout(t12);
+    if (t18) window.clearTimeout(t18);
+    t12 = undefined;
+    t18 = undefined;
+  };
+
+  const reveal = () => {
+    if (loading) loading.hidden = true;
+    if (frame) frame.classList.add('is-ready');
+    if (still) still.classList.add('is-ready');
+  };
+
+  const teardown = () => {
+    clearTimers();
+    if (frame) { frame.remove(); frame = null; }
+    if (still) { still.remove(); still = null; }
+    if (loading) { loading.hidden = false; }
+    if (tip) tip.textContent = '正在打开真实演示站…';
+  };
+
+  const setVw = (vw: string) => {
+    curVw = vw;
+    document.querySelectorAll('#pv-seg button').forEach((b) => {
+      b.classList.toggle('is-on', (b as HTMLElement).dataset.vw === vw);
+    });
+    stage?.setAttribute('data-vw', vw);
+    // iframe 本身不改宽度，只改容器宽——内部靠响应式自己适配，切视图不用重新加载。
+    // 手机视图对静态图没意义（截图是桌面版）→ 切到手机且还没加载真站时，顺手把真站拉起来。
+    if (vw === 'mb' && cur && cur.live && cur.demo && !frame) startLive();
+  };
+
+  // ★ 演示站实测（2026-10-22，curl 逐个打表）：同一个编号两次请求能差一个数量级——
+  //   /2590/ 第一次 6.0s 完成，第二次 40s 超时；/835/ 首字节就要 9s、40s 读不完 body。
+  //   所以真站**只能按需加载**：打开弹层就挂 iframe，慢站会在 18s 兜底时露出白屏，
+  //   客户看到的是「点了个站，出来一片空白」，比不给这个按钮更糟。
+  const startLive = () => {
+    if (!cur || !cur.demo || frame || !stage) return;
+    if (pvLive) { pvLive.disabled = true; pvLive.textContent = '正在打开真站…'; }
+    if (loading) loading.hidden = false;
+    if (tip) tip.textContent = '正在打开真实演示站…';
+
+    frame = document.createElement('iframe');
+    frame.src = `https://demo.0427qy.com/${cur.demo}/`;
+    frame.title = '成品站真实演示';
+    frame.loading = 'eager';
+    frame.referrerPolicy = 'no-referrer';
+    frame.onload = () => {
+      reveal();
+      if (pvLive) pvLive.textContent = '真站已加载';
+    };
+    stage.appendChild(frame);
+    if (still) still.style.display = 'none';
+
+    // 12 秒还没 load：把退路写在脸上。
+    t12 = window.setTimeout(() => {
+      if (tip) tip.textContent = '这个演示站加载有点慢，先看右边的方案要点';
+    }, 12000);
+    // 18 秒到了还没画出来：撤掉 iframe、把截图放回来。
+    // 不能「强制显示」——实测有编号 40 秒都读不完 body，强制显示等于给客户一片白板。
+    // 留一句「再试一次」，客户愿意等就自己点，不愿意等也已经看到页面长什么样了。
+    t18 = window.setTimeout(() => {
+      if (frame && !frame.classList.contains('is-ready')) {
+        frame.remove();
+        frame = null;
+        if (still) still.style.display = '';
+        if (pvLive) {
+          pvLive.disabled = false;
+          pvLive.textContent = '真站没打开，再试一次';
+        }
+        reveal();
+        return;
+      }
+      reveal();
+    }, 18000);
+  };
+
+  const mountStill = (src: string) => {
+    if (!stage) return;
+    still = document.createElement('img');
+    still.src = src;
+    still.alt = '成品站页面效果';
+    still.onload = reveal;
+    stage.appendChild(still);
+    // 截图是本地资源，秒开——不需要 loading 遮罩压在上面
+    reveal();
+  };
+
+  const openPv = (id: string) => {
+    const t = PICK[id];
+    if (!t || !pv) return;
+    teardown();
+
+    const name = document.getElementById('pv-name');
+    const meta = document.getElementById('pv-meta');
+    const lead = document.getElementById('pv-lead');
+    const pages = document.getElementById('pv-pages');
+    const scenes = document.getElementById('pv-scenes');
+    const advice = document.getElementById('pv-advice');
+    const notfor = document.getElementById('pv-notfor');
+
+    if (name) name.textContent = t.h1;
+    if (meta) meta.textContent = `${t.industry.split('-').join(' · ')} · ${t.pages.length} 个栏目 · ${t.color}`;
+    if (lead) lead.textContent = t.lead || '';
+    if (pages) pages.innerHTML = (t.pages || []).map((p: string) => `<span>${p}</span>`).join('');
+    // scenes / advice 是 {t,d} 对象数组（t=要点标题，d=展开说明），不是纯字符串
+    if (scenes)
+      scenes.innerHTML = (t.scenes || [])
+        .map((s: any) => `<li><b>${s.t}</b>——${s.d}</li>`)
+        .join('');
+    if (advice)
+      advice.innerHTML = (t.advice || [])
+        .map((s: any) => `<li><b>${s.t}</b>——${s.d}</li>`)
+        .join('');
+    if (notfor) notfor.textContent = t.notFor || '';
+    if (pvMore) pvMore.href = `${'https://www.0427qy.com'}/template/${t.slug}.html`;
+
+    cur = t;
+    pv.hidden = false;
+    document.body.style.overflow = 'hidden';
+    setVw('pc');
+    // 先给本地截图（秒开），真站由客户自己点——演示站慢起来没谱，不能拿它堵首屏
+    mountStill(t.src);
+    if (pvLive) {
+      pvLive.hidden = !(t.live && t.demo);
+      pvLive.disabled = false;
+      pvLive.textContent = '加载真实演示站';
+    }
+  };
+
+  const closePv = () => {
+    if (!pv) return;
+    pv.hidden = true;
+    document.body.style.overflow = '';
+    teardown();
+  };
+
+  grid?.addEventListener('click', (e) => {
+    const card = (e.target as HTMLElement).closest<HTMLElement>('.tpl-card');
+    if (!card || !card.dataset.open) return;
+    // JS 在场就在本站的框架层里看；不在场则放行到主站详情页（href 已写好）
+    e.preventDefault();
+    openPv(card.dataset.open);
+  });
+
+  pv?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('[data-close]')) closePv();
+  });
+
+  pvLive?.addEventListener('click', () => startLive());
+
+  document.getElementById('pv-seg')?.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-vw]');
+    if (b) setVw(b.dataset.vw || 'pc');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && pv && !pv.hidden) closePv();
+  });
+</script>
+
+<style>
+  .shop-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 16px; flex-wrap: wrap; }
+  .shop-search {
+    position: relative; display: flex; align-items: center; gap: 8px;
+    flex: 1 1 320px; max-width: 420px;
+    padding: 0 12px; height: 42px; border: 1px solid var(--line); border-radius: 999px;
+    background: #fff; color: var(--ink-3);
+    transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  .shop-search:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px oklch(0.48 0.17 27 / 0.09); }
+  .shop-search input {
+    flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent;
+    font: inherit; font-size: 14px; color: var(--ink);
+  }
+  .shop-search input::-webkit-search-cancel-button { display: none; }
+  #shop-clear {
+    flex: none; width: 22px; height: 22px; display: grid; place-items: center; padding: 0;
+    border: 0; border-radius: 50%; background: var(--bg-warm); color: var(--ink-3);
+    font-size: 15px; line-height: 1; cursor: pointer;
+  }
+  .shop-count { margin: 0; font-size: 13px; color: var(--ink-3); }
+
+  /* 锦州本地快捷入口：城市站与总站版式上最明显的差异 */
+  .yk-hot { display: flex; align-items: flex-start; gap: 12px; margin: 0 0 18px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-warm); }
+  .jz-hot-t { flex: none; font-size: 12.5px; font-weight: 600; color: var(--brand); padding-top: 5px; }
+  .jz-hot-b { display: flex; flex-wrap: wrap; gap: 8px; }
+  .jz-hot-b button {
+    display: flex; flex-direction: column; gap: 2px; text-align: left; cursor: pointer;
+    padding: 6px 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff;
+    font: inherit; transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+  }
+  .jz-hot-b button:hover { border-color: var(--brand); box-shadow: 0 3px 10px rgba(0,0,0,.06); }
+  .jz-hot-b b { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .jz-hot-b i { font-style: normal; font-size: 11px; color: var(--ink-3); }
+
+  .tpl-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+  .tpl-filter button {
+    font: inherit; font-size: 13px; color: var(--ink-2); background: #fff;
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer;
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+  }
+  .tpl-filter button i { font-style: normal; color: var(--ink-3); margin-left: 3px; }
+  .tpl-filter button:hover { border-color: var(--brand); color: var(--brand); }
+  .tpl-filter button.is-on { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .tpl-filter button.is-on i { color: rgba(255, 255, 255, 0.72); }
+
+  .tpl-grp { margin: 0 0 30px; scroll-margin-top: 96px; }
+  .tpl-grp[hidden] { display: none; }
+  .tpl-grp-h {
+    display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap;
+    margin: 0 0 13px; padding: 0 0 8px; border-bottom: 1px solid var(--line);
+  }
+  .tpl-grp-h h2 { margin: 0; font-size: 15.5px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+  .tpl-grp-h span { font-size: 12.5px; color: var(--ink-3); }
+  .tpl-grp-only {
+    margin-left: auto; padding: 3px 11px; border: 1px solid var(--line); border-radius: 999px;
+    background: #fff; font: inherit; font-size: 12px; color: var(--ink-3); cursor: pointer;
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+  .tpl-grp-only:hover { color: var(--brand); border-color: var(--brand); }
+
+  .tpl-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .tpl-card {
+    display: block; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    background: #fff; color: inherit; text-decoration: none;
+    transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease), border-color 0.22s var(--ease);
+  }
+  .tpl-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09); border-color: oklch(0.48 0.17 27 / 0.35); }
+
+  .tpl-thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg-warm); }
+  .tpl-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 0.35s var(--ease); }
+  .tpl-card:hover .tpl-thumb img { transform: scale(1.03); }
+
+  .tpl-live {
+    position: absolute; top: 8px; left: 8px;
+    padding: 3px 8px; border-radius: 999px;
+    background: oklch(0.22 0.01 45 / 0.72); color: #fff;
+    font-size: 10.5px; font-weight: 500; letter-spacing: 0.02em;
+    backdrop-filter: blur(2px);
+  }
+  .tpl-hover {
+    position: absolute; right: 8px; bottom: 8px;
+    padding: 5px 11px; border-radius: 999px;
+    background: var(--brand); color: #fff; font-size: 11.5px; font-weight: 500;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .tpl-card:hover .tpl-hover { opacity: 1; transform: none; }
+
+  .tpl-card-b { padding: 11px 13px 13px; }
+  .tpl-card-b b { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink); line-height: 1.45; }
+  .tpl-card-b span { display: block; margin-top: 4px; font-size: 11.5px; color: var(--ink-3); }
+
+  .shop-empty { margin: 40px 0 0; text-align: center; font-size: 14px; color: var(--ink-3); }
+
+  /* ============ 预览框架层 ============
+     z-index 300：要高过吸顶 header(100) 和客服球(210) */
+  .pvf { position: fixed; inset: 0; z-index: 300; display: flex; }
+  .pvf[hidden] { display: none; }
+  .pvf-mask { position: absolute; inset: 0; background: rgba(16, 16, 18, 0.62); backdrop-filter: blur(3px); }
+  .pvf-box {
+    position: relative; margin: auto; width: min(1240px, 94vw); height: min(860px, 92vh);
+    display: flex; flex-direction: column; background: #fff; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 26px 70px rgba(0,0,0,.34);
+  }
+  .pvf-top {
+    flex: none; display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; border-bottom: 1px solid var(--line); background: #fff;
+  }
+  .pvf-top-l { min-width: 0; flex: 1; }
+  .pvf-top-l b { display: block; font-size: 14.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pvf-top-l span { font-size: 11.5px; color: var(--ink-3); }
+  .pvf-top-r { flex: none; display: flex; align-items: center; gap: 10px; }
+  .pvf-seg { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .pvf-seg button {
+    padding: 5px 13px; border: 0; background: #fff; font: inherit; font-size: 12.5px;
+    color: var(--ink-2); cursor: pointer; transition: background .18s var(--ease), color .18s var(--ease);
+  }
+  .pvf-seg button.is-on { background: var(--brand); color: #fff; font-weight: 600; }
+  .pvf-live {
+    padding: 6px 13px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--brand); background: var(--brand); color: #fff;
+    font: inherit; font-size: 12.5px; font-weight: 600;
+    transition: opacity .18s var(--ease), background .18s var(--ease);
+  }
+  .pvf-live[hidden] { display: none; }
+  .pvf-live:hover:not(:disabled) { background: oklch(0.42 0.17 27); }
+  .pvf-live:disabled { opacity: .62; cursor: default; }
+
+  .pvf-x {
+    width: 32px; height: 32px; display: grid; place-items: center; cursor: pointer;
+    border: 1px solid var(--line); border-radius: 50%; background: #fff;
+    font-size: 14px; color: var(--ink-2); transition: border-color .18s var(--ease), color .18s var(--ease);
+  }
+  .pvf-x:hover { border-color: var(--brand); color: var(--brand); }
+
+  .pvf-main { flex: 1; display: flex; min-height: 0; }
+  .pvf-stage {
+    position: relative; flex: 1; min-width: 0; background: var(--bg-warm);
+    display: flex; align-items: stretch; justify-content: center; overflow: hidden;
+  }
+  /* iframe / 大图都是 JS 运行时创建的，拿不到 Astro 的 data-astro-cid，
+     直接写 .pvf-stage iframe 编译后带 cid，永远匹配不上 → 必须用 :global() */
+  .pvf-stage[data-vw='mb'] { align-items: flex-start; }
+  .pvf-stage :global(iframe) {
+    width: 100%; height: 100%; border: 0; display: block;
+    opacity: 0; transition: opacity .25s var(--ease);
+  }
+  .pvf-stage[data-vw='mb'] :global(iframe) {
+    width: 390px; max-width: 100%; height: 100%;
+    margin: 0 auto; box-shadow: 0 0 0 1px var(--line);
+  }
+  .pvf-stage :global(img) {
+    width: 100%; height: auto; max-height: 100%; object-fit: contain; object-position: top center;
+    opacity: 0; transition: opacity .25s var(--ease);
+  }
+  .pvf-stage :global(.is-ready) { opacity: 1; }
+
+  .pvf-loading {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 12px; background: var(--bg-warm);
+    font-size: 13px; color: var(--ink-3);
+  }
+  .pvf-loading[hidden] { display: none; }
+  .pvf-spin {
+    width: 26px; height: 26px; border: 2.5px solid var(--line); border-top-color: var(--brand);
+    border-radius: 50%; animation: pvspin .8s linear infinite;
+  }
+  @keyframes pvspin { to { transform: rotate(360deg); } }
+
+  .pvf-side {
+    flex: none; width: 336px; border-left: 1px solid var(--line);
+    padding: 16px 16px 20px; overflow-y: auto; background: #fff;
+  }
+  .pvf-lead { margin: 0 0 14px; font-size: 13px; line-height: 1.75; color: var(--ink-2); }
+  .pvf-block { margin: 0 0 15px; }
+  .pvf-block h3 { margin: 0 0 7px; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+  .pvf-block ul, .pvf-block ol { margin: 0; padding-left: 17px; }
+  .pvf-block li { font-size: 12.5px; line-height: 1.72; color: var(--ink-2); margin-bottom: 3px; }
+  .pvf-block li b { font-weight: 600; color: var(--ink); }
+  .pvf-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pvf-chips span {
+    padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px;
+    font-size: 11.5px; color: var(--ink-2); background: var(--bg-warm);
+  }
+  .pvf-warn h3 { color: #8a5a00; }
+  .pvf-warn p { margin: 0; font-size: 12.5px; line-height: 1.72; color: var(--ink-2); }
+  .pvf-acts { margin-top: 18px; display: flex; flex-direction: column; gap: 9px; align-items: flex-start; }
+  .pvf-acts .btn { width: 100%; justify-content: center; }
+  .pvf-more { font-size: 12.5px; color: var(--ink-3); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .pvf-more:hover { color: var(--brand); border-color: var(--brand); }
+
+  @media (max-width: 1100px) {
+    .tpl-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .pvf-side { width: 300px; }
+  }
+  @media (max-width: 980px) {
+    .pvf-box { width: 96vw; height: 94vh; }
+    .pvf-main { flex-direction: column; }
+    .pvf-stage { flex: none; height: 46%; }
+    .pvf-side { width: auto; border-left: 0; border-top: 1px solid var(--line); flex: 1; }
+  }
+  @media (max-width: 820px) { .tpl-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
+  @media (max-width: 560px) {
+    .tpl-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .tpl-card-b { padding: 9px 10px 11px; }
+    .tpl-card-b b { font-size: 12.5px; }
+    .tpl-card-b span { font-size: 11px; }
+    .tpl-hover { display: none; }
+    .shop-search { flex: 1 1 100%; max-width: 100%; }
+    .yk-hot { flex-direction: column; gap: 8px; }
+    .tpl-filter { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-bottom: 18px; padding-bottom: 4px; }
+    .tpl-filter::-webkit-scrollbar { display: none; }
+    .tpl-filter button { flex: none; }
+    .tpl-grp { margin-bottom: 24px; }
+    .tpl-grp-h h2 { font-size: 14.5px; }
+    .tpl-grp-only { display: none; }
+  }
+</style>

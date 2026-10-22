@@ -1,0 +1,451 @@
+---
+// 锦州城市站首页 · 与主站同一套骨架，文案按锦州企业语境重写（2026-10-22）
+// 轮播三屏：企业 AI 效能提升（主）/ 一人公司 OPC / 建站与开发（承接）
+// 城市站差异点：新增「锦州行业方案」区块，按锦州官方产业口径给入口
+import Base from '../layouts/Base.astro';
+import { SITE } from '../config/site.js';
+import { TEL, CASES } from '../data/cases.js';
+import { INDUSTRIES } from '../data/industries.js';
+
+const STEPS = [
+  { no: '01', title: '流程梳理', desc: '把业务流程写成明确规则：谁在什么环节做什么、什么条件触发什么动作。', deliver: '流程文档' },
+  { no: '02', title: '信息化补齐', desc: '把还在纸上、微信里、个人电脑里的数据先收进系统，让流程有数据可跑。', deliver: '系统 / 表单' },
+  { no: '03', title: '智能体接入', desc: '挑最耗时、最高频的环节配成智能体，接进现有工作流，先跑通一个。', deliver: '可运行的智能体' },
+  { no: '04', title: '长期维护', desc: '业务变了，流程和智能体跟着改；日常出问题有人兜底，不是交付即失联。', deliver: '持续服务' },
+];
+---
+
+<Base
+  title="锦州企业AI服务·网站建设·小程序开发｜千羽网络（服务锦州）"
+  description="服务锦州及辽西地区：企业AI效能提升、一人公司（OPC）全流程、网站建设、小程序与软件开发。近20年企业信息化经验，方法先在自有业务跑通再交付。电话/微信18624274046。"
+  canonical={`${SITE.domain}/`}
+  keywords="锦州企业AI服务,锦州网站建设,锦州做网站,锦州网络公司,锦州小程序开发,锦州软件开发,企业AI效能提升,一人公司"
+>
+  <!-- ============ 首屏轮播：三条业务线 ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-track" id="hero-track">
+      <!-- Slide 1：企业 AI 效能提升（主推） -->
+      <div class="slide">
+        <div class="wrap slide-inner">
+          <div class="slide-copy">
+            <span class="kicker">企业 AI 效能提升</span>
+            <h1>锦州企业 AI 服务<br />让一个人干出一个团队的活</h1>
+            <p>把重复性工作交给智能体：流程梳理 → 信息化补齐 → 智能体接入 → 长期维护，四步落地。石化及精细化工、冶金与新材料、特种合金、装备制造这些工业主导产业，加上农副产品加工、港口物流与文旅——锦州这些产业的流程长什么样、坑在哪，我们看得懂。</p>
+            <div class="slide-actions">
+              <a class="btn btn-primary" href={`tel:${TEL}`}>聊聊你的业务</a>
+              <a class="btn btn-ghost" href="/prodect/wzcz.html">了解服务详情</a>
+            </div>
+          </div>
+          <div class="slide-visual" aria-hidden="true">
+            <svg viewBox="0 0 420 340" fill="none">
+              <!-- 中心：企业主 -->
+              <circle cx="210" cy="170" r="52" fill="#b32c29"/>
+              <text x="210" y="164" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">你</text>
+              <text x="210" y="184" text-anchor="middle" font-size="11" fill="#f3d9d6">只管决策</text>
+              <!-- 四个智能体节点 -->
+              <g font-size="13" font-weight="500" fill="#26201c">
+                <g>
+                  <line x1="210" y1="122" x2="210" y2="62" stroke="#c9bdb0" stroke-width="1.5" stroke-dasharray="4 4"/>
+                  <rect x="140" y="20" width="140" height="40" rx="10" fill="#ffffff" stroke="#e3d9cf"/>
+                  <circle cx="166" cy="40" r="6" fill="#b32c29"/>
+                  <text x="180" y="45">内容生产</text>
+                </g>
+                <g>
+                  <line x1="258" y1="170" x2="270" y2="170" stroke="#c9bdb0" stroke-width="1.5" stroke-dasharray="4 4"/>
+                  <rect x="272" y="150" width="140" height="40" rx="10" fill="#ffffff" stroke="#e3d9cf"/>
+                  <circle cx="298" cy="170" r="6" fill="#b32c29"/>
+                  <text x="312" y="175">客服应答</text>
+                </g>
+                <g>
+                  <line x1="210" y1="218" x2="210" y2="280" stroke="#c9bdb0" stroke-width="1.5" stroke-dasharray="4 4"/>
+                  <rect x="140" y="282" width="140" height="40" rx="10" fill="#ffffff" stroke="#e3d9cf"/>
+                  <circle cx="166" cy="302" r="6" fill="#b32c29"/>
+                  <text x="180" y="307">数据报表</text>
+                </g>
+                <g>
+                  <line x1="162" y1="170" x2="150" y2="170" stroke="#c9bdb0" stroke-width="1.5" stroke-dasharray="4 4"/>
+                  <rect x="8" y="150" width="140" height="40" rx="10" fill="#ffffff" stroke="#e3d9cf"/>
+                  <circle cx="34" cy="170" r="6" fill="#b32c29"/>
+                  <text x="48" y="175">流程审批</text>
+                </g>
+              </g>
+              <text x="210" y="332" text-anchor="middle" font-size="11.5" fill="#8a7f74">智能体进流程，人做判断</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2：一人公司（OPC）服务 -->
+      <div class="slide">
+        <div class="wrap slide-inner">
+          <div class="slide-copy">
+            <span class="kicker">一人公司（OPC）服务</span>
+            <h2>一个人 + 一整套智能体<br />把公司开到能接单</h2>
+            <p>从注册到获客全流程护航：工商注册、财税代办、线上门面、网络推广、智能体搭建。锦州是省政府确定的区域中心城市，定位带动辽西、辐射黑吉西部与蒙东、联动京津冀——一人公司做外贸、物流、跨境，起点比内陆城市高。辽宁省 OPC 培育政策已落地。</p>
+            <div class="slide-actions">
+              <a class="btn btn-primary" href={`tel:${TEL}`}>评估你的情况</a>
+              <a class="btn btn-ghost" href="/prodect/wzcz.html">OPC 服务清单</a>
+            </div>
+          </div>
+          <div class="slide-visual slide-visual-shot">
+            <img src="/images/case-opc-dashboard.png" alt="千羽OPC办公系统面板：待审批、智能体任务与执行监视" width="560" height="350" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3：建站与开发（承接） -->
+      <div class="slide">
+        <div class="wrap slide-inner">
+          <div class="slide-copy">
+            <span class="kicker">建站与开发</span>
+            <h2>网站、小程序、系统<br />按档交付，有人维护</h2>
+            <p>成品 / 仿制 / 定制三档可选，SEO 站内优化先行，上线后专人维护。老本行，不玩虚的——能带来询价的网站才是好网站。锦州企业做外贸和港口物流的多，多语言站和询盘转化是常做的一块。</p>
+            <div class="slide-actions">
+              <a class="btn btn-primary" href={`tel:${TEL}`}>报个需求</a>
+              <a class="btn btn-ghost" href="/industry/">按行业看方案</a>
+              <a class="btn btn-ghost" href="/prodect/wzjs.html">查看建站服务</a>
+              <a class="btn btn-ghost" href="/prodect/wzyw.html">小程序与系统</a>
+            </div>
+            <ul class="slide-price">
+              <li><b>成品建站</b><span>500 元起</span></li>
+              <li><b>仿制建站</b><span>1000 元起</span></li>
+              <li><b>定制开发</b><span>3000 元起</span></li>
+            </ul>
+          </div>
+          <div class="slide-visual slide-visual-shot">
+            <img src="/images/case-opc-web.png" alt="千羽开发的平台界面" width="560" height="350" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 轮播控件 -->
+    <div class="hero-dots" role="tablist" aria-label="首屏切换">
+      <button class="dot is-active" data-go="0" role="tab" aria-selected="true" aria-label="企业 AI 效能提升"></button>
+      <button class="dot" data-go="1" role="tab" aria-selected="false" aria-label="一人公司服务"></button>
+      <button class="dot" data-go="2" role="tab" aria-selected="false" aria-label="建站与开发"></button>
+    </div>
+  </section>
+
+  <!-- ============ 信任带：为什么是千羽 ============ -->
+  <section class="trust">
+    <div class="wrap trust-grid">
+      <div class="trust-item">
+        <h3>自己先跑通，再拿给你</h3>
+        <p>从流程梳理到智能体接入，每套方法先在千羽自己业务里验证过，确认能用才交付。</p>
+      </div>
+      <div class="trust-item">
+        <h3>不卖工具，交付服务</h3>
+        <p>AI 工具谁都能买，难的是接进你的数据、权限和流程。我们做的是让它真干活的那一段。</p>
+      </div>
+      <div class="trust-item">
+        <h3>懂锦州的产业流程</h3>
+        <p>石化、冶金新材料、特种合金、装备制造、农副产品加工——知道厂里和港口的流程长什么样、坑在哪里，不拿一套互联网玩法硬套传统业务。</p>
+      </div>
+      <div class="trust-item">
+        <h3>一个人从头跟到尾</h3>
+        <p>从沟通需求到落地维护由同一位负责人跟进，没有转包、没有交接损耗，出问题直接找到人。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 交付案例 ============ -->
+  <section class="section" id="cases">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">交付案例</span>
+        <h2>做出来的东西，直接给你看</h2>
+        <p>以下为千羽自有项目与已交付项目的功能概述；客户项目已作脱敏处理，不披露企业名称与经营数据。锦州企业要做的，多数是把这套能力按行业流程改造一遍。</p>
+      </div>
+      <div class="case-list">
+        {CASES.map((c) => (
+          <article class="case-card">
+            <div class="case-media">
+              {c.images.map((img) => (
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  width={img.w ?? 560}
+                  height={img.h ?? 350}
+                  class={img.wide ? 'is-wide' : undefined}
+                  loading="lazy"
+                />
+              ))}
+            </div>
+            <div class="case-body">
+              <span class="case-tag">{c.tag}</span>
+              <h3>{c.title}</h3>
+              <p>{c.desc}</p>
+              <ul class="case-points">
+                {c.points.map((p) => <li>{p}</li>)}
+              </ul>
+              {c.stats && (
+                <div class="case-stats">
+                  {c.stats.map((s) => (
+                    <div class="case-stat">
+                      <b>{s.num}<small>{s.unit}</small></b>
+                      <span>{s.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {c.statsNote && <p class="case-stats-note">{c.statsNote}</p>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 企业 AI 四步方法论 ============ -->
+  <section class="section section-warm" id="method">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">落地方法</span>
+        <h2>四步，把 AI 装进业务流程</h2>
+        <p>小步快跑：先做一次轻量诊断，找出最痛、最高频的 1—2 个场景，拆成能独立交付的模块，先上线一个，跑出结果再往下铺。不一上来就上大平台。</p>
+      </div>
+      <div class="step-grid">
+        {STEPS.map((s) => (
+          <div class="step-card">
+            <span class="step-no">{s.no}</span>
+            <h3>{s.title}</h3>
+            <p>{s.desc}</p>
+            <span class="step-deliver">交付：{s.deliver}</span>
+          </div>
+        ))}
+      </div>
+      <div class="scene-strip">
+        <span>常见落地环节：</span>
+        <b>办公</b>填单审批、知识库检索
+        <b>客服</b>高频问答、工单分派
+        <b>数据</b>多源汇总、自动报表
+        <b>业务</b>内容发布、线索整理
+        <b>生产</b>点检记录归档、质检单据汇总
+        <b>外贸</b>询盘整理、多语言产品资料
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 锦州行业方案（城市站差异区块） ============ -->
+  <section class="section" id="industry">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">锦州行业方案</span>
+        <h2>锦州的产业结构，决定要做什么样的系统</h2>
+        <p>石化及精细化工是第一支柱，冶金与新材料在全国有话语权，农副产品有牌子，港口和文旅是老本行。2024 年全市规上工业增加值同比增长 11.6%，居全省首位。产业不同，信息化的痛点不同，做法也不同。数据来源：锦州市统计局、锦州市工业和信息化局、锦州市发展和改革委员会公开信息。</p>
+      </div>
+      <div class="ind-grid">
+        {INDUSTRIES.map((it) => (
+          <a class="ind-card" href={`/industry/${it.slug}.html`}>
+            <b>{it.name}</b>
+            <span>{it.stat}</span>
+            <em>{it.pain}</em>
+          </a>
+        ))}
+      </div>
+      <p class="ind-more"><a href="/industry/">看全部行业方案 →</a></p>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta" id="cta">
+    <div class="wrap cta-inner">
+      <div class="cta-copy">
+        <span class="kicker kicker-light">开始之前</span>
+        <h2>想创业，或者想给公司装上 AI？</h2>
+        <p>把情况说一遍，我来判断从哪一步开始。不推销、不铺垫——先聊清楚你的业务适不适合、值不值得做。</p>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href={`tel:${TEL}`}>电话 / 微信 186-2427-4046</a>
+          <span class="cta-note">辽宁省人工智能 OPC 培育发展实施方案（2026—2028 年）已发布，政策细节可协助核对</span>
+        </div>
+      </div>
+      <div class="cta-qr">
+        <img src="/images/wecom-qr.png" alt="企业微信二维码" width="132" height="132" loading="lazy" />
+        <span>企业微信扫码咨询</span>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ============ 轮播首屏 ============ */
+  .hero { background: var(--bg-warm); border-bottom: 1px solid var(--line); position: relative; }
+  .hero-track {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .hero-track::-webkit-scrollbar { display: none; }
+  .slide { flex: 0 0 100%; scroll-snap-align: start; min-height: 560px; display: flex; align-items: center; }
+  .slide-inner {
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: var(--s6); align-items: center;
+    padding-block: var(--s6);
+  }
+  .slide-copy :is(h1, h2) {
+    font-size: clamp(30px, 4.2vw, 46px); line-height: 1.22; font-weight: 700;
+    letter-spacing: -0.02em; margin: 0 0 var(--s3); color: var(--ink);
+  }
+  .slide-copy > p { font-size: 16.5px; color: var(--ink-2); max-width: 46ch; margin: 0 0 var(--s4); }
+  .slide-actions { display: flex; gap: var(--s2); flex-wrap: wrap; }
+  .slide-price { list-style: none; display: flex; gap: var(--s2); margin: var(--s4) 0 0; padding: 0; }
+  .slide-price li {
+    display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line);
+    border-radius: var(--r1); padding: 10px 16px; font-size: 13px; color: var(--ink-3);
+  }
+  .slide-price b { font-size: 14px; color: var(--ink); }
+  .slide-price span { color: var(--brand); font-weight: 600; }
+  /* ============ 锦州行业方案（城市站新增） ============ */
+  .ind-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
+    gap: var(--s2); margin-top: var(--s4);
+  }
+  .ind-card {
+    display: flex; flex-direction: column; gap: 5px; color: var(--ink);
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r2); padding: var(--s3);
+    transition: border-color 0.15s var(--ease), transform 0.15s var(--ease), box-shadow 0.15s var(--ease);
+  }
+  .ind-card:hover {
+    color: var(--ink); border-color: var(--brand); transform: translateY(-2px);
+    box-shadow: 0 8px 24px oklch(0.3 0.02 45 / 0.08);
+  }
+  .ind-card b { font-size: 15.5px; }
+  .ind-card span { font-size: 12.5px; font-weight: 600; color: var(--brand); }
+  .ind-card em { font-style: normal; font-size: 13px; line-height: 1.7; color: var(--ink-3); }
+  .ind-more { margin: var(--s3) 0 0; font-size: 14px; }
+  .slide-visual svg { width: 100%; height: auto; display: block; }
+  .slide-visual-shot { display: flex; justify-content: center; }
+  .slide-visual-shot img {
+    max-width: 100%; height: auto;
+    border-radius: var(--r3); border: 1px solid var(--line);
+    box-shadow: 0 12px 40px oklch(0.3 0.02 45 / 0.10);
+  }
+  .hero-dots { position: absolute; bottom: var(--s3); left: 50%; transform: translateX(-50%); display: flex; gap: var(--s1); }
+  .dot {
+    width: 28px; height: 4px; border-radius: 2px; border: none; padding: 0;
+    background: oklch(0.80 0.01 60); cursor: pointer; transition: background 0.2s var(--ease), width 0.2s var(--ease);
+  }
+  .dot.is-active { background: var(--brand); width: 40px; }
+  @media (max-width: 900px) {
+    .slide { min-height: 0; }
+    .slide-inner { grid-template-columns: 1fr; gap: var(--s4); padding-block: var(--s5); }
+    .slide-visual { display: none; }
+    .hero-dots { position: static; transform: none; justify-content: center; padding-bottom: var(--s3); }
+  }
+
+  /* ============ 信任带 ============ */
+  .trust { background: var(--dark); color: oklch(0.85 0.008 60); }
+  .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s4); padding-block: var(--s5); }
+  .trust-item h3 { font-size: 15.5px; font-weight: 600; color: #fff; margin: 0 0 var(--s1); }
+  .trust-item p { font-size: 13.5px; line-height: 1.7; margin: 0; color: oklch(0.72 0.01 60); }
+  .trust-item { padding-left: var(--s3); border-left: 2px solid var(--brand); }
+  @media (max-width: 900px) { .trust-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .trust-grid { grid-template-columns: 1fr; } }
+
+  /* ============ 案例区 ============ */
+  .case-list { display: flex; flex-direction: column; gap: var(--s5); }
+  .case-card {
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--s5); align-items: center;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r3); padding: var(--s4);
+    transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  .case-card:hover { border-color: oklch(0.82 0.05 27); box-shadow: 0 8px 30px oklch(0.3 0.02 45 / 0.06); }
+  .case-card:nth-child(even) .case-media { order: 2; }
+  .case-media { display: flex; gap: var(--s2); align-items: center; justify-content: center; }
+  .case-media img { max-width: 100%; height: auto; border-radius: var(--r2); border: 1px solid var(--line); background: var(--bg-warm); }
+  .case-media img.is-wide { width: 100%; }
+  .case-tag {
+    display: inline-block; font-size: 12.5px; font-weight: 600; color: var(--brand);
+    background: var(--brand-soft); border-radius: 999px; padding: 4px 14px; margin-bottom: var(--s2);
+  }
+  .case-body h3 { font-size: 21px; font-weight: 700; margin: 0 0 var(--s2); letter-spacing: -0.01em; }
+  .case-body p { font-size: 14.5px; color: var(--ink-2); margin: 0 0 var(--s3); }
+  .case-points { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s1); }
+  .case-points li { font-size: 13px; color: var(--ink-2); background: var(--bg-warm); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+  .case-stats { display: flex; gap: var(--s4); margin: var(--s3) 0 0; padding-top: var(--s3); border-top: 1px solid var(--line); }
+  .case-stat b { display: block; font-size: 22px; font-weight: 700; color: var(--brand); letter-spacing: -0.01em; line-height: 1.2; }
+  .case-stat b small { font-size: 13px; font-weight: 600; }
+  .case-stat span { display: block; font-size: 12px; color: var(--ink-3); margin-top: 3px; line-height: 1.5; max-width: 18ch; }
+  .case-stats-note { font-size: 12px; color: var(--ink-3); margin: var(--s2) 0 0; }
+  @media (max-width: 560px) { .case-stats { flex-direction: column; gap: var(--s2); } }
+  @media (max-width: 900px) {
+    .case-card { grid-template-columns: 1fr; gap: var(--s3); }
+    .case-card:nth-child(even) .case-media { order: 0; }
+  }
+
+  /* ============ 方法论 ============ */
+  .step-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s3); }
+  .step-card {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r2); padding: var(--s3);
+    display: flex; flex-direction: column; gap: var(--s1);
+  }
+  .step-no { font-size: 13px; font-weight: 700; color: var(--brand); letter-spacing: 0.08em; }
+  .step-card h3 { font-size: 17px; font-weight: 700; margin: 0; }
+  .step-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; flex: 1; }
+  .step-deliver { font-size: 12.5px; color: var(--brand); font-weight: 600; }
+  .scene-strip {
+    margin-top: var(--s4); background: #fff; border: 1px dashed oklch(0.82 0.04 27);
+    border-radius: var(--r2); padding: var(--s3); font-size: 13.5px; color: var(--ink-2);
+    display: flex; flex-wrap: wrap; gap: var(--s1); align-items: center;
+  }
+  .scene-strip b { color: var(--brand); margin-left: var(--s2); }
+  @media (max-width: 900px) { .step-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .step-grid { grid-template-columns: 1fr; } }
+
+  /* ============ CTA ============ */
+  .cta { background: var(--brand); color: #fff; }
+  .cta-inner { display: grid; grid-template-columns: 1fr auto; gap: var(--s5); align-items: center; padding-block: var(--s6); }
+  .kicker-light { color: oklch(0.92 0.03 27); }
+  .kicker-light::before { background: oklch(0.92 0.03 27); }
+  .cta h2 { font-size: clamp(24px, 3vw, 32px); font-weight: 700; margin: 0 0 var(--s2); letter-spacing: -0.01em; }
+  .cta p { font-size: 15.5px; color: oklch(0.95 0.015 27); max-width: 56ch; margin: 0 0 var(--s4); }
+  .cta-actions { display: flex; flex-direction: column; gap: var(--s2); align-items: flex-start; }
+  .cta .btn-primary { background: #fff; color: var(--brand-deep); }
+  .cta .btn-primary:hover { background: oklch(0.96 0.01 27); color: var(--brand-deep); }
+  .cta-note { font-size: 12.5px; color: oklch(0.90 0.02 27); }
+  .cta-qr { text-align: center; }
+  .cta-qr img { border-radius: var(--r2); background: #fff; padding: 6px; }
+  .cta-qr span { display: block; font-size: 12.5px; color: oklch(0.92 0.015 27); margin-top: var(--s1); }
+  @media (max-width: 900px) { .cta-inner { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  // 轮播：scroll-snap + 自动播放（尊重 prefers-reduced-motion）
+  const track = document.getElementById('hero-track');
+  const dots = Array.from(document.querySelectorAll('.dot'));
+  if (track && dots.length) {
+    let idx = 0;
+    let timer: number | undefined;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const go = (i: number) => {
+      idx = (i + dots.length) % dots.length;
+      track.scrollTo({ left: idx * track.clientWidth, behavior: 'smooth' });
+      dots.forEach((d, k) => {
+        d.classList.toggle('is-active', k === idx);
+        d.setAttribute('aria-selected', k === idx ? 'true' : 'false');
+      });
+    };
+
+    dots.forEach((d) => d.addEventListener('click', () => { go(Number(d.dataset.go)); restart(); }));
+
+    const start = () => { if (!reduced) timer = window.setInterval(() => go(idx + 1), 5200); };
+    const stop = () => { if (timer) window.clearInterval(timer); timer = undefined; };
+    const restart = () => { stop(); start(); };
+
+    track.addEventListener('pointerenter', stop);
+    track.addEventListener('pointerleave', start);
+    track.addEventListener('focusin', stop);
+    track.addEventListener('scroll', () => {
+      const near = Math.round(track.scrollLeft / track.clientWidth);
+      if (near !== idx) {
+        idx = near;
+        dots.forEach((d, k) => {
+          d.classList.toggle('is-active', k === idx);
+          d.setAttribute('aria-selected', k === idx ? 'true' : 'false');
+        });
+      }
+    }, { passive: true });
+
+    start();
+  }
+</script>

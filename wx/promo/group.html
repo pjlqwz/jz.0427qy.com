@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>拼团</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  .g-hero {
+    padding: 18px 16px 46px;
+    color: #fff;
+    background:
+      radial-gradient(120% 80% at 90% 0%, rgba(255, 255, 255, .2), transparent 60%),
+      linear-gradient(150deg, var(--brand2), var(--brand) 60%, var(--brandInk));
+    border-radius: 0 0 20px 20px;
+  }
+  .g-hero h1 { margin: 0; font-size: 19px; font-weight: 700; letter-spacing: .5px; }
+  .g-hero p { margin: 6px 0 0; font-size: 12px; color: rgba(255, 255, 255, .78); }
+
+  .g-steps {
+    display: flex;
+    margin: -30px 14px 0;
+    padding: 14px 8px;
+    background: #fff;
+    border-radius: var(--r);
+    box-shadow: var(--sh);
+  }
+  .g-step { flex: 1; text-align: center; position: relative; }
+  .g-step .n {
+    width: 22px; height: 22px; margin: 0 auto 6px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--brandSoft); color: var(--brandInk);
+    font-size: 11px; font-weight: 700;
+  }
+  .g-step .t { font-size: 11px; color: var(--ink2); }
+
+  /* 团卡片 */
+  .g-card { margin: 12px 14px 0; overflow: hidden; }
+  .g-top { display: flex; gap: 11px; padding: 13px 14px; }
+  .g-top .thumb { width: 78px; height: 78px; }
+  .g-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .g-name { font-size: 14.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .g-sub { margin-top: 3px; font-size: 11.5px; color: var(--ink3); }
+  .g-price { margin-top: auto; display: flex; align-items: baseline; gap: 7px; }
+  .g-price .go {
+    font-size: 10px; font-weight: 700; color: #fff;
+    background: var(--brand); border-radius: 4px;
+    padding: 1px 5px;
+  }
+  .g-cta {
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 14px;
+    background: linear-gradient(100deg, #fdf3ea, #fbe7d6);
+    border-top: 1px solid #f8e2ce;
+  }
+  .g-avatars { display: flex; }
+  .g-avatars i {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid #fff;
+    background: #e9ded3;
+    margin-left: -6px;
+    display: grid; place-items: center;
+    font-size: 9px; color: #8a7c70; font-style: normal;
+  }
+  .g-avatars i:first-child { margin-left: 0; }
+  .g-need { flex: 1; font-size: 12px; color: #a05a26; }
+  .g-need b { color: var(--brandInk); font-weight: 700; }
+  .g-timer { font-size: 11px; color: var(--ink3); font-variant-numeric: tabular-nums; }
+  .g-timer b { color: var(--ink2); font-weight: 600; }
+  .g-card.is-done .g-cta { background: linear-gradient(100deg, #eef8f2, #e2f4ea); border-top-color: #d3ecdf; }
+  .g-card.is-done .g-need { color: #1f7a52; }
+
+  .g-mine {
+    margin: 18px 16px 0;
+    padding: 14px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px dashed var(--line);
+    text-align: center;
+  }
+  .g-mine b { display: block; font-size: 13.5px; }
+  .g-mine span { display: block; margin-top: 4px; font-size: 11.5px; color: var(--ink3); }
+  .g-mine .btn { margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--solid">
+    <button class="nav-btn" data-back aria-label="返回">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5-7 7 7 7"/></svg>
+    </button>
+    <div class="nav-title">拼团</div>
+    <div class="nav-side"></div>
+  </nav>
+
+  <main class="mp-main">
+    <div class="g-hero">
+      <h1>2–3 人成团，最高立省 40%</h1>
+      <p>凑齐人数自动成团，未成团 24 小时内原路退款</p>
+    </div>
+
+    <div class="g-steps">
+      <div class="g-step"><div class="n">1</div><div class="t">选择商品</div></div>
+      <div class="g-step"><div class="n">2</div><div class="t">邀请好友</div></div>
+      <div class="g-step"><div class="n">3</div><div class="t">人满成团</div></div>
+    </div>
+
+    <div id="list"></div>
+
+    <div class="g-mine">
+      <b>没有想拼的？自己开个团</b>
+      <span>发起后分享给好友，24 小时内人数满即发货</span>
+      <button class="btn btn--soft btn--sm" id="newBtn">发起拼团</button>
+    </div>
+    <div style="height:16px"></div>
+  </main>
+
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  /* 拼团数据：取当前行业前 3 个商品，团价 = 原价 * 0.62 起 */
+  const groups = PRODUCTS.slice(0, 3).map((p, i) => {
+    const need = [2, 1, 2][i];
+    return {
+      pid: p.id,
+      name: p.name,
+      sub: p.sub,
+      ico: p.ico,
+      cls: p.cls,
+      price: p.price,
+      gprice: Math.max(1, Math.round(p.price * (0.62 + i * 0.05))),
+      total: need + 1,
+      need,
+      avatars: need + 1 - need,
+      joined: false,
+      end: Date.now() + (78 + i * 42) * 6e4
+    };
+  });
+
+  function mmss(ms) {
+    if (ms <= 0) return '已结束';
+    const s = Math.floor(ms / 1000);
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  }
+
+  function render() {
+    document.getElementById('list').innerHTML = groups.map((g, i) => {
+      const done = g.need <= 0;
+      const av = Array.from({ length: Math.max(1, g.total - g.need) }, (_, k) =>
+        `<i>${['左', 'M', '橙'][k] || '友'}</i>`).join('');
+      return `<div class="card g-card ${done ? 'is-done' : ''}" data-i="${i}">
+        <div class="g-top">
+          <div class="thumb ${g.cls}"><svg viewBox="0 0 24 24" fill="currentColor">${ICO[g.ico] || ICO.bowl}</svg></div>
+          <div class="g-info">
+            <div class="g-name">${QY.esc(g.name)}</div>
+            <div class="g-sub">${QY.esc(g.sub)}</div>
+            <div class="g-price">
+              <span class="price"><i>¥</i><b>${g.gprice}</b></span>
+              <span class="price-old">¥${g.price}</span>
+              <span class="go">${g.total} 人团</span>
+            </div>
+          </div>
+        </div>
+        <div class="g-cta">
+          <div class="g-avatars">${av}</div>
+          <span class="g-need">${done
+            ? '已成团，等待发货'
+            : `还差 <b>${g.need}</b> 人 · <span class="g-timer" data-end="${g.end}">${mmss(g.end - Date.now())}</span>`}</span>
+          <button class="btn btn--primary btn--sm" data-join="${i}" ${done ? 'disabled' : ''}>
+            ${done ? '已成团' : (g.joined ? '邀请好友' : '去参团')}
+          </button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  document.addEventListener('click', e => {
+    const j = e.target.closest('[data-join]');
+    if (j) {
+      const g = groups[+j.dataset.join];
+      if (g.need <= 0) return;
+      if (g.joined) return QY.toast('已生成邀请链接（演示）', 1500);
+      g.joined = true;
+      g.need -= 1;
+      QY.toast(g.need > 0 ? `参团成功，还差 ${g.need} 人` : '人数已满，成团成功！', 1600);
+      render();
+      return;
+    }
+    if (e.target.closest('#newBtn')) {
+      const g = {
+        pid: PRODUCTS[3].id, name: PRODUCTS[3].name, sub: PRODUCTS[3].sub,
+        ico: PRODUCTS[3].ico, cls: PRODUCTS[3].cls,
+        price: PRODUCTS[3].price,
+        gprice: Math.round(PRODUCTS[3].price * 0.7),
+        total: 3, need: 2, joined: true,
+        end: Date.now() + 24 * 36e5
+      };
+      groups.unshift(g);
+      QY.toast('拼团已创建，快分享给好友', 1600);
+      render();
+    }
+  });
+
+  /* 倒计时 */
+  setInterval(() => {
+    document.querySelectorAll('.g-timer').forEach(el => {
+      el.textContent = mmss(+el.dataset.end - Date.now());
+    });
+  }, 1000);
+
+  render();
+  QY.tabbar('mine');
+})();
+</script>
+</body>
+</html>

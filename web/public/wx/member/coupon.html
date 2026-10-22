@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>优惠券</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  .cp-tabs {
+    position: sticky; top: 0; z-index: 15;
+    display: flex; gap: 6px;
+    padding: 10px 14px;
+    background: linear-gradient(var(--bg) 76%, rgba(247, 243, 238, 0));
+  }
+  .cp-tabs button {
+    height: 30px; padding: 0 14px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--line);
+    font-size: 12.5px; color: var(--ink2);
+  }
+  .cp-tabs button.is-on { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 600; }
+
+  /* 券卡 */
+  .cp {
+    position: relative;
+    display: flex;
+    margin: 0 14px 10px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: var(--sh);
+    overflow: hidden;
+  }
+  .cp-left {
+    flex: 0 0 96px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 14px 6px;
+    color: #fff;
+    background: linear-gradient(140deg, var(--brand2), var(--brand));
+  }
+  .cp-left .v { font-size: 27px; font-weight: 700; line-height: 1; letter-spacing: -.6px; font-variant-numeric: tabular-nums; }
+  .cp-left .v small { font-size: 13px; font-weight: 600; margin-right: 1px; }
+  .cp-left .u { margin-top: 5px; font-size: 10.5px; color: rgba(255, 255, 255, .8); }
+  .cp-left::after {
+    content: "";
+    position: absolute;
+    left: 96px; top: 0; bottom: 0;
+    width: 1px;
+    background: repeating-linear-gradient(180deg, #e8ded4 0 4px, transparent 4px 8px);
+  }
+  .cp-body { flex: 1; min-width: 0; padding: 12px 12px 11px; display: flex; flex-direction: column; }
+  .cp-name { font-size: 14px; font-weight: 600; }
+  .cp-cond { margin-top: 3px; font-size: 11.5px; color: var(--ink3); }
+  .cp-date { margin-top: auto; padding-top: 6px; font-size: 10.5px; color: var(--ink4); }
+  .cp-act {
+    align-self: center;
+    margin-right: 11px;
+    flex: 0 0 auto;
+    height: 28px; padding: 0 12px;
+    border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+    background: linear-gradient(135deg, var(--brand2), var(--brand));
+    color: #fff;
+    box-shadow: 0 3px 9px rgba(224, 99, 44, .26);
+  }
+  .cp-act:active { transform: scale(.96); }
+  .cp-act.is-got { background: #f4efe9; color: var(--ink3); box-shadow: none; }
+  .cp-act.is-use { background: var(--ink); color: #fff; box-shadow: none; }
+
+  .cp.is-off .cp-left { background: linear-gradient(140deg, #cfc6bd, #b6aca2); }
+  .cp.is-off .cp-name, .cp.is-off .cp-left .v { color: #fff; }
+  .cp.is-off { opacity: .78; }
+  .cp-stamp {
+    position: absolute;
+    right: 66px; top: 50%;
+    transform: translateY(-50%) rotate(-14deg);
+    width: 54px; height: 54px;
+    border: 1.6px solid rgba(180, 170, 160, .7);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 10.5px; font-weight: 700;
+    color: rgba(150, 140, 130, .9);
+    letter-spacing: .5px;
+    pointer-events: none;
+  }
+  .cp-tip { margin: 4px 16px 16px; font-size: 11.5px; line-height: 1.8; color: var(--ink3); }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--solid">
+    <button class="nav-btn" data-back aria-label="返回">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5-7 7 7 7"/></svg>
+    </button>
+    <div class="nav-title">优惠券</div>
+    <div class="nav-side"></div>
+  </nav>
+
+  <main class="mp-main">
+    <div class="cp-tabs" id="tabs"></div>
+    <div id="list"></div>
+    <p class="cp-tip">券在结算页自动可用；同一单只能用一张。演示数据，不涉及真实权益。</p>
+  </main>
+
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  let tab = 'get';
+
+  const face = t => {
+    if (t.type === 'off') return { v: t.v, unit: '折', pre: '' };
+    if (t.type === 'ship') return { v: t.v, unit: '元免运费', pre: '¥' };
+    return { v: t.v, unit: '元', pre: '¥' };
+  };
+
+  function cardCP(t, state) {
+    const f = face(t);
+    const cond = t.min > 0 ? `满 ${t.min} 元可用` : '无门槛';
+    const disabled = state === 'used' || state === 'expired';
+    return `<div class="cp ${disabled ? 'is-off' : ''}">
+      <div class="cp-left">
+        <div class="v">${f.pre}${f.v}<small>${t.type === 'off' ? '' : ''}</small></div>
+        <div class="u">${f.unit}</div>
+      </div>
+      <div class="cp-body">
+        <div class="cp-name">${QY.esc(t.t)}</div>
+        <div class="cp-cond">${cond} · ${t.from === 'member' ? '会员专享' : t.from === 'new' ? '新客专享' : '全场通用'}</div>
+        <div class="cp-date">有效期 ${t.days} 天</div>
+      </div>
+      ${state === 'get' ? `<button class="cp-act" data-claim="${t.id}">领取</button>` : ''}
+      ${state === 'got' ? `<button class="cp-act is-got">已领取</button>` : ''}
+      ${state === 'usable' ? `<a class="cp-act is-use" href="../trade/home.html#menu">去使用</a>` : ''}
+      ${disabled ? `<span class="cp-stamp">${state === 'used' ? '已使用' : '已过期'}</span>` : ''}
+    </div>`;
+  }
+
+  function render() {
+    const mine = QY.coupons.mine();
+    const myIds = new Set(mine.map(c => c.id));
+    const usableCnt = mine.filter(c => {
+      const t = COUPONS.find(x => x.id === c.id);
+      return t && !c.used && c.exp > Date.now();
+    }).length;
+
+    document.getElementById('tabs').innerHTML =
+      `<button data-t="get" class="${tab === 'get' ? 'is-on' : ''}">领券中心</button>
+       <button data-t="mine" class="${tab === 'mine' ? 'is-on' : ''}">我的券（${usableCnt}）</button>`;
+
+    const host = document.getElementById('list');
+
+    if (tab === 'get') {
+      host.innerHTML = COUPONS.map(t => cardCP(t, myIds.has(t.id) ? 'got' : 'get')).join('');
+    } else {
+      if (!mine.length) {
+        host.innerHTML = `<div class="empty" style="padding-top:60px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 9.2A2 2 0 0 1 5 6.2h14a2 2 0 0 1 1.6 3M3.4 14.8A2 2 0 0 0 5 17.8h14a2 2 0 0 0 1.6-3"/></svg>
+          <div class="empty-t">还没有优惠券</div>
+          <div class="empty-s">去领券中心看看</div>
+          <button class="btn btn--primary btn--sm" data-t="get" style="margin-top:16px">去领券</button>
+        </div>`;
+        return;
+      }
+      host.innerHTML = mine.slice().reverse().map(c => {
+        const t = COUPONS.find(x => x.id === c.id);
+        if (!t) return '';
+        const state = c.used ? 'used' : (c.exp < Date.now() ? 'expired' : 'usable');
+        return cardCP(t, state);
+      }).join('');
+    }
+  }
+
+  document.addEventListener('click', e => {
+    const tb = e.target.closest('[data-t]');
+    if (tb) { tab = tb.dataset.t; render(); return; }
+
+    const cl = e.target.closest('[data-claim]');
+    if (cl) {
+      const r = QY.coupons.claim(cl.dataset.claim);
+      if (!r.ok) return QY.toast(r.msg, 1200);
+      QY.toast('领取成功，结算时可用', 1400);
+      render();
+    }
+  });
+
+  render();
+  QY.tabbar('mine');
+})();
+</script>
+</body>
+</html>

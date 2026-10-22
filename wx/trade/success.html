@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>支付成功 · 拾光小馆</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  .s-wrap { padding: 0 18px; }
+
+  /* 对勾 */
+  .s-check {
+    width: 78px; height: 78px;
+    margin: 34px auto 0;
+    position: relative;
+  }
+  .s-check svg { width: 100%; height: 100%; }
+  .s-check .ring {
+    fill: none;
+    stroke: #2e9e6b;
+    stroke-width: 3;
+    stroke-dasharray: 226;
+    stroke-dashoffset: 226;
+    animation: strokeIn .62s cubic-bezier(.5, 0, .3, 1) .06s forwards;
+    opacity: .28;
+  }
+  .s-check .tick {
+    fill: none;
+    stroke: #2e9e6b;
+    stroke-width: 4.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+    animation: strokeIn .5s cubic-bezier(.4, 0, .2, 1) .42s forwards;
+  }
+  .s-check .bg {
+    position: absolute; inset: 12px;
+    border-radius: 50%;
+    background: var(--greenSoft);
+    z-index: -1;
+    transform: scale(.6);
+    opacity: 0;
+    animation: pop .4s ease .3s forwards;
+  }
+
+  .s-title {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: .4px;
+  }
+  .s-amt {
+    margin-top: 7px;
+    text-align: center;
+    color: var(--ink3);
+    font-size: 13px;
+  }
+  .s-amt b { font-size: 22px; color: var(--ink); font-weight: 700; margin-left: 4px; font-variant-numeric: tabular-nums; }
+
+  /* 取餐号 */
+  .s-ticket {
+    margin-top: 22px;
+    position: relative;
+    padding: 18px 16px 16px;
+    border-radius: 16px;
+    background: linear-gradient(150deg, #2b2320, #46362b);
+    color: #fff;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(43, 35, 32, .26);
+  }
+  .s-ticket::after {
+    content: "";
+    position: absolute;
+    width: 150px; height: 150px;
+    right: -50px; top: -54px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .06);
+  }
+  .s-ticket .lb { font-size: 11.5px; color: rgba(255, 255, 255, .62); letter-spacing: .6px; }
+  .s-ticket .no {
+    margin-top: 4px;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(120deg, #fff, #ffd9b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .s-ticket .tip { margin-top: 6px; font-size: 12px; color: rgba(255, 255, 255, .72); }
+  .s-ticket .dash {
+    margin: 14px -16px 12px;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .26) 0 5px, transparent 5px 11px);
+  }
+  .s-ticket .row { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255, 255, 255, .72); }
+  .s-ticket .row + .row { margin-top: 7px; }
+  .s-ticket .row b { color: #fff; font-weight: 600; }
+
+  /* 积分 */
+  .s-pts {
+    margin-top: 12px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 14px;
+    border-radius: 14px;
+    background: linear-gradient(100deg, #fdf3e2, #fbeadb);
+    border: 1px solid #f7e2cb;
+  }
+  .s-pts .ic {
+    width: 32px; height: 32px; border-radius: 10px;
+    display: grid; place-items: center;
+    background: linear-gradient(140deg, #f0c078, #c08a3e);
+    color: #fff;
+  }
+  .s-pts .ic svg { width: 18px; height: 18px; }
+  .s-pts .tx { flex: 1; min-width: 0; font-size: 12.5px; color: #8a5a2c; }
+  .s-pts .tx b { color: #a8621f; }
+  .s-pts .go { font-size: 12px; color: #a8621f; opacity: .75; }
+
+  .s-btns { margin-top: 20px; display: flex; gap: 10px; }
+  .s-btns .btn { flex: 1; }
+
+  .s-foot {
+    margin: 18px 0 24px;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink4);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--solid">
+    <div class="nav-side"></div>
+    <div class="nav-title">支付结果</div>
+    <div class="nav-side">
+      <a class="nav-btn" href="home.html" aria-label="关闭">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <main class="mp-main">
+    <div class="s-wrap">
+      <div class="s-check">
+        <span class="bg"></span>
+        <svg viewBox="0 0 80 80">
+          <circle class="ring" cx="40" cy="40" r="36"/>
+          <path class="tick" d="M25 41.5 35.5 52 56 30"/>
+        </svg>
+      </div>
+
+      <div class="s-title" id="title">支付成功</div>
+      <div class="s-amt" id="amt">已支付 <b>¥0</b></div>
+
+      <div class="s-ticket" id="ticket"></div>
+
+      <div class="s-pts">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.6l2.5 5.4 5.9.8-4.3 4.1 1.1 5.8L12 15.9l-5.2 2.8 1.1-5.8-4.3-4.1 5.9-.8L12 2.6Z"/></svg></span>
+        <span class="tx" id="ptsTx">本单可获得积分，可在会员中心查看</span>
+        <span class="go">会员 ›</span>
+      </div>
+
+      <div class="s-btns">
+        <a class="btn btn--ghost" href="home.html">返回首页</a>
+        <a class="btn btn--primary" id="ordBtn" href="order.html">查看订单</a>
+      </div>
+
+      <p class="s-foot">这是功能演示环境，未产生真实扣款。<br>正式项目由微信支付完成收款，资金直达商户号。</p>
+    </div>
+  </main>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  const no = QY.qs('no');
+  const SVC_NO = (BIZ.deliver || BIZ_ID === 'food') ? '取餐号' : '服务单号';
+  let order = (no && QY.orders.get(no)) || QY.orders.last();
+
+  /* 直接打开本页（展厅里常见）时用一单示例数据兜底，避免空页 */
+  if (!order) {
+    const it = PRODUCTS.slice(0, 2).map(p => ({
+      name: p.name, specText: p.specs.length ? (p.specs[0].opts[0].label) : '标准',
+      qty: 1, unit: p.price, ico: p.ico, cls: p.cls
+    }));
+    const goods = it.reduce((n, i) => n + i.unit * i.qty, 0);
+    order = {
+      no: 'QY' + new Date().getFullYear() + String(new Date().getMonth() + 1).padStart(2, '0')
+        + String(new Date().getDate()).padStart(2, '0') + '0001',
+      outNo: 'A' + String(Math.floor(10 + Math.random() * 80)),
+      ts: Date.now(), items: it, goods,
+      pack: PROMO.pack, delivery: 0,
+      promo: goods >= PROMO.threshold ? PROMO.minus : 0,
+      couponCut: 0, couponName: '',
+      total: Math.max(0, goods + PROMO.pack - (goods >= PROMO.threshold ? PROMO.minus : 0)),
+      mode: 'pickup', pickupTime: '尽快（约 15 分钟）',
+      addr: SHOP.address, remark: '', payMethod: '微信支付',
+      status: 'paid', statusText: '已支付 · 制作中'
+    };
+  }
+
+  document.getElementById('amt').innerHTML = `已支付 <b>¥${QY.money(order.total)}</b>`;
+  document.getElementById('ordBtn').href = 'order.html?id=' + order.no;
+
+  const isPickup = order.mode === 'pickup';
+  const quick = /^尽快/.test(order.pickupTime || '');
+  const etaText = isPickup
+    ? (quick ? '预计 15 分钟内可取' : `预计 ${order.pickupTime} 可取`)
+    : '预计 30–40 分钟送达';
+  document.getElementById('ticket').innerHTML = `
+    <div class="lb">${isPickup ? SVC_NO + ' · ' + MODE_WORD : '订单号 · 骑手配送中'}</div>
+    <div class="no">${isPickup ? order.outNo : order.no}</div>
+    <div class="tip">${etaText}</div>
+    <div class="dash"></div>
+    <div class="row"><span>${isPickup ? '取餐门店' : '收货地址'}</span><b style="max-width:65%;text-align:right">${QY.esc(isPickup ? SHOP.name + ' ' + SHOP.branch : order.addr)}</b></div>
+    <div class="row"><span>下单时间</span><b>${QY.fmtTime(order.ts)}</b></div>
+    <div class="row"><span>支付方式</span><b>${order.payMethod}</b></div>`;
+
+  const pts = Math.floor(order.total);
+  document.getElementById('ptsTx').innerHTML =
+    `本单预计获得 <b>${pts} 积分</b>，消费 1 元 = 1 分`;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+---
+// 锦州站资讯详情（由 data/news.js 生成）
+// 路径与主站保持一致：/news/industry/<id>.html（左总 2026-10-22 要求「复制回来、保持路径相同」）
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../config/site.js';
+import { ARTICLES } from '../../../data/news.js';
+
+export function getStaticPaths() {
+  return ARTICLES.map((entry) => ({ params: { id: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const others = ARTICLES.filter((x) => x.slug !== entry.slug).slice(0, 6);
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: entry.title,
+  description: entry.summary,
+  author: { '@type': 'Organization', name: SITE.brand },
+  publisher: { '@type': 'Organization', name: SITE.brand },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE.domain}/news/industry/${entry.slug}.html` },
+};
+---
+
+<Base
+  title={`${entry.title}｜千羽网络（服务锦州）`}
+  description={entry.summary}
+  canonical={`${SITE.domain}/news/industry/${entry.slug}.html`}
+  keywords={entry.keywords.join(',')}
+  jsonld={jsonld}
+>
+  <div class="wrap">
+    <nav class="crumbs"><a href="/">首页</a> › <a href="/news/">行业资讯</a> › {entry.title}</nav>
+    <article class="art">
+      <h1 class="art-title">{entry.title}</h1>
+      <div class="art-meta">{entry.keywords.join(' / ')}</div>
+      <p class="art-lede">{entry.summary}</p>
+      <div class="art-body" set:html={entry.bodyHtml} />
+    </article>
+
+    <div class="cta-box">
+      <div>
+        <h2>聊你的情况</h2>
+        <p>把你的流程和问题说一遍，我来判断从哪一步开始。不推销、不铺垫。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href={`tel:${SITE.tel}`}>电话 / 微信 {SITE.tel}</a>
+        <a class="btn btn-ghost" href="/contect/">看联系方式</a>
+      </div>
+    </div>
+
+    <nav class="rel">
+      <span>继续看</span>
+      {others.map((o) => <a href={`/news/industry/${o.slug}.html`}>{o.title}</a>)}
+      <a href="/industry/">锦州行业方案 →</a>
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .crumbs { font-size: 13px; color: var(--ink-3); margin: var(--s3) 0 0; }
+  .crumbs a { color: var(--ink-3); }
+  .crumbs a:hover { color: var(--brand); }
+  .art { max-width: 74ch; margin-bottom: var(--s5); }
+  .art-title {
+    font-size: clamp(23px, 3vw, 32px); line-height: 1.35; font-weight: 700;
+    letter-spacing: -0.01em; margin: var(--s3) 0 var(--s2);
+  }
+  .art-meta { font-size: 13px; color: var(--ink-3); margin-bottom: var(--s3); }
+  .art-lede {
+    font-size: 15.5px; line-height: 1.85; color: var(--ink-2);
+    background: var(--bg-warm); border-left: 3px solid var(--brand);
+    padding: 14px 18px; border-radius: 0 var(--r2) var(--r2) 0; margin: 0 0 var(--s4);
+  }
+  .art-body :global(h2) {
+    font-size: 19px; font-weight: 700; letter-spacing: -0.01em;
+    margin: var(--s4) 0 var(--s2); padding-left: 11px; border-left: 3px solid var(--brand);
+  }
+  .art-body :global(p) { font-size: 15.5px; line-height: 1.95; color: var(--ink-2); margin: 0 0 var(--s3); }
+  .cta-box {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--s4); flex-wrap: wrap;
+    background: var(--bg-warm); border: 1px solid var(--line); border-radius: var(--r3);
+    padding: var(--s4); margin: 0 0 var(--s4);
+  }
+  .cta-box h2 { font-size: 19px; font-weight: 700; margin: 0 0 6px; }
+  .cta-box p { font-size: 14px; color: var(--ink-2); margin: 0; max-width: 54ch; line-height: 1.8; }
+  .cta-actions { display: flex; gap: var(--s2); flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; font-size: 14.5px; font-weight: 600;
+    padding: 11px 20px; border-radius: var(--r1); border: 1px solid transparent; white-space: nowrap;
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { background: var(--brand-deep); color: #fff; }
+  .btn-ghost { border-color: var(--line); color: var(--ink-2); background: #fff; }
+  .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
+  .rel {
+    display: flex; align-items: flex-start; gap: 10px 12px; flex-wrap: wrap;
+    border-top: 1px solid var(--line); padding-top: var(--s3); font-size: 14px; margin-bottom: var(--s5);
+  }
+  .rel span { color: var(--ink-3); }
+  .rel a { color: var(--brand); font-weight: 600; }
+</style>

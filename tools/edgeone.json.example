@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/tools/*", "destination": "/__blocked_do_not_create__" },
+    { "source": "/web/*", "destination": "/__blocked_do_not_create__" },
+    { "source": "/reports/*", "destination": "/__blocked_do_not_create__" }
+  ]
+}

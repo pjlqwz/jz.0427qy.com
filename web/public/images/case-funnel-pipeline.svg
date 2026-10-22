@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" role="img" aria-label="自动获客流水线架构示意图">
+  <defs>
+    <marker id="fc-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#b32c29"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="430" fill="#faf7f4"/>
+
+  <!-- 标题 -->
+  <text x="40" y="46" font-size="16" font-weight="600" fill="#26201c">千羽自动获客流水线</text>
+  <text x="40" y="66" font-size="12" fill="#8a7f74">内容生产 → 收录推送 → 视频获客 → 线索沉淀，四段全自动运转</text>
+
+  <!-- 四个节点 -->
+  <g>
+    <!-- 节点 1：内容生产 -->
+    <rect x="40" y="92" width="164" height="180" rx="12" fill="#ffffff" stroke="#e8e0d8"/>
+    <circle cx="80" cy="124" r="16" fill="#b32c29"/>
+    <path d="M74 124 h12 M74 118 h12 M74 130 h12" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    <text x="80" y="168" font-size="13" font-weight="600" fill="#26201c" text-anchor="middle">内容生产</text>
+    <text x="80" y="188" font-size="11" fill="#6b5f54" text-anchor="middle">帝国CMS 站群</text>
+    <text x="80" y="206" font-size="11" fill="#6b5f54" text-anchor="middle">SEO 文章日更 5 篇</text>
+    <text x="80" y="224" font-size="11" fill="#6b5f54" text-anchor="middle">智能体起草 + 人工审稿</text>
+    <rect x="58" y="240" width="128" height="20" rx="10" fill="#faf3f2"/>
+    <text x="122" y="254" font-size="10" fill="#b32c29" text-anchor="middle">班次：每日 09:00 自动执行</text>
+
+    <!-- 节点 2：收录推送 -->
+    <rect x="228" y="92" width="164" height="180" rx="12" fill="#ffffff" stroke="#e8e0d8"/>
+    <circle cx="268" cy="124" r="16" fill="#26201c"/>
+    <path d="M268 116 v10 M268 124 l6 4" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <circle cx="268" cy="124" r="11" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/>
+    <text x="268" y="168" font-size="13" font-weight="600" fill="#26201c" text-anchor="middle">收录推送</text>
+    <text x="268" y="188" font-size="11" fill="#6b5f54" text-anchor="middle">百度主动推送</text>
+    <text x="268" y="206" font-size="11" fill="#6b5f54" text-anchor="middle">sitemap 回填保底</text>
+    <text x="268" y="224" font-size="11" fill="#6b5f54" text-anchor="middle">发布后约 5 分钟触发</text>
+    <rect x="246" y="240" width="128" height="20" rx="10" fill="#f4efe9"/>
+    <text x="310" y="254" font-size="10" fill="#6b5f54" text-anchor="middle">内外网双发 · 延迟自动补推</text>
+
+    <!-- 节点 3：视频获客 -->
+    <rect x="416" y="92" width="164" height="180" rx="12" fill="#ffffff" stroke="#e8e0d8"/>
+    <circle cx="456" cy="124" r="16" fill="#b32c29"/>
+    <path d="M450 118 v12 l10 -6 z" fill="#ffffff"/>
+    <text x="456" y="168" font-size="13" font-weight="600" fill="#26201c" text-anchor="middle">视频获客</text>
+    <text x="456" y="188" font-size="11" fill="#6b5f54" text-anchor="middle">抖音 CDP 自动搜索</text>
+    <text x="456" y="206" font-size="11" fill="#6b5f54" text-anchor="middle">15×5 关键词表轮换</text>
+    <text x="456" y="224" font-size="11" fill="#6b5f54" text-anchor="middle">按标题筛选业务相关视频</text>
+    <rect x="434" y="240" width="128" height="20" rx="10" fill="#faf3f2"/>
+    <text x="498" y="254" font-size="10" fill="#b32c29" text-anchor="middle">复用浏览器登录态 · 无需扫码</text>
+
+    <!-- 节点 4：线索沉淀 -->
+    <rect x="604" y="92" width="164" height="180" rx="12" fill="#ffffff" stroke="#e8e0d8"/>
+    <circle cx="644" cy="124" r="16" fill="#26201c"/>
+    <path d="M638 118 h12 v12 h-12 z M641 121 h6 M641 125 h6" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <text x="644" y="168" font-size="13" font-weight="600" fill="#26201c" text-anchor="middle">线索沉淀</text>
+    <text x="644" y="188" font-size="11" fill="#6b5f54" text-anchor="middle">ima 知识库归档</text>
+    <text x="644" y="206" font-size="11" fill="#6b5f54" text-anchor="middle">视频内容 + 获客数据</text>
+    <text x="644" y="224" font-size="11" fill="#6b5f54" text-anchor="middle">反哺选题与关键词表</text>
+    <rect x="622" y="240" width="128" height="20" rx="10" fill="#f4efe9"/>
+    <text x="686" y="254" font-size="10" fill="#6b5f54" text-anchor="middle">闭环：数据 → 下一轮内容</text>
+
+    <!-- 连接箭头 -->
+    <g stroke="#b32c29" stroke-width="2" fill="none">
+      <line x1="204" y1="182" x2="226" y2="182" marker-end="url(#fc-arrow)"/>
+      <line x1="392" y1="182" x2="414" y2="182" marker-end="url(#fc-arrow)"/>
+      <line x1="580" y1="182" x2="602" y2="182" marker-end="url(#fc-arrow)"/>
+    </g>
+  </g>
+
+  <!-- 底部回流线 -->
+  <path d="M686 272 C686 316 122 316 122 272" stroke="#8a7f74" stroke-width="1.5" fill="none" stroke-dasharray="5 5"/>
+  <path d="M122 286 l-5 -8 M122 286 l5 -8" stroke="#8a7f74" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <text x="404" y="330" font-size="11" fill="#8a7f74" text-anchor="middle">沉淀数据回流，驱动下一轮关键词与选题</text>
+
+  <!-- 底部运行状态条 -->
+  <rect x="40" y="356" width="728" height="46" rx="10" fill="#26201c"/>
+  <circle cx="70" cy="379" r="5" fill="#3d9a50"/>
+  <text x="88" y="384" font-size="12" fill="#f4efe9">流水线状态：运行中</text>
+  <text x="240" y="384" font-size="12" fill="#b8ada1">｜</text>
+  <text x="262" y="384" font-size="12" fill="#f4efe9">已发布文章 1,455 篇</text>
+  <text x="470" y="384" font-size="12" fill="#b8ada1">｜</text>
+  <text x="492" y="384" font-size="12" fill="#f4efe9">智能体值守，异常自动记录</text>
+  <text x="700" y="384" font-size="12" fill="#e8a79f" text-anchor="end">自有业务实测</text>
+</svg>

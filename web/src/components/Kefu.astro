@@ -1,0 +1,291 @@
+---
+// 客服名片弹窗：一个悬浮入口 + 一张横版名片。
+// 设计意图：站内 CTA 原本只有 tel: 和页脚二维码，客户在长页面看到一半想咨询时够不着。
+// 这个组件在右下角常驻一个入口，点开是「能真拨号、真复制、真加微信」的名片。
+// 有意做成不自动弹——自动弹窗是骚扰，只做「随时可及」。
+// 任何页面想主动唤起：调用 window.qyKefu.open()
+//
+// 横版三栏：品牌（logo，底色与品牌色同为 #b32c29，无缝）| 二维码 | 联系方式
+// 不列 QQ：客户选型场景下电话/微信就够，多一行反而稀释了主渠道。
+import { SITE } from '../config/site.js';
+
+interface Props {
+  title?: string;
+  sub?: string;
+}
+const { title = '一对一咨询', sub = '企业 AI · 建站 · 小程序 · 软件定制' } = Astro.props;
+
+const TEL = SITE.tel;
+const MAIL = SITE.email;
+---
+
+<div class="kefu" id="qy-kefu">
+  <button class="kefu-fab" type="button" aria-haspopup="dialog" aria-controls="qy-kefu-card" aria-expanded="false">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+    </svg>
+    <span>咨询</span>
+  </button>
+
+  <div class="kefu-mask" id="qy-kefu-mask" hidden>
+    <div class="kefu-card" id="qy-kefu-card" role="dialog" aria-modal="true" aria-labelledby="qy-kefu-title">
+      <div class="kefu-hd">
+        <div class="kefu-brand">
+          <img class="kefu-logo" src="/images/logo.png" alt="千羽网络" width="600" height="182" />
+          <div class="kefu-hdtxt">
+            <p class="kefu-title" id="qy-kefu-title">{title}</p>
+            <p class="kefu-sub">{sub}</p>
+          </div>
+        </div>
+        <button class="kefu-x" type="button" aria-label="关闭">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <div class="kefu-body">
+        <div class="kefu-qr">
+          <img src="/images/wecom-qr.png" alt="千羽网络企业微信二维码" width="132" height="132" loading="lazy" />
+          <p>微信扫码加我<br /><span>手机可长按识别</span></p>
+        </div>
+
+        <div class="kefu-list">
+          <a class="kefu-row" href={`tel:${TEL}`}>
+            <span class="kefu-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /></svg>
+            </span>
+            <span class="kefu-txt"><i>电话 · 左先生</i><b>{TEL}</b></span>
+            <span class="kefu-go" aria-hidden="true">拨打</span>
+          </a>
+
+          <div class="kefu-row">
+            <span class="kefu-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.4 8.4 0 0 1 12 3.2a8.4 8.4 0 0 1 9 8.3z" /></svg>
+            </span>
+            <span class="kefu-txt"><i>微信 · 同手机号</i><b>{TEL}</b></span>
+            <button class="kefu-copy" type="button" data-copy={TEL}>复制</button>
+          </div>
+
+          <div class="kefu-row">
+            <span class="kefu-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m2 7 10 7 10-7" /></svg>
+            </span>
+            <span class="kefu-txt"><i>邮箱 · 需求文档与报价</i><b>{MAIL}</b></span>
+            <button class="kefu-copy" type="button" data-copy={MAIL}>复制</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="kefu-ft">工作日 9:00–18:00 在线 · 非工作时间留言次日回复</p>
+    </div>
+  </div>
+
+  <div class="kefu-toast" id="qy-kefu-toast" role="status" aria-live="polite"></div>
+</div>
+
+<style>
+  .kefu-fab {
+    position: fixed; right: 24px; bottom: 24px; z-index: 90;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 13px 19px; border: 0; border-radius: 999px; cursor: pointer;
+    background: var(--brand); color: #fff; font-family: inherit; font-size: 15px; font-weight: 500;
+    box-shadow: 0 8px 24px oklch(0.48 0.17 27 / 0.3);
+    transition: transform 0.2s var(--ease), background 0.15s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  .kefu-fab:hover { background: var(--brand-deep); transform: translateY(-2px); box-shadow: 0 12px 28px oklch(0.48 0.17 27 / 0.36); }
+  .kefu-fab:active { transform: translateY(0); }
+
+  .kefu-mask {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    background: oklch(0.22 0.01 45 / 0.55);
+    backdrop-filter: blur(3px);
+    animation: kefu-fade 0.2s var(--ease);
+  }
+  .kefu-mask[hidden] { display: none; }
+  @keyframes kefu-fade { from { opacity: 0; } to { opacity: 1; } }
+
+  /* 横版：660 宽，头/身/脚三段，身分左右两栏 */
+  .kefu-card {
+    width: 100%; max-width: 660px; max-height: 90vh; overflow-y: auto; overscroll-behavior: contain;
+    background: #fff; border-radius: var(--r3);
+    box-shadow: 0 24px 60px oklch(0.22 0.01 45 / 0.32);
+    animation: kefu-pop 0.26s var(--ease);
+  }
+  @keyframes kefu-pop { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+
+  /* 头部红底取 #b32c29，与 logo.png 自带底色完全一致，图片放上去无缝 */
+  .kefu-hd {
+    position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 16px 20px; background: #b32c29; color: #fff;
+    border-radius: var(--r3) var(--r3) 0 0;
+  }
+  .kefu-brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .kefu-logo { display: block; width: auto; height: 30px; flex: none; }
+  .kefu-hdtxt { min-width: 0; border-left: 1px solid oklch(1 0 0 / 0.28); padding-left: 14px; }
+  .kefu-title { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.35; letter-spacing: 0.01em; }
+  .kefu-sub { margin: 3px 0 0; font-size: 12px; line-height: 1.45; opacity: 0.85; }
+
+  .kefu-x {
+    flex: none; width: 32px; height: 32px;
+    display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
+    background: oklch(1 0 0 / 0.16); color: #fff; cursor: pointer;
+    transition: background 0.15s var(--ease);
+  }
+  .kefu-x:hover { background: oklch(1 0 0 / 0.3); }
+
+  .kefu-body { display: flex; align-items: stretch; }
+  .kefu-qr {
+    flex: none; width: 208px; padding: 18px 18px 16px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
+    background: var(--bg-warm); border-right: 1px solid var(--line);
+  }
+  .kefu-qr img {
+    display: block; width: 132px; height: 132px; border-radius: 6px;
+    background: #fff; border: 1px solid var(--line);
+  }
+  .kefu-qr p { margin: 0; text-align: center; font-size: 12px; line-height: 1.45; color: var(--ink-2); font-weight: 500; }
+  .kefu-qr p span { font-size: 11px; color: var(--ink-3); font-weight: 400; }
+
+  .kefu-list { flex: 1; min-width: 0; padding: 16px 18px; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+  .kefu-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--r2);
+    background: var(--bg-warm); text-decoration: none; color: var(--ink);
+  }
+  a.kefu-row { background: var(--brand-soft); transition: background 0.15s var(--ease); }
+  a.kefu-row:hover { background: oklch(0.93 0.045 27); }
+  .kefu-ico {
+    flex: none; width: 28px; height: 28px; display: grid; place-items: center;
+    border-radius: 50%; background: var(--brand); color: #fff;
+  }
+  .kefu-txt { flex: 1; min-width: 0; display: block; }
+  .kefu-txt i { display: block; font-style: normal; font-size: 11px; color: var(--ink-3); line-height: 1.35; }
+  .kefu-txt b { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.45; word-break: break-all; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
+  .kefu-go, .kefu-copy {
+    flex: none; font-family: inherit; font-size: 12px; line-height: 1;
+    padding: 7px 13px; border-radius: 999px; cursor: pointer;
+    border: 1px solid oklch(0.48 0.17 27 / 0.28); background: #fff; color: var(--brand);
+    transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+  }
+  .kefu-copy:hover { background: var(--brand-soft); border-color: var(--brand); }
+  .kefu-go { border-color: transparent; background: var(--brand); color: #fff; }
+
+  .kefu-ft {
+    margin: 0; padding: 10px 20px; text-align: center; font-size: 11.5px; color: var(--ink-3); line-height: 1.6;
+    border-top: 1px solid var(--line);
+  }
+
+  .kefu-toast {
+    position: fixed; left: 50%; bottom: 92px; z-index: 210;
+    transform: translate(-50%, 8px); opacity: 0; visibility: hidden;
+    padding: 9px 17px; border-radius: 999px;
+    background: oklch(0.22 0.01 45 / 0.92); color: #fff; font-size: 13px; white-space: nowrap;
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease), visibility 0.2s;
+    pointer-events: none;
+  }
+  .kefu-toast.is-on { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
+  /* 窄屏：横版退回竖版，二维码从左侧栏移到顶部条 */
+  @media (max-width: 640px) {
+    .kefu-fab { right: 16px; bottom: 16px; padding: 12px 16px; font-size: 14px; }
+    .kefu-mask { padding: 12px; align-items: flex-end; }
+    .kefu-card { max-width: 100%; max-height: 92vh; }
+    .kefu-hd { padding: 13px 16px; gap: 10px; }
+    .kefu-logo { height: 24px; }
+    .kefu-hdtxt { padding-left: 11px; }
+    .kefu-title { font-size: 14px; }
+    .kefu-sub { font-size: 11px; }
+    .kefu-body { flex-direction: column; }
+    .kefu-qr {
+      width: auto; flex-direction: row; justify-content: center; gap: 14px;
+      padding: 14px 16px; border-right: 0; border-bottom: 1px solid var(--line);
+    }
+    .kefu-qr img { width: 96px; height: 96px; }
+    .kefu-qr p { text-align: left; font-size: 12.5px; }
+    .kefu-list { padding: 12px 14px; gap: 7px; }
+    .kefu-row { padding: 9px 11px; }
+    .kefu-ft { padding: 9px 16px; font-size: 11px; }
+  }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('qy-kefu');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+
+    const mask = document.getElementById('qy-kefu-mask');
+    const card = document.getElementById('qy-kefu-card');
+    const fab = root.querySelector('.kefu-fab');
+    const toast = document.getElementById('qy-kefu-toast');
+    if (!mask || !card || !fab) return;
+
+    let toastTimer;
+    const showToast = (msg) => {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('is-on');
+      clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => toast.classList.remove('is-on'), 1800);
+    };
+
+    const open = () => {
+      mask.hidden = false;
+      fab.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      const first = card.querySelector('a.kefu-row, .kefu-copy') as HTMLElement | null;
+      first?.focus({ preventScroll: true });
+    };
+
+    const close = () => {
+      mask.hidden = true;
+      fab.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      fab.focus({ preventScroll: true });
+    };
+
+    fab.addEventListener('click', open);
+    card.querySelector('.kefu-x')?.addEventListener('click', close);
+    mask.addEventListener('click', (e) => { if (e.target === mask) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !mask.hidden) close(); });
+
+    // 复制：clipboard API 优先，失败退回 execCommand（部分内置浏览器不支持前者）
+    const legacyCopy = (text: string) => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, text.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      } catch {
+        return false;
+      }
+    };
+
+    card.addEventListener('click', async (e) => {
+      const btn = (e.target as Element).closest?.('[data-copy]') as HTMLElement | null;
+      if (!btn) return;
+      e.preventDefault();
+      const text = btn.dataset.copy || '';
+      let ok = false;
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          ok = true;
+        }
+      } catch {
+        ok = false;
+      }
+      if (!ok) ok = legacyCopy(text);
+      showToast(ok ? `已复制：${text}` : '复制失败，请长按号码手动复制');
+    });
+
+    // 供页面其他按钮主动唤起
+    (window as any).qyKefu = { open, close };
+  })();
+</script>

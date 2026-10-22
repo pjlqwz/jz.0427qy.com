@@ -1,0 +1,16 @@
+{
+  "name": "jz-qy-web",
+  "type": "module",
+  "private": true,
+  "version": "0.1.0",
+  "description": "jz.0427qy.com 锦州城市站前台（Astro 静态生成，preserve 模式保持原 URL）",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:urls": "node tools/check-urls.mjs"
+  },
+  "dependencies": {
+    "astro": "^5"
+  }
+}

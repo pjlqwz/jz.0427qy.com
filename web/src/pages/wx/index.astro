@@ -1,0 +1,640 @@
+---
+// 小程序能力展厅 /wx/（2026-10-21 由 public/wx/index.html 转为 Astro 页，统一站内 header/footer）
+// 2026-10-21 SEO 改造（依据 reports/seo-report-wx-hall-2026-10-21.md）：
+//   1. 15 个功能清单 / 6 条行业说明 / 行业功能矩阵 / 行业按钮 全部改为**构建时静态渲染**，
+//      此前全靠 JS innerHTML 注入，爬虫只看到 150 字 → 现在正文 1000+ 字
+//   2. 数据抽到 src/data/wx-demo.js，客户端经 <script type="application/json" id="wx-data"> 读同一份
+//   3. 客户端脚本**不再重写 innerHTML**（会抹掉 data-astro-cid），只切 class 与 iframe src
+//   4. H 标签：H1 含主词；功能清单/行业说明升级为 H2 + 4/6 个 H3
+//   5. 主词改为「小程序功能演示/功能清单」族（不抢 wzyw 的「锦州小程序开发」）
+//   6. 新增面包屑、正文出链、FAQ（与 FAQPage JSON-LD 逐字一致）
+import Base from '../../layouts/Base.astro';
+import { TEL } from '../../data/cases.js';
+import { BIZ_LIST, NOTE, MATRIX, GROUPS } from '../../data/wx-demo.js';
+
+// 给 15 个功能编好号（01–15），静态渲染时直接用
+let _no = 0;
+const GROUPS_NO = GROUPS.map((g) => ({
+  ...g,
+  items: g.items.map((it) => ({ ...it, no: String(++_no).padStart(2, '0') })),
+}));
+
+// 六个行业「各看什么」——扩写版（每段 60–80 字），承接 6 组行业长尾
+const INDUSTRY = [
+  {
+    biz: 'food',
+    h: '餐饮：看的是点餐效率',
+    p: '高峰期一张桌翻三次，菜单一改就得等印新码——这是餐饮小程序最容易卡住的地方。餐饮版重点演示分类筛选、规格加价、凑单满减、取餐号叫号四个环节，每一步都在手机上真的点一遍。',
+  },
+  {
+    biz: 'beauty',
+    h: '美业：看的是预约与次卡',
+    p: '美业最怕的是档期撞车和次卡算错。美业版重点演示按时段锁位、指定技师、会员折扣、做完自动记次——你可以在手机上自己试着约一次，看时段是不是真的被锁住。',
+  },
+  {
+    biz: 'dental',
+    h: '口腔：看的是信任与项目化',
+    p: '口腔客户下单前最关心两件事：价格透不透明、做完有没有人跟。口腔版重点演示项目套餐明码标价、医生可指定、术后回访表单自动推送，这些在演示里都能点开看。',
+  },
+  {
+    biz: 'edu',
+    h: '教育：看的是转化路径',
+    p: '教育培训的钱多半花在试听到报名这一段，人一旦掉链子就白花。教育版重点演示试听预约、班型选择、课程包购买、老带新拼团，把这条转化路径完整走一遍。',
+  },
+  {
+    biz: 'fitness',
+    h: '健身：看的是续费与到场率',
+    p: '健身房真正赚钱靠续费，靠的不是卖卡那一刻。健身版重点演示卡种对比、团课预约、打卡积分、体测记录，让到场率和续费意愿都能在后台看见。',
+  },
+  {
+    biz: 'retail',
+    h: '零售：看的是客单与复购',
+    p: '零售小程序拼的是客单价和复购，不是把货架搬到手机上。零售版重点演示满减凑单、限时秒杀、社区团购、次日自提，这四件事直接决定一单能卖多少。',
+  },
+];
+
+// 常见问题：可见 HTML 与 FAQPage JSON-LD 共用同一份数组，保证逐字一致
+const FAQ = [
+  {
+    q: '做一个小程序大概要多少钱？',
+    a: '不报统一价。价格取决于功能范围、是否需要对接你现有的收银或库存系统，以及行业版式要不要重做。你把想要的功能圈出来，第一次沟通我就给你算清楚，不会先报个低价再往上加。',
+  },
+  {
+    q: '从确定需求到上线要多久？',
+    a: '要分两段看。开发本身按功能范围定，我们不承诺一个统一的固定天数；但备案是绕不开的——备案通常要 7 到 20 个工作日，微信认证 300 元/年。这两件事我会在第一次沟通就跟你讲明白，不含糊。',
+  },
+  {
+    q: '能不能只要这 15 个功能里的几个？',
+    a: '可以，而且大多数客户就是这么做的。15 个功能是能力清单，不是套餐。先按你的行业挑 3 到 5 个核心功能上线，跑一段时间看数据，再加会员或营销模块，比一次全上更稳。',
+  },
+  {
+    q: '做完以后商品、价格、活动我自己能改吗？',
+    a: '能。商品、价格、库存、优惠券、活动场次都在后台自己改，不需要每次找我们。交付时会带你的人走一遍后台操作，包教会；源码也会交付给你，不留后手。',
+  },
+  {
+    q: '备案和微信认证需要我跑吗？',
+    a: '备案我们可以帮你走流程，但主体资料、法人信息、真实性核验需要你本人配合，这部分谁都不能代办。微信认证走微信公众平台，300 元/年是微信收的，不是我们的服务费。',
+  },
+  {
+    q: '演示页里下的单是真的吗？数据在哪里？',
+    a: '不是真的。演示用的是本地假数据，下单、支付、领券都不会产生真实交易，也不会连你的微信支付，你可以放心随便点。真实的支付和会员数据要等你自己的小程序上线、接入你的商户号之后才会有。',
+  },
+];
+
+// 页面级结构化数据：面包屑 + Service（含功能目录）+ FAQ
+// 注意 Offer 里不写 price——页面上没有明码标价，写了就是结构化数据与内容不一致
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      '@id': 'https://jz.0427qy.com/wx/#breadcrumb',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '首页', item: 'https://jz.0427qy.com/' },
+        { '@type': 'ListItem', position: 2, name: '全部服务', item: 'https://jz.0427qy.com/prodect/' },
+        { '@type': 'ListItem', position: 3, name: '小程序功能演示', item: 'https://jz.0427qy.com/wx/' },
+      ],
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://jz.0427qy.com/wx/#service',
+      name: '微信小程序定制开发',
+      serviceType: '小程序开发',
+      description:
+        '扫码点餐、购物车、支付、会员积分、签到、领券、大转盘、拼团、秒杀、预约、表单、客服共 15 个功能现场演示，支持餐饮、美业、口腔、教育、健身、零售 6 个行业版式。',
+      provider: { '@id': 'https://jz.0427qy.com/#org' },
+      areaServed: [
+        { '@type': 'City', name: '锦州市' },
+        { '@type': 'State', name: '辽宁省' },
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: '小程序功能模块',
+        itemListElement: GROUPS.map((g) => ({
+          '@type': 'OfferCatalog',
+          name: g.name,
+          description: g.sub,
+          itemListElement: g.items.map((it) => ({
+            '@type': 'Offer',
+            itemOffered: { '@type': 'Service', name: it.n, description: it.d },
+          })),
+        })),
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://jz.0427qy.com/wx/#faq',
+      mainEntity: FAQ.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+
+const INIT = { f: 'trade/home.html', n: '首页 / 商品列表' };
+---
+
+<Base
+  title="小程序功能演示·15个功能点给你看｜千羽网络"
+  description="扫码点餐、购物车、支付、会员积分、签到、领券、大转盘、拼团、秒杀、预约、客服，15个小程序功能真的能点。6个行业一键切换。电话/微信18624274046。"
+  canonical="https://jz.0427qy.com/wx/"
+  keywords="小程序功能演示,小程序功能清单,小程序有哪些功能,点餐小程序功能,会员积分小程序,小程序拼团秒杀,锦州小程序开发,小程序商城"
+  jsonld={jsonld}
+>
+  <div class="wxr">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="面包屑">
+        <a href="/">首页</a> › <a href="/prodect/">全部服务</a> › 小程序功能演示
+      </nav>
+
+      <div class="grid">
+        <div class="side">
+          <div class="hero">
+            <p class="kick">小程序能力展厅</p>
+            <h1>小程序功能演示：15 个功能点给你看，<em>6 个行业一键换皮</em></h1>
+            <p class="hero-lede">
+              右边这台手机不是录屏，是能真的点的小程序功能演示：15 个功能从加购到支付真的能点一遍，6 个行业一键换皮。锦州做餐饮、零售、美业、汽配的，第一步不是比价，是先在这里把自己行业该上哪些功能圈出来。
+            </p>
+            <p>
+              加购物车、选规格、下单支付、会员积分、签到、领券、抽奖、预约、留言，每一步都会真的走一遍。换一个行业标签，同一套页面立刻变成你的行业。<em class="hero-att">不是给你看几张图。</em>
+            </p>
+            <div class="stats">
+              <div><b>15</b><span>个可点功能</span></div>
+              <div><b>6</b><span>个行业版式</span></div>
+              <div><b>4</b><span>大功能模块</span></div>
+              <div><b>0</b><span>张静态截图</span></div>
+            </div>
+          </div>
+
+          <p class="side-t">选一个行业看效果 <em>换皮不换代码</em></p>
+          <div class="biz" id="biz">
+            {BIZ_LIST.map((b) => (
+              <button data-biz={b.id} class={b.id === 'food' ? 'is-on' : undefined}>{b.name}</button>
+            ))}
+          </div>
+          <div class="biz-note" id="bizNote">
+            {BIZ_LIST.map((b) => (
+              <p class="bn" data-note={b.id} hidden={b.id === 'food' ? undefined : true} set:html={NOTE[b.id]} />
+            ))}
+          </div>
+
+          <h2 class="side-t">15 个功能，分四组 <em>点哪一项，右边就变哪屏</em></h2>
+          <div id="fns">
+            {GROUPS_NO.map((g) => (
+              <div class="grp">
+                <h3 class="grp-h">{g.name}<span>{g.sub}</span></h3>
+                {g.items.map((it) => (
+                  <button
+                    class={it.f === INIT.f && it.n === INIT.n ? 'fn is-on' : 'fn'}
+                    data-f={it.f}
+                    data-n={it.n}
+                  >
+                    <span class="n">{it.no}</span>
+                    <span class="tx"><b>{it.n}</b><small>{it.d}</small></span>
+                    <span class="go">打开 ›</span>
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+          <p class="more">
+            看完功能要谈开发：<a href="/prodect/wzyw.html">锦州小程序开发：按需报价，源码交付 →</a>
+          </p>
+        </div>
+
+        <section class="stage">
+          <div class="stage-in">
+            <div class="stage-cap">
+              <b id="capName">{INIT.n}</b>
+              <span class="dot"></span>
+              <span id="capBiz">餐饮</span>
+              <span class="sp"></span>
+              <a class="open" id="openLink" href="trade/home.html?biz=food" target="_blank" rel="noopener nofollow">新窗口打开 ↗</a>
+            </div>
+            <div class="phone-wrap" id="phoneWrap">
+              <div class="phone">
+                <iframe id="frame" src="trade/home.html?biz=food" title="小程序功能演示：扫码点餐与购物车"></iframe>
+              </div>
+            </div>
+            <p class="stage-foot">真实交互，数据只存在你本地浏览器 · 不涉及任何真实交易</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="blk">
+        <h2>六个行业，各看什么</h2>
+        <p class="sub">同一套代码，换行业就换重点。下面这六段，是我们实际交付时先问客户的问题。</p>
+        <div class="ind">
+          {INDUSTRY.map((n) => (
+            <div class="ind-item">
+              <h3>{n.h}</h3>
+              <p>{n.p}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="blk matrix">
+        <h2>不同行业的典型功能组合</h2>
+        <p class="sub">同样 15 个功能，按行业习惯搭出不同组合。这正是我们实际交付时做的事。</p>
+        <table class="mx">
+          <thead>
+            <tr><th scope="col">行业</th><th scope="col">典型组合</th><th scope="col">重点关注</th></tr>
+          </thead>
+          <tbody>
+            {MATRIX.map((r) => (
+              <tr>
+                <th scope="row">{r[0]}</th>
+                <td>{r[1].map((x) => <span class="pill">{x}</span>)}</td>
+                <td>{r[2]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="more">
+          只想要网站、暂时不做小程序：<a href="/prodect/wzjs.html">网站建设：成品建站 500 元起 →</a>
+        </p>
+      </section>
+
+      <section class="blk choose">
+        <h2>小程序功能怎么选：先定三件事</h2>
+        <p>
+          客户常问「做一个全功能的小程序要多少钱」，其实顺序错了——功能不是越多越好，是越对越好。按这三步定，钱花在能带来生意的地方。
+        </p>
+        <ol>
+          <li>
+            <b>先定行业的核心场景。</b>餐饮是点餐和叫号，美业是预约和次卡，口腔是项目和回访，教育是试听到报名。一个行业通常只有 1–2 个场景真正决定成交，其余都是锦上添花。
+          </li>
+          <li>
+            <b>再砍掉用不上的功能。</b>15 个功能全上不是不可能，但每多一个就要多一套后台配置、多一次员工培训。先把不需要的划掉，剩下的才是真正要花钱的部分。
+          </li>
+          <li>
+            <b>最后算预算和维护成本。</b>小程序不是做完就结束：服务器、微信认证（300 元/年）、活动配置、商品上新，长期都要有人管。预算要按「首年投入 + 每年维护」两笔算，别只看开发报价。
+          </li>
+        </ol>
+        <p class="choose-end">
+          这三步想清楚再来谈，报价和工期都会准确得多；反过来，一上来只问总价，最后大概率是功能对不上、中途反复改。
+        </p>
+      </section>
+
+      <section class="blk faq">
+        <h2>常见问题</h2>
+        {FAQ.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+        <p class="more">
+          想看我们交付过什么：<a href="/case/">小程序与系统交付案例 →</a>
+        </p>
+      </section>
+
+      <div class="endcta">
+        <div class="endcta-main">
+          <h2>说清楚你的行业和功能，我 24 小时内给方案</h2>
+          <p
+            >备案 7–20 个工作日、微信认证 300 元/年，这两件事我会在第一次沟通就跟你讲明白，不含糊。<br
+            />微信同号，扫码或直接搜 18624274046。</p
+          >
+          <div class="acts">
+            <a class="b1" href={`tel:${TEL}`}>打电话 186 2427 4046</a>
+            <button class="b2" id="copyWechat" type="button" data-wechat={TEL}>复制微信号</button>
+            <a class="b2" href="mailto:admin@0427qy.com">发邮件</a>
+          </div>
+        </div>
+        <div class="endcta-qr">
+          <img src="/images/wecom-qr.png" alt="千羽网络企业微信二维码" width="104" height="104" loading="lazy" />
+          <span>扫码 / 长按识别</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 交互数据：与上方静态内容同源（src/data/wx-demo.js），只供客户端读取 -->
+  <script type="application/json" id="wx-data" set:html={JSON.stringify({ BIZ_LIST, NOTE })} />
+
+  <script is:inline>
+    (function () {
+      /* 数据来自 #wx-data（与静态 HTML 同源），不再在脚本里写死常量 */
+      const raw = document.getElementById('wx-data');
+      const D = raw ? JSON.parse(raw.textContent) : null;
+      if (!D) return;
+
+      let biz = 'food';
+      let cur = { f: 'trade/home.html', n: '首页 / 商品列表' };
+
+      const frame = document.getElementById('frame');
+      const openLink = document.getElementById('openLink');
+
+      /* 行业说明：静态渲染了 6 条，切换时只 toggle hidden，不重写 innerHTML */
+      function paintNote() {
+        document.querySelectorAll('#bizNote .bn').forEach(function (p) {
+          p.hidden = p.getAttribute('data-note') !== biz;
+        });
+        const b = D.BIZ_LIST.filter(function (x) { return x.id === biz; })[0];
+        document.getElementById('capBiz').textContent = b ? b.name : '';
+      }
+
+      /* 功能高亮：只切 class */
+      function markFns() {
+        document.querySelectorAll('#fns .fn').forEach(function (btn) {
+          btn.classList.toggle(
+            'is-on',
+            btn.getAttribute('data-f') === cur.f && btn.getAttribute('data-n') === cur.n
+          );
+        });
+      }
+
+      function srcOf(f) {
+        return f + (f.indexOf('?') > -1 ? '&' : '?') + 'biz=' + biz;
+      }
+
+      function load(f, name) {
+        cur = { f: f, n: name };
+        const src = srcOf(f);
+        frame.src = src;
+        openLink.href = src;
+        document.getElementById('capName').textContent = name;
+        markFns();
+        /* 窄屏演示区在列表上方，点完把手机拉回视野 */
+        if (window.innerWidth <= 860) {
+          document.querySelector('.stage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      document.getElementById('biz').addEventListener('click', function (e) {
+        const b = e.target.closest('[data-biz]');
+        if (!b) return;
+        biz = b.getAttribute('data-biz');
+        document.querySelectorAll('#biz button').forEach(function (x) {
+          x.classList.toggle('is-on', x === b);
+        });
+        paintNote();
+        load(cur.f, cur.n);
+      });
+
+      document.getElementById('fns').addEventListener('click', function (e) {
+        const b = e.target.closest('.fn');
+        if (!b) return;
+        load(b.getAttribute('data-f'), b.getAttribute('data-n'));
+      });
+
+      /* 手机框等比缩放：连布局占位一起缩，保证整机在首屏可见 */
+      const PHONE_W = 393, PHONE_H = 830;
+
+      function absTop(el) {
+        let y = 0;
+        while (el) { y += el.offsetTop; el = el.offsetParent; }
+        return y;
+      }
+
+      function fit() {
+        const wrap = document.getElementById('phoneWrap');
+        const phone = wrap && wrap.querySelector('.phone');
+        const card = document.querySelector('.stage-in');
+        if (!wrap || !phone || !card) return;
+
+        /* 窄屏走 CSS 响应式，不缩放 */
+        if (window.innerWidth <= 860) {
+          wrap.style.width = '';
+          wrap.style.height = '';
+          phone.style.transform = '';
+          return;
+        }
+
+        /* 先复原到原尺寸，量出「手机以外」的固定高度：卡片内边距 + 标题栏 + 脚注 */
+        phone.style.transform = '';
+        wrap.style.width = PHONE_W + 'px';
+        wrap.style.height = PHONE_H + 'px';
+        const chrome = card.offsetHeight - PHONE_H;
+
+        const availH = window.innerHeight - absTop(card) - 22;   // 首屏可用高度
+        const s = Math.max(.56, Math.min(1, (availH - chrome) / PHONE_H));
+
+        wrap.style.width = Math.round(PHONE_W * s) + 'px';
+        wrap.style.height = Math.round(PHONE_H * s) + 'px';
+        phone.style.transform = 'scale(' + s + ')';
+      }
+      window.addEventListener('resize', fit);
+      window.addEventListener('orientationchange', fit);
+
+      paintNote();
+      markFns();
+      fit();
+      window.addEventListener('load', fit);
+    })();
+
+    /* 底部 CTA 是真实转化出口，只放真能用的联系方式，不要链到演示页 */
+    (function () {
+      var btn = document.getElementById('copyWechat');
+      if (!btn) return;
+      var num = btn.getAttribute('data-wechat');
+      var timer = null;
+
+      function ok() {
+        if (timer) clearTimeout(timer);
+        btn.textContent = '已复制 ' + num + ' ✓';
+        btn.classList.add('is-done');
+        timer = setTimeout(function () {
+          btn.textContent = '复制微信号';
+          btn.classList.remove('is-done');
+          timer = null;
+        }, 2400);
+      }
+
+      function legacy() {
+        var ta = document.createElement('textarea');
+        ta.value = num;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, num.length);
+        var done = false;
+        try { done = document.execCommand('copy'); } catch (e) { done = false; }
+        document.body.removeChild(ta);
+        if (done) ok();
+        else { btn.textContent = '微信号 ' + num + '（长按复制）'; }
+      }
+
+      btn.addEventListener('click', function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(num).then(ok, legacy);
+        } else {
+          legacy();
+        }
+      });
+    })();
+  </script>
+</Base>
+
+<style is:global>
+  /* .wxr 作用域包住所有选择器：用 is:global + .wxr 前缀限定范围，避免污染全站 */
+  .wxr {
+    --ink2: var(--ink-2);
+    --ink3: var(--ink-3);
+  }
+  .wxr a { color: inherit; text-decoration: none; }
+  .wxr button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+
+  /* ---------- 面包屑 ---------- */
+  .wxr .crumbs { padding-top: 18px; margin-bottom: 12px; }
+
+  /* ---------- 头部 ---------- */
+  .wxr .hero { padding: 0 0 20px; margin: 0 0 22px; border-bottom: 1px solid var(--line); }
+  .wxr .hero .kick { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; color: var(--brand); margin: 0 0 9px; }
+  .wxr .hero h1 { margin: 0; font-size: 26px; line-height: 1.4; letter-spacing: -.4px; font-weight: 700; }
+  .wxr .hero h1 em { font-style: normal; color: var(--brand); }
+  .wxr .hero p { margin: 11px 0 0; font-size: 13.5px; color: var(--ink2); line-height: 1.78; }
+  .wxr .hero p b { color: var(--ink); font-weight: 600; }
+  .wxr .hero .hero-lede { font-size: 14px; color: var(--ink-2); }
+  .wxr .hero .hero-att { font-style: normal; font-weight: 600; color: var(--ink); }
+  .wxr .hero .stats { display: flex; flex-wrap: wrap; gap: 0; margin-top: 18px; }
+  .wxr .hero .stats div { flex: 0 0 auto; padding: 0 16px; border-left: 1px solid var(--line); }
+  .wxr .hero .stats div:first-child { padding-left: 0; border-left: 0; }
+  .wxr .hero .stats div b { display: block; font-size: 19px; font-weight: 700; letter-spacing: -.5px; font-variant-numeric: tabular-nums; line-height: 1.3; }
+  .wxr .hero .stats div span { font-size: 11.5px; color: var(--ink3); white-space: nowrap; }
+
+  /* ---------- 左右分栏 ---------- */
+  .wxr .grid { display: grid; grid-template-columns: minmax(0, 1fr) 500px; gap: 48px; align-items: start; padding: 30px 0 10px; }
+
+  /* 板块小标题（已升级为 h2，样式保持原 .side-t 观感） */
+  .wxr .side-t { display: flex; align-items: baseline; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--ink3); margin: 0 0 11px; }
+  .wxr .side-t em { font-style: normal; font-weight: 400; letter-spacing: 0; color: var(--ink3); }
+
+  .wxr .biz { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 26px; }
+  .wxr .biz button { height: 32px; padding: 0 13px; border-radius: 8px; border: 1px solid var(--line); font-size: 13px; color: var(--ink2); background: #fff; transition: all .16s ease; }
+  .wxr .biz button:hover { border-color: var(--ink3); }
+  .wxr .biz button.is-on { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 600; }
+  .wxr .biz-note { font-size: 12px; color: var(--ink3); line-height: 1.7; margin: -14px 0 24px; padding: 10px 12px; background: var(--brand-soft); border-radius: 8px; }
+  .wxr .biz-note .bn { margin: 0; }
+  .wxr .biz-note b { color: var(--brand-deep); }
+
+  /* ---------- 功能清单 ---------- */
+  .wxr .grp { margin-bottom: 20px; }
+  .wxr .grp-h { display: flex; align-items: baseline; gap: 7px; font-size: 13px; font-weight: 700; margin: 0 0 8px; }
+  .wxr .grp-h span { font-size: 11px; font-weight: 400; color: var(--ink3); letter-spacing: 0; }
+  .wxr .fn { display: flex; align-items: center; gap: 9px; width: 100%; padding: 9px 11px; border-radius: 9px; text-align: left; border: 1px solid transparent; transition: all .14s ease; }
+  .wxr .fn:hover { background: var(--bg-warm); border-color: var(--line); }
+  .wxr .fn.is-on { background: var(--brand-soft); border-color: #f3d5cf; }
+  .wxr .fn .n { flex: 0 0 auto; width: 20px; height: 20px; border-radius: 6px; background: #f2ede8; color: var(--ink3); font-size: 10px; font-weight: 700; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+  .wxr .fn.is-on .n { background: var(--brand); color: #fff; }
+  .wxr .fn .tx { flex: 1; min-width: 0; }
+  .wxr .fn .tx b { display: block; font-size: 13.5px; font-weight: 600; }
+  .wxr .fn .tx small { display: block; font-size: 11px; color: var(--ink3); margin-top: 1px; }
+  .wxr .fn .go { flex: 0 0 auto; color: var(--ink3); font-size: 12px; opacity: 0; transition: opacity .14s ease; }
+  .wxr .fn:hover .go, .wxr .fn.is-on .go { opacity: 1; }
+
+  /* ---------- 演示区 ---------- */
+  .wxr .stage { position: sticky; top: 84px; align-self: start; }
+  .wxr .stage-in { display: flex; flex-direction: column; align-items: center; padding: 20px 18px 16px; border-radius: 20px; background: radial-gradient(120% 60% at 50% 0%, #fdf1ec, transparent 62%), var(--bg-warm); border: 1px solid var(--line); }
+  .wxr .stage-cap { display: flex; align-items: center; gap: 8px; width: 100%; margin-bottom: 14px; font-size: 12px; color: var(--ink3); }
+  .wxr .stage-cap b { font-size: 13px; color: var(--ink); font-weight: 600; }
+  .wxr .stage-cap .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink3); }
+  .wxr .stage-cap .sp { flex: 1; }
+  .wxr .stage-cap .open { font-size: 12px; color: var(--brand); border-bottom: 1px solid rgba(179, 54, 42, .3); }
+  .wxr .stage-cap .open:hover { border-bottom-color: var(--brand); }
+  .wxr .phone-wrap { position: relative; width: 393px; height: 830px; }
+  .wxr .phone { position: absolute; top: 0; left: 0; width: 393px; height: 830px; transform-origin: top left; padding: 9px; border-radius: 40px; background: linear-gradient(160deg, #35302c, #17130f 58%, #2c2724); box-shadow: 0 30px 60px -24px rgba(47, 42, 38, .5), 0 8px 20px -10px rgba(47, 42, 38, .3); }
+  .wxr .phone::before { content: ""; position: absolute; top: 3px; left: 50%; width: 96px; height: 4px; margin-left: -48px; border-radius: 2px; background: rgba(255, 255, 255, .14); z-index: 3; pointer-events: none; }
+  .wxr .phone iframe { width: 100%; height: 100%; border: 0; border-radius: 32px; background: #fff; display: block; }
+  .wxr .stage-foot { margin-top: 11px; font-size: 11px; color: var(--ink3); text-align: center; line-height: 1.6; white-space: nowrap; }
+
+  /* ---------- 通用内容板块 ---------- */
+  .wxr .blk { padding: 44px 0 8px; }
+  .wxr .blk h2 { margin: 0 0 6px; font-size: 22px; letter-spacing: -.3px; line-height: 1.35; }
+  .wxr .blk .sub { margin: 0 0 22px; font-size: 13.5px; color: var(--ink2); line-height: 1.75; }
+  .wxr .more { margin: 18px 0 0; font-size: 13.5px; color: var(--ink2); }
+  .wxr .more a { color: var(--brand); font-weight: 600; }
+  .wxr .more a:hover { color: var(--brand-deep); }
+
+  /* ---------- 六个行业 ---------- */
+  .wxr .ind { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 34px; }
+  .wxr .ind-item h3 { margin: 0 0 7px; font-size: 15.5px; font-weight: 700; letter-spacing: -.1px; }
+  .wxr .ind-item p { margin: 0; font-size: 13.5px; color: var(--ink2); line-height: 1.85; }
+
+  /* ---------- 能力矩阵 ---------- */
+  .wxr table.mx { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .wxr table.mx thead th { text-align: left; padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 11.5px; font-weight: 700; color: var(--ink3); letter-spacing: .6px; background: var(--bg-warm); }
+  .wxr table.mx tbody th { text-align: left; padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: top; font-weight: 600; white-space: nowrap; width: 118px; }
+  .wxr table.mx tbody td { text-align: left; padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .wxr table.mx tbody td:nth-child(2) { color: var(--ink2); }
+  .wxr table.mx tbody tr:hover th, .wxr table.mx tbody tr:hover td { background: #fdfaf8; }
+  .wxr .pill { display: inline-block; padding: 1px 7px; margin: 0 4px 4px 0; border-radius: 5px; background: var(--brand-soft); color: var(--brand-deep); font-size: 11.5px; white-space: nowrap; }
+
+  /* ---------- 怎么选三件事 ---------- */
+  .wxr .choose p { margin: 0 0 14px; font-size: 13.5px; color: var(--ink2); line-height: 1.85; }
+  .wxr .choose ol { margin: 0 0 14px; padding-left: 22px; }
+  .wxr .choose li { margin-bottom: 11px; font-size: 13.5px; color: var(--ink2); line-height: 1.85; }
+  .wxr .choose li b { color: var(--ink); }
+  .wxr .choose .choose-end { margin: 0; }
+
+  /* ---------- FAQ ---------- */
+  .wxr .faq details { border-bottom: 1px solid var(--line); padding: 13px 0; }
+  .wxr .faq summary { font-size: 14px; font-weight: 600; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; }
+  .wxr .faq summary::-webkit-details-marker { display: none; }
+  .wxr .faq summary::before { content: "+"; flex: 0 0 auto; width: 16px; color: var(--brand); font-weight: 700; }
+  .wxr .faq details[open] summary::before { content: "–"; }
+  .wxr .faq details p { margin: 9px 0 0 24px; font-size: 13.5px; color: var(--ink2); line-height: 1.85; }
+
+  /* ---------- 收尾 CTA ---------- */
+  .wxr .endcta { display: flex; align-items: center; justify-content: space-between; gap: 30px; margin: 40px 0 48px; padding: 34px 30px; border-radius: 16px; background: linear-gradient(140deg, #2f2a26, #4a423b); color: #fff; }
+  .wxr .endcta-main { min-width: 0; }
+  .wxr .endcta h2 { margin: 0; font-size: 21px; letter-spacing: -.2px; }
+  .wxr .endcta p { margin: 9px 0 0; font-size: 13.5px; color: rgba(255, 255, 255, .66); line-height: 1.8; }
+  .wxr .endcta .acts { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 20px; }
+  .wxr .endcta .b1 { height: 40px; padding: 0 20px; border-radius: 9px; background: #fff; color: #2f2a26; font-size: 13.5px; font-weight: 600; display: inline-flex; align-items: center; white-space: nowrap; }
+  .wxr .endcta .b2 { height: 40px; padding: 0 20px; border-radius: 9px; border: 1px solid rgba(255, 255, 255, .26); background: none; color: #fff; font-size: 13.5px; font-family: inherit; cursor: pointer; display: inline-flex; align-items: center; white-space: nowrap; transition: border-color .18s, background .18s; }
+  .wxr .endcta .b2:hover { border-color: rgba(255, 255, 255, .6); }
+  .wxr .endcta .b2.is-done { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .5); }
+  .wxr .endcta-qr { flex: 0 0 auto; text-align: center; }
+  .wxr .endcta-qr img { display: block; width: 104px; height: 104px; padding: 5px; border-radius: 10px; background: #fff; }
+  .wxr .endcta-qr span { display: block; margin-top: 8px; font-size: 11.5px; color: rgba(255, 255, 255, .55); }
+
+  /* ---------- 响应式 ---------- */
+  /* 矮屏（笔记本 768 高）把手机框外的装饰压到最小，尽量让演示更大 */
+  @media (max-height: 820px) and (min-width: 861px) {
+    .wxr .stage-in { padding: 14px 14px 12px; }
+    .wxr .stage-cap { margin-bottom: 10px; }
+    .wxr .stage-foot { display: none; }
+  }
+  @media (max-width: 1160px) {
+    .wxr .grid { grid-template-columns: minmax(0, 1fr) 430px; gap: 34px; }
+    .wxr .hero h1 { font-size: 24px; }
+  }
+  @media (max-width: 980px) {
+    .wxr .grid { grid-template-columns: minmax(0, 1fr) 380px; gap: 26px; }
+    .wxr .hero .stats div { padding: 0 12px; }
+    .wxr .hero .stats div b { font-size: 17px; }
+  }
+  @media (max-width: 860px) {
+    .wxr .hero { padding-bottom: 18px; margin-bottom: 20px; }
+    .wxr .hero h1 { font-size: 22px; }
+    .wxr .hero p { font-size: 13px; }
+    .wxr .hero .stats { margin-top: 14px; }
+    .wxr .hero .stats div b { font-size: 17px; }
+    .wxr .grid { grid-template-columns: 1fr; gap: 22px; padding-top: 22px; }
+    .wxr .stage { position: static; order: -1; scroll-margin-top: 78px; }
+    .wxr .stage-in { padding: 16px 12px 14px; }
+    .wxr .phone-wrap { width: 100%; max-width: 375px; height: 812px; }
+    .wxr .phone { width: 100%; height: 100%; border-radius: 34px; padding: 7px; }
+    .wxr .phone iframe { border-radius: 28px; }
+    .wxr .phone::before { display: none; }
+    .wxr .stage-foot { display: none; }
+    .wxr .ind { grid-template-columns: 1fr; gap: 20px; }
+    .wxr .blk { padding: 34px 0 6px; }
+    .wxr .blk h2 { font-size: 19px; }
+    .wxr table.mx { display: block; overflow-x: auto; white-space: nowrap; }
+    .wxr table.mx tbody td:nth-child(2) { white-space: normal; min-width: 240px; }
+    /* 收尾 CTA 竖排：手机上二维码放中间更好扫 */
+    .wxr .endcta { flex-direction: column; align-items: stretch; gap: 20px; padding: 26px 22px; }
+    .wxr .endcta h2 { font-size: 18px; line-height: 1.5; }
+    .wxr .endcta-qr { align-self: center; }
+  }
+  @media (max-width: 420px) {
+    .wxr .phone-wrap { height: 640px; }
+  }
+</style>

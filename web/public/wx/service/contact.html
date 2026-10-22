@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>在线客服</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  .c-top {
+    display: flex; align-items: center; gap: 11px;
+    padding: 13px 14px;
+    background: #fff;
+    border-bottom: 1px solid var(--line2);
+  }
+  .c-av {
+    width: 38px; height: 38px; border-radius: 11px;
+    display: grid; place-items: center;
+    background: linear-gradient(150deg, var(--brand2), var(--brand));
+    color: #fff;
+  }
+  .c-av svg { width: 21px; height: 21px; }
+  .c-top b { display: block; font-size: 14px; }
+  .c-top span { font-size: 11px; color: var(--ink3); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+  .c-top span i { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+  .c-top .tel { margin-left: auto; font-size: 12px; color: var(--brandInk); }
+
+  .c-body { padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 12px; }
+  .c-day { align-self: center; font-size: 10.5px; color: var(--ink4); background: #efe9e2; padding: 2px 9px; border-radius: 999px; }
+
+  .c-msg { display: flex; gap: 8px; max-width: 84%; }
+  .c-msg .av {
+    flex: 0 0 auto;
+    width: 28px; height: 28px; border-radius: 9px;
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 700;
+    background: #efe7de; color: #8a7a6a;
+  }
+  .c-msg .bub {
+    padding: 9px 12px;
+    border-radius: 12px 12px 12px 4px;
+    background: #fff;
+    font-size: 13px;
+    line-height: 1.6;
+    box-shadow: 0 1px 4px rgba(34, 29, 25, .06);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .c-msg.me { align-self: flex-end; flex-direction: row-reverse; }
+  .c-msg.me .bub {
+    background: linear-gradient(150deg, var(--brand2), var(--brand));
+    color: #fff;
+    border-radius: 12px 12px 4px 12px;
+    box-shadow: 0 3px 10px rgba(224, 99, 44, .22);
+  }
+  .c-msg.me .av { background: var(--brandSoft); color: var(--brandInk); }
+
+  .c-typing .bub { display: flex; gap: 3px; padding: 12px; }
+  .c-typing .bub i {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--ink4);
+    animation: tp 1.1s infinite;
+  }
+  .c-typing .bub i:nth-child(2) { animation-delay: .15s; }
+  .c-typing .bub i:nth-child(3) { animation-delay: .3s; }
+  @keyframes tp { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
+
+  .c-quick { display: flex; gap: 7px; overflow-x: auto; padding: 4px 14px 10px; scrollbar-width: none; }
+  .c-quick::-webkit-scrollbar { display: none; }
+  .c-quick button {
+    flex: 0 0 auto;
+    height: 30px; padding: 0 13px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--ink2);
+  }
+  .c-quick button:active { background: var(--brandSoft); }
+
+  .c-input {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: #fff;
+    border-top: 1px solid var(--line);
+  }
+  .c-input input {
+    flex: 1; min-width: 0;
+    height: 38px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #f8f4ef;
+    font-size: 13.5px;
+    outline: 0;
+  }
+  .c-input input:focus { border-color: var(--brand); background: #fff; }
+  .c-send {
+    flex: 0 0 auto;
+    height: 38px; padding: 0 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--brand2), var(--brand));
+    color: #fff; font-size: 13.5px; font-weight: 600;
+    box-shadow: 0 3px 10px rgba(224, 99, 44, .26);
+  }
+  .c-send:active { transform: scale(.97); }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--solid">
+    <button class="nav-btn" data-back aria-label="返回">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5-7 7 7 7"/></svg>
+    </button>
+    <div class="nav-title">在线客服</div>
+    <div class="nav-side"></div>
+  </nav>
+
+  <div class="c-top">
+    <div class="c-av">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.4 4.6 8.2a1.6 1.6 0 0 0-.7 1.3v9a1.6 1.6 0 0 0 1.6 1.6h2.2v-6.4h8.6v6.4h2.2a1.6 1.6 0 0 0 1.6-1.6v-9a1.6 1.6 0 0 0-.7-1.3L12 3.4Z"/></svg>
+    </div>
+    <div style="flex:1;min-width:0">
+      <b id="shopName">拾光小馆</b>
+      <span><i></i>在线 · 平均 3 分钟内回复</span>
+    </div>
+    <a class="tel" id="telLink">拨打</a>
+  </div>
+
+  <main class="mp-main" id="scroller">
+    <div class="c-body" id="msgs"></div>
+    <div class="c-quick" id="quick"></div>
+  </main>
+
+  <div class="c-input">
+    <input id="inp" maxlength="120" placeholder="输入想咨询的问题…">
+    <button class="c-send" id="send">发送</button>
+  </div>
+
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  document.getElementById('shopName').textContent = SHOP.name + ' 客服';
+  document.getElementById('telLink').textContent = SHOP.phone;
+
+  const QUICK = ['能定制功能吗', '多久能上线', '怎么收费', '能抽奖吗', '可以先看案例吗'];
+
+  /* 自动回复规则 */
+  const RULES = [
+    { k: /定制|改功能|能不能做|开发/, a: '标准功能都能改文案、改配色、改字段。\n特殊流程（比如多门店分账、批次追溯）按人天单独算，会先出一页方案给你确认再动手。' },
+    { k: /多久|上线|时间|几天/, a: '纯展示型 7 天左右；带交易和会员 15–20 天。\n注意备案要单独算：7–20 个工作日，得用你公司的营业执照。这两件事是并行的。' },
+    { k: /价|收费|多少钱|贵/, a: '模板版 980 起（不含定制改动），增强版 2980 起，定制 6800 起。\n认证费 300/年（个体户有优惠）单独交给微信，不经我们的手。' },
+    { k: /抽奖|转盘|活动/, a: '能。大转盘、九宫格、刮刮卡都能做，共用一套概率配置。\n有奖销售的合规上限是最高奖不超过 5 万元，涉及现金红包还要额外资质，这些我会提前跟你讲清楚。' },
+    { k: /案例|看看|做过/, a: '可以，这个展厅里就是可点的真实交互：交易、会员、抽奖、预约都在。\n想看某个行业的版式，我可以按你的行业换一套配色和文案给你看效果。' },
+    { k: /预约|到店|订座/, a: '支持。可以选项目、日期、时段和人数，门店端会收到确认通知。\n想试试的话，从「我的 → 我的预约」进去就能操作。' }
+  ];
+
+  const msgsEl = document.getElementById('msgs');
+  const scroller = document.getElementById('scroller');
+
+  function bubble(text, from) {
+    const el = document.createElement('div');
+    el.className = 'c-msg ' + (from === 'me' ? 'me' : 'shop');
+    el.innerHTML = `<span class="av">${from === 'me' ? '我' : '客'}</span><div class="bub">${QY.esc(text)}</div>`;
+    msgsEl.appendChild(el);
+    scroller.scrollTop = scroller.scrollHeight;
+    return el;
+  }
+
+  function seed() {
+    const list = QY.messages.list();
+    if (!list.length) {
+      QY.messages.reply(`你好，这里是${SHOP.name}。\n可以直接问我：能不能定制、多久能上线、怎么收费。`);
+    }
+    const all = QY.messages.list();
+    msgsEl.innerHTML = '<div class="c-day">今天</div>';
+    all.forEach(m => bubble(m.text, m.from));
+    scroller.scrollTop = scroller.scrollHeight;
+  }
+
+  function replyTo(text) {
+    const hit = RULES.find(r => r.k.test(text));
+    const el = document.createElement('div');
+    el.className = 'c-msg shop c-typing';
+    el.innerHTML = `<span class="av">客</span><div class="bub"><i></i><i></i><i></i></div>`;
+    msgsEl.appendChild(el);
+    scroller.scrollTop = scroller.scrollHeight;
+
+    setTimeout(() => {
+      el.remove();
+      const ans = hit ? hit.a : '收到，我记下来了。\n需要具体方案的话，点右下角「需求登记」填一下行业和功能，我 24 小时内回你。';
+      QY.messages.reply(ans);
+      bubble(ans, 'shop');
+    }, 900);
+  }
+
+  function send(text) {
+    const t = (text || document.getElementById('inp').value).trim();
+    if (!t) return;
+    document.getElementById('inp').value = '';
+    QY.messages.add(t, 'me');
+    bubble(t, 'me');
+    replyTo(t);
+  }
+
+  document.getElementById('quick').innerHTML = QUICK.map(q =>
+    `<button data-q="${QY.esc(q)}">${QY.esc(q)}</button>`).join('');
+  document.getElementById('quick').addEventListener('click', e => {
+    const b = e.target.closest('[data-q]');
+    if (b) send(b.dataset.q);
+  });
+
+  document.getElementById('send').addEventListener('click', () => send());
+  document.getElementById('inp').addEventListener('keydown', e => {
+    if (e.key === 'Enter') send();
+  });
+
+  seed();
+  QY.tabbar('mine');
+})();
+</script>
+</body>
+</html>

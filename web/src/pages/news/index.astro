@@ -1,0 +1,71 @@
+---
+// 锦州站资讯列表：文章从主站导入（city=锦州，路径与主站一致 /news/industry/<id>.html）
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config/site.js';
+import { ARTICLES } from '../../data/news.js';
+
+const cut = (s, n) => (s.length > n ? s.slice(0, n) + '…' : s);
+---
+
+<Base
+  title="锦州企业信息化与 AI 落地实操记录｜千羽网络"
+  description="面向锦州企业的实操内容：怎么选建站服务商、锦州各产业的信息化卡点、上 AI 之前要理清的三件事。只写方法与判断。"
+  canonical={`${SITE.domain}/news/`}
+  keywords="锦州企业信息化,锦州网站建设,锦州企业AI,锦州数字化转型,锦州建站公司"
+>
+  <div class="wrap">
+    <nav class="crumbs"><a href="/">首页</a> › 行业资讯</nav>
+    <h1 class="page-title">行业资讯</h1>
+    <p class="lede">
+      这里放写给锦州企业看的实操内容：怎么判断一项投入值不值、某个行业的信息化卡点在哪、上 AI 之前要准备什么。
+      文章覆盖网站建设、SEO 推广、小程序与软件开发、企业 AI 等方向，按锦州本地的产业和行情写。
+      想直接聊业务，打电话或微信 18624274046。
+    </p>
+
+    <ul class="news-list">
+      {ARTICLES.map((a) => (
+        <li class="news-item">
+          <a href={`/news/industry/${a.slug}.html`}>
+            <h2>{a.title}</h2>
+            <p>{cut(a.summary, 110)}</p>
+            <span class="meta">{a.keywords.slice(0, 3).join(' · ')}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <nav class="rel">
+      <span>相关</span>
+      <a href="/industry/">锦州行业方案 →</a>
+      <a href="/prodect/wzjs.html">网站建设怎么交付 →</a>
+      <a href="/prodect/wzcz.html">企业 AI 服务 →</a>
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .crumbs { font-size: 13px; color: var(--ink-3); margin: var(--s3) 0 0; }
+  .crumbs a { color: var(--ink-3); }
+  .crumbs a:hover { color: var(--brand); }
+  .page-title {
+    font-size: clamp(26px, 3.4vw, 36px); line-height: 1.3; font-weight: 700;
+    letter-spacing: -0.01em; margin: var(--s3) 0 var(--s2);
+  }
+  .lede { font-size: 15.5px; line-height: 1.85; color: var(--ink-2); max-width: 74ch; margin: 0 0 var(--s5); }
+  .news-list { list-style: none; margin: 0 0 var(--s5); padding: 0; display: grid; gap: var(--s2); }
+  .news-item a {
+    display: block; color: var(--ink); background: #fff;
+    border: 1px solid var(--line); border-radius: var(--r2); padding: var(--s3);
+    transition: border-color 0.15s var(--ease), transform 0.15s var(--ease);
+  }
+  .news-item a:hover { color: var(--ink); border-color: var(--brand); transform: translateY(-2px); }
+  .news-item h2 { font-size: 16.5px; font-weight: 600; margin: 0 0 6px; line-height: 1.5; }
+  .news-item p { font-size: 13.5px; line-height: 1.75; color: var(--ink-2); margin: 0 0 8px; }
+  .news-item .meta { font-size: 12px; color: var(--ink-3); }
+  .rel {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    border-top: 1px solid var(--line); padding-top: var(--s3); font-size: 14px;
+  }
+  .rel span { color: var(--ink-3); }
+  .rel a { color: var(--brand); font-weight: 600; }
+</style>

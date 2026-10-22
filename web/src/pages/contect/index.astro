@@ -1,0 +1,146 @@
+---
+// 站2 联系页 /contect/（2026-10-18 随新设计重做，URL 不变）
+// 原站保留文案：「改变 VS 不改变 / 我们在路上 你在哪」
+import Base from '../../layouts/Base.astro';
+import { TEL } from '../../data/cases.js';
+---
+
+<Base
+  title="联系千羽网络·电话微信18624274046"
+  description="锦州千羽网络：电话/微信18624274046（左先生）、QQ904392007、邮箱admin@0427qy.com。不推销不铺垫，先聊清楚你的业务值不值得做。"
+  canonical="https://jz.0427qy.com/contect/"
+  keywords="联系千羽网络,锦州网络公司电话,企业AI咨询,一人公司咨询"
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumbs"><a href="/">首页</a> › 联系</nav>
+
+      <!-- 页头 -->
+      <div class="sec-head">
+        <span class="kicker">联系我们</span>
+        <h1 class="page-title">先聊清楚值不值得做，再谈怎么做</h1>
+        <p>不推销、不铺垫。把情况说一遍，我来判断你的业务适不适合、从哪一步开始、值不值得投入。</p>
+      </div>
+
+      <!-- 原站气势文案保留 -->
+      <div class="change-block">
+        <span class="change-vs">改变</span>
+        <span class="change-or">VS</span>
+        <span class="change-vs is-off">不改变</span>
+        <p>我们在路上，你在哪？</p>
+      </div>
+
+      <!-- 联系卡 -->
+      <h2 class="block-title">联系方式</h2>
+      <div class="contact-grid">
+        <div class="contact-main">
+          <a class="contact-row" href={`tel:${TEL}`}>
+            <span class="c-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </span>
+            <span class="c-body">
+              <b>电话 / 微信</b>
+              18624274046（左先生）
+            </span>
+            <span class="c-go">拨打 →</span>
+          </a>
+          <div class="contact-row">
+            <span class="c-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </span>
+            <span class="c-body">
+              <b>QQ（业务咨询）</b>
+              904392007
+            </span>
+          </div>
+          <a class="contact-row" href="mailto:admin@0427qy.com">
+            <span class="c-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            </span>
+            <span class="c-body">
+              <b>邮箱</b>
+              admin@0427qy.com
+            </span>
+            <span class="c-go">发邮件 →</span>
+          </a>
+          <div class="contact-row">
+            <span class="c-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <span class="c-body">
+              <b>地址</b>
+              辽宁 · 盘锦（服务区域含锦州）
+            </span>
+          </div>
+        </div>
+
+        <!-- 二维码卡 -->
+        <div class="qr-card">
+          <img src="/images/wecom-qr.png" alt="企业微信二维码" width="160" height="160" />
+          <b>企业微信扫码</b>
+          <p>扫码添加，直接说你的情况。建议优先电话/微信，响应最快。</p>
+        </div>
+      </div>
+
+      <!-- 咨询说明 -->
+      <h2 class="block-title">咨询前想清楚这三件事</h2>
+      <div class="notice-strip">
+        <b>聊起来更高效：</b>
+        <span>① 你现在卡在哪一步（想创业 / 公司已开业）</span>
+        <span>② 最耗时、最重复的环节是什么</span>
+        <span>③ 期望先看到结果，还是先要完整方案</span>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-title { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.3; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 16px; }
+
+  .block-title {
+    font-size: clamp(20px, 2.6vw, 26px); font-weight: 700; color: var(--ink);
+    margin: 40px 0 20px; letter-spacing: -0.01em;
+  }
+
+  .change-block {
+    background: var(--dark); border-radius: 16px; padding: 48px 24px; text-align: center;
+    margin-bottom: 48px; color: #fff;
+  }
+  .change-vs {
+    font-size: clamp(30px, 4.5vw, 48px); font-weight: 700; letter-spacing: 0.06em;
+  }
+  .change-vs.is-off { color: oklch(0.55 0.01 60); text-decoration: line-through; text-decoration-thickness: 3px; }
+  .change-or { display: inline-block; margin: 0 20px; font-size: 18px; color: var(--brand); font-weight: 700; }
+  .change-block p { font-size: 16px; color: oklch(0.80 0.01 60); margin: 16px 0 0; letter-spacing: 0.04em; }
+
+  .contact-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-bottom: 48px; }
+  .contact-main { display: flex; flex-direction: column; gap: 12px; }
+  .contact-row {
+    display: flex; align-items: center; gap: 16px; background: #fff;
+    border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px;
+    transition: border-color 0.2s var(--ease);
+  }
+  a.contact-row:hover { border-color: var(--brand); color: inherit; }
+  .c-ico {
+    width: 42px; height: 42px; border-radius: 10px; background: var(--brand-soft);
+    color: var(--brand); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .c-body { display: flex; flex-direction: column; flex: 1; font-size: 14.5px; color: var(--ink-2); }
+  .c-body b { font-size: 15px; color: var(--ink); }
+  .c-go { font-size: 13px; color: var(--brand); font-weight: 500; white-space: nowrap; }
+  .qr-card {
+    background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px;
+    padding: 28px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .qr-card img { border-radius: 12px; background: #fff; padding: 6px; border: 1px solid var(--line); }
+  .qr-card b { font-size: 15px; }
+  .qr-card p { font-size: 12.5px; color: var(--ink-2); margin: 0; line-height: 1.7; }
+
+  .notice-strip {
+    display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;
+    background: oklch(0.97 0.04 90); border: 1px solid oklch(0.88 0.07 90);
+    border-radius: 12px; padding: 18px 24px; font-size: 13.5px; color: oklch(0.40 0.06 90);
+  }
+  .notice-strip b { color: oklch(0.35 0.07 90); }
+  @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+</style>

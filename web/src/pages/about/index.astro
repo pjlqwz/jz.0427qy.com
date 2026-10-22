@@ -1,0 +1,162 @@
+---
+// 站2 关于页 /about/（2026-10-18 随新设计重做，URL 不变）
+import Base from '../../layouts/Base.astro';
+import { TEL } from '../../data/cases.js';
+
+const PRACTICES = [
+  {
+    title: '站群内容生产',
+    desc: '帝国CMS 站群 + 智能体流水线，SEO 文章日更 5 篇，写完自动推送百度站长平台。',
+  },
+  {
+    title: '抖音关键词获客',
+    desc: 'CDP 模式复用浏览器登录态，15×5 关键词表驱动搜索轮换，按标题筛选业务相关视频。',
+  },
+  {
+    title: '代码化视频生产',
+    desc: 'Remotion（React + TypeScript）流水线，编剧、分镜、素材、成片全链路代码生成。',
+  },
+  {
+    title: '知识库沉淀',
+    desc: 'ima 知识库存放视频内容与获客数据，反哺选题，形成「生产 → 数据 → 再生产」闭环。',
+  },
+];
+---
+
+<Base
+  title="关于千羽网络｜锦州企业AI服务商"
+  description="千羽网络（千羽亿维（盘锦）网络科技有限公司），团队在盘锦，服务覆盖锦州及辽西地区，近20年企业信息化经验，自身业务全流程跑在智能体上。电话/微信18624274046。"
+  canonical="https://jz.0427qy.com/about/"
+  keywords="千羽网络,锦州千羽,千羽亿维,企业AI服务,一人公司服务,关于我们"
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumbs"><a href="/">首页</a> › 关于千羽</nav>
+      <div class="sec-head">
+        <span class="kicker">关于千羽</span>
+        <h1 class="page-title">把验证过的方法，交给企业</h1>
+        <p>千羽网络团队在盘锦，服务覆盖锦州及辽西地区，近 20 年企业信息化经验。我们不做概念演示——每套方法先在千羽自己业务里跑通，确认能用，再交付给你。</p>
+      </div>
+
+      <!-- 我们是谁 -->
+      <div class="about-grid">
+        <div class="about-text">
+          <h2>我们是谁</h2>
+          <p>千羽网络（千羽亿维（盘锦）网络科技有限公司），前身千一网络，是由工作在一线的 IT 技术团队组成的本地服务商。过去多年，我们做网站建设、SEO 推广、软件开发，服务盘锦及周边企业；现在把这套方法按锦州的产业结构改造后带过来——石化及精细化工、冶金与新材料、特种合金、装备制造，到农副产品加工、港口粮食物流与文旅。</p>
+          <p>现在我们把自己在用的方法产品化：<b>企业 AI 效能提升</b>与<b>一人公司（OPC）服务</b>。建站、开发这些老本行没有丢，降级为承接业务——你需要网站、小程序、系统，我们按档交付；你想让公司跑得更快，看企业 AI 服务。</p>
+        </div>
+        <div class="about-side">
+          <div class="side-card">
+            <span class="side-num">近 20 年</span>
+            <span class="side-lbl">企业信息化经验</span>
+          </div>
+          <div class="side-card">
+            <span class="side-num">全流程</span>
+            <span class="side-lbl">自有业务跑在智能体上</span>
+          </div>
+          <div class="side-card">
+            <span class="side-num">一个人</span>
+            <span class="side-lbl">从沟通到维护跟到底，无转包</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 差异化 -->
+      <div class="diff">
+        <div class="diff-copy">
+          <span class="kicker">我们的不一样</span>
+          <h2>给智能体配上「眼睛和手」</h2>
+          <p>网上对智能体的负面评价——烧 token、不支持工具、答非所问——本质原因是没给智能体配置工具。我们的做法正相反：给智能体接上数据、权限和流程，让它在可控框架里执行，而不是让它自由发挥。</p>
+          <p>这也是我们做企业 AI 服务的底层逻辑：<b>先梳理流程，再让智能体进流程</b>。不拿一套互联网玩法硬套传统业务。</p>
+        </div>
+        <div class="diff-visual" aria-hidden="true">
+          <svg viewBox="0 0 360 300" fill="none">
+            <rect x="30" y="120" width="90" height="60" rx="10" fill="#ffffff" stroke="#e3d9cf"/>
+            <text x="75" y="145" text-anchor="middle" font-size="12" fill="#26201c">你的数据</text>
+            <text x="75" y="163" text-anchor="middle" font-size="11" fill="#8a7f74">系统 / 表单</text>
+            <line x1="120" y1="150" x2="150" y2="150" stroke="#b32c29" stroke-width="2"/>
+            <path d="M144 144 l8 6 -8 6" stroke="#b32c29" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="150" y="105" width="90" height="90" rx="14" fill="#b32c29"/>
+            <text x="195" y="145" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">智能体</text>
+            <text x="195" y="166" text-anchor="middle" font-size="11" fill="#f3d9d6">有工具可调</text>
+            <line x1="240" y1="150" x2="270" y2="150" stroke="#b32c29" stroke-width="2"/>
+            <path d="M264 144 l8 6 -8 6" stroke="#b32c29" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="270" y="120" width="70" height="60" rx="10" fill="#ffffff" stroke="#e3d9cf"/>
+            <text x="305" y="145" text-anchor="middle" font-size="12" fill="#26201c">你的流程</text>
+            <text x="305" y="163" text-anchor="middle" font-size="11" fill="#8a7f74">干活 / 交付</text>
+            <text x="180" y="235" text-anchor="middle" font-size="12" fill="#6b5f54">可控框架内执行，不是自由发挥</text>
+            <path d="M120 210 C180 260 240 260 300 210" stroke="#c9bdb0" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 自有实践 -->
+      <div class="practice">
+        <div class="sec-head">
+          <span class="kicker">自有实践</span>
+          <h2>这些流水线，每天在千羽自己跑</h2>
+          <p>不是 PPT 上的能力清单，是每天在用的生产工具。踩过的坑、调过的参数，都变成交付给你的方法。</p>
+        </div>
+        <div class="practice-grid">
+          {PRACTICES.map((p) => (
+            <div class="practice-card">
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 理念 + CTA -->
+      <div class="about-cta">
+        <p class="motto">「用心做到最好，让您获取最大效益。」</p>
+        <p class="moto-sub">这是千羽多年的服务理念，也是我们交付每一套智能体工作流的标准。</p>
+        <a class="btn btn-primary" href={`tel:${TEL}`}>电话聊聊：186-2427-4046</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-title { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.3; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 16px; }
+  .about-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; align-items: start; margin-bottom: 64px; }
+  .about-text h2 { font-size: 22px; font-weight: 700; margin: 0 0 16px; }
+  .about-text p { font-size: 15px; color: var(--ink-2); margin: 0 0 16px; }
+  .about-text b { color: var(--ink); }
+  .about-side { display: flex; flex-direction: column; gap: 16px; }
+  .side-card {
+    background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px 24px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .side-num { font-size: 22px; font-weight: 700; color: var(--brand); }
+  .side-lbl { font-size: 13px; color: var(--ink-2); }
+  .diff {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center;
+    background: var(--bg-warm); border: 1px solid var(--line); border-radius: 16px;
+    padding: 40px; margin-bottom: 64px;
+  }
+  .diff-copy h2 { font-size: 24px; font-weight: 700; margin: 0 0 16px; }
+  .diff-copy p { font-size: 14.5px; color: var(--ink-2); margin: 0 0 14px; }
+  .diff-copy b { color: var(--ink); }
+  .diff-visual svg { width: 100%; height: auto; }
+  .practice { margin-bottom: 64px; }
+  .practice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .practice-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 24px;
+    transition: border-color 0.2s var(--ease);
+  }
+  .practice-card:hover { border-color: oklch(0.82 0.05 27); }
+  .practice-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 8px; }
+  .practice-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; }
+  .about-cta {
+    text-align: center; background: var(--dark); color: #fff;
+    border-radius: 16px; padding: 48px 24px;
+  }
+  .motto { font-size: clamp(20px, 2.6vw, 26px); font-weight: 700; margin: 0 0 8px; }
+  .moto-sub { font-size: 14px; color: oklch(0.72 0.01 60); margin: 0 0 24px; }
+  @media (max-width: 900px) {
+    .about-grid, .diff { grid-template-columns: 1fr; gap: 24px; }
+    .diff { padding: 24px; }
+    .practice-grid { grid-template-columns: 1fr; }
+  }
+</style>

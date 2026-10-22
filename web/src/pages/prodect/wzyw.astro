@@ -1,0 +1,170 @@
+---
+// 站2 产品页：软件开发 /prodect/wzyw.html（2026-10-18 随新设计重做，URL 不变）
+import Base from '../../layouts/Base.astro';
+import { TEL } from '../../data/cases.js';
+import { SITE } from '../../config/site.js';
+
+const SCOPES = [
+  { id: 'mp', name: '小程序开发', desc: '微信小程序商城、预约、会员、业务管理系统。扫码即用、无需下载，配合公众号形成转化闭环。' },
+  { id: 'app', name: 'APP 定制开发', desc: '根据业务需要定制 iOS / 安卓应用，从需求梳理、UI/UX 设计到前后端开发、测试上线全流程交付。' },
+  { id: 'erp', name: '企业信息化系统', desc: '业务系统开发：把还在纸上、微信里、个人电脑里的流程搬进系统——审批、台账、报表、权限，让数据真正归企业。' },
+];
+
+const CYCLES = [
+  { level: '简单应用', time: '1 个月左右', note: '功能基础，如单模块商城、信息展示类' },
+  { level: '中等复杂度', time: '2—3.5 个月', note: '功能较多，或需对接即时通讯等系统' },
+  { level: '大型 / 复杂', time: '6 个月左右', note: '功能复杂、涉及大量数据处理或集成' },
+];
+---
+
+<Base
+  title="锦州小程序开发·软件定制开发｜千羽网络"
+  description="锦州小程序开发、APP定制与业务系统开发，按需报价，源码交付。系统上线只是开始，让智能体进去干活。电话/微信18624274046。"
+  canonical="https://jz.0427qy.com/prodect/wzyw.html"
+  keywords="锦州软件开发,锦州小程序开发,锦州APP开发,定制开发,业务系统"
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumbs"><a href="/">首页</a> › 软件开发</nav>
+      <div class="sec-head">
+        <span class="kicker">软件开发</span>
+        <h1 class="page-title">小程序 + APP + 业务系统，按需定制</h1>
+        <p>近 20 年企业信息化经验，知道企业里的流程长什么样、坑在哪里。从需求梳理到测试上线，层层审核、层层确认。</p>
+      </div>
+
+      <!-- 三类范围 -->
+      <div class="scope-grid">
+        {SCOPES.map((s) => (
+          <div class="scope-card" id={s.id}>
+            <h2>{s.name}</h2>
+            <p>{s.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- 能力展厅入口 -->
+      <a class="demo-band" href="/wx/">
+        <div class="demo-band-tx">
+          <span class="kicker">能力展厅</span>
+          <h2>15 个功能，现在就点给你看</h2>
+          <p>扫码点餐、选规格、购物车、下单支付、会员积分、签到、领券、大转盘、拼团、秒杀、预约、客服留言——不是截图，是真的能点的页面。换一个行业标签，同一套页面立刻变成餐饮、美业、口腔、教育、健身、零售。</p>
+        </div>
+        <span class="demo-band-go">进入展厅 →</span>
+      </a>
+
+      <!-- 开发周期 -->
+      <div class="cycle-block">
+        <div class="sec-head">
+          <span class="kicker">周期参考</span>
+          <h2>定制开发需要多长时间？</h2>
+          <p>时间因项目复杂度、功能需求、设计要求以及开发团队的经验而不同。以下是大致周期，签约前会给到你逐模块的排期表。</p>
+        </div>
+        <div class="cycle-grid">
+          {CYCLES.map((c) => (
+            <div class="cycle-card">
+              <span class="cycle-level">{c.level}</span>
+              <span class="cycle-time">{c.time}</span>
+              <p>{c.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 流程 -->
+      <div class="flow-strip">
+        <span>需求分析</span><i>→</i>
+        <span>UI/UX 设计</span><i>→</i>
+        <span>前后端开发</span><i>→</i>
+        <span>测试验证</span><i>→</span>
+        <span>上线交付</span>
+      </div>
+
+      <!-- 交叉引导 -->
+      <div class="cross-cta">
+        <div>
+          <span class="kicker kicker-light">开发之后</span>
+          <h2>系统上线只是开始，让智能体进去干活</h2>
+          <p>系统里的数据、流程、权限都齐了，正是接入智能体的最好时机。千羽做「开发 + AI 接入」一体的交付，不是交完代码就失联。</p>
+        </div>
+        <div class="cross-actions">
+          <a class="btn btn-primary" href="/prodect/wzcz.html">了解企业 AI 服务</a>
+          <a class="btn btn-ghost" href={`tel:${TEL}`}>电话咨询</a>
+        </div>
+      </div>
+
+      <nav class="sibling" aria-label="其他产品">
+        <span>其他产品：</span>
+        <a href="/prodect/wzjs.html">网站建设</a>
+        <a href="/prodect/wztg.html">网络推广</a>
+        <a href="/prodect/wzcz.html">企业 AI 服务</a>
+        <a href="/prodect/">全部服务总览 →</a>
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-title { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.3; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 16px; }
+  .scope-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 64px; }
+  .scope-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 28px;
+    scroll-margin-top: 92px;
+    transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  /* 从导航二级跳进来时给一下高亮，客户知道「就是这一块」 */
+  .scope-card:target { border-color: var(--brand); box-shadow: 0 8px 30px oklch(0.55 0.14 27 / 0.14); }
+  .scope-card:hover { border-color: oklch(0.82 0.05 27); box-shadow: 0 8px 30px oklch(0.3 0.02 45 / 0.06); }
+  .scope-card h2 { font-size: 18px; font-weight: 700; margin: 0 0 10px; }
+  .scope-card p { font-size: 14px; color: var(--ink-2); margin: 0; }
+
+  /* 能力展厅入口 */
+  .demo-band {
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+    background: var(--brand-soft); border: 1px solid oklch(0.88 0.04 27); border-radius: 16px;
+    padding: 26px 30px; margin: 0 0 56px; text-decoration: none;
+    transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .demo-band:hover { border-color: var(--brand); box-shadow: 0 10px 34px oklch(0.5 0.1 27 / 0.1); transform: translateY(-1px); }
+  .demo-band-tx h2 { font-size: 19px; font-weight: 700; margin: 4px 0 8px; color: var(--ink); }
+  .demo-band-tx p { font-size: 13.5px; line-height: 1.75; color: var(--ink-2); margin: 0; max-width: 62ch; }
+  .demo-band-go {
+    flex-shrink: 0; display: inline-flex; align-items: center;
+    height: 40px; padding: 0 20px; border-radius: 9px;
+    background: var(--brand); color: #fff; font-size: 14px; font-weight: 600;
+    transition: background 0.15s var(--ease);
+  }
+  .demo-band:hover .demo-band-go { background: var(--brand-deep); }
+  .cycle-block { margin-bottom: 48px; }
+  .cycle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cycle-card {
+    background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px; padding: 24px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .cycle-level { font-size: 15px; font-weight: 700; }
+  .cycle-time { font-size: 20px; font-weight: 700; color: var(--brand); }
+  .cycle-card p { font-size: 12.5px; color: var(--ink-3); margin: 0; }
+  .flow-strip {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    background: #fff; border: 1px dashed oklch(0.82 0.04 27); border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 48px; font-size: 14px; font-weight: 500;
+  }
+  .flow-strip i { color: var(--brand); font-style: normal; }
+  .cross-cta {
+    display: flex; justify-content: space-between; align-items: center; gap: 32px;
+    background: var(--dark); color: #fff; border-radius: 16px; padding: 40px; margin-bottom: 40px;
+  }
+  .cross-cta h2 { font-size: 21px; font-weight: 700; margin: 0 0 10px; }
+  .cross-cta p { font-size: 14px; color: oklch(0.75 0.01 60); margin: 0; max-width: 52ch; }
+  .cross-actions { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+  .cross-actions .btn-ghost { background: transparent; color: #fff; border-color: oklch(0.45 0.01 60); }
+  .cross-actions .btn-ghost:hover { border-color: #fff; color: #fff; }
+  .sibling { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 13.5px; color: var(--ink-3); }
+  .sibling a { color: var(--brand); text-decoration: underline; }
+  @media (max-width: 900px) {
+    .scope-grid { grid-template-columns: 1fr; }
+    .cycle-grid { grid-template-columns: 1fr; }
+    .demo-band { flex-direction: column; align-items: flex-start; gap: 16px; padding: 22px; }
+    .cross-cta { flex-direction: column; align-items: flex-start; padding: 28px; }
+    .cross-actions { flex-direction: row; }
+  }
+</style>

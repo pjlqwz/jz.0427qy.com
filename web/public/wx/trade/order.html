@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>订单 · 拾光小馆</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  /* ---------- 状态卡 ---------- */
+  .o-status {
+    margin: 12px 14px 0;
+    padding: 16px;
+    border-radius: var(--r);
+    background: linear-gradient(140deg, #2b2320, #473729);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(43, 35, 32, .22);
+  }
+  .o-status::after {
+    content: "";
+    position: absolute; width: 150px; height: 150px;
+    right: -48px; top: -58px; border-radius: 50%;
+    background: rgba(255, 255, 255, .06);
+  }
+  .o-status .st { font-size: 17px; font-weight: 700; letter-spacing: .4px; }
+  .o-status .ds { margin-top: 5px; font-size: 12px; color: rgba(255, 255, 255, .66); }
+  .o-status .outno {
+    margin-top: 12px; display: inline-flex; align-items: baseline; gap: 6px;
+    padding: 6px 12px; border-radius: 8px;
+    background: rgba(255, 255, 255, .1);
+    font-size: 12px; color: rgba(255, 255, 255, .74);
+  }
+  .o-status .outno b { font-size: 19px; color: #ffd9b8; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+
+  /* ---------- 时间轴 ---------- */
+  .o-tl { display: flex; padding: 16px 8px 6px; }
+  .o-step { flex: 1; position: relative; text-align: center; }
+  .o-step::before {
+    content: "";
+    position: absolute;
+    top: 5px; left: -50%; width: 100%; height: 1.5px;
+    background: var(--line);
+  }
+  .o-step:first-child::before { display: none; }
+  .o-step.done::before, .o-step.now::before { background: #b9d9c8; }
+  .o-dot {
+    position: relative; z-index: 1;
+    width: 11px; height: 11px; margin: 0 auto;
+    border-radius: 50%;
+    background: var(--line);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1.5px var(--line);
+  }
+  .o-step.done .o-dot { background: #46a97a; box-shadow: 0 0 0 1.5px #b9d9c8; }
+  .o-step.now .o-dot { background: var(--brand); box-shadow: 0 0 0 1.5px #f4c9b3; animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.22); } }
+  .o-step .lb { margin-top: 7px; font-size: 11px; color: var(--ink3); line-height: 1.3; }
+  .o-step.done .lb, .o-step.now .lb { color: var(--ink); font-weight: 600; }
+  .o-step .tm { margin-top: 2px; font-size: 9.5px; color: var(--ink4); font-variant-numeric: tabular-nums; }
+
+  /* ---------- 通用 ---------- */
+  .o-card { margin: 10px 14px 0; overflow: hidden; }
+  .o-shop-h { display: flex; align-items: center; gap: 7px; padding: 12px 14px; }
+  .o-shop-h b { font-size: 13.5px; }
+  .o-shop-h .st { margin-left: auto; font-size: 12px; color: var(--brandInk); }
+  .o-g { display: flex; gap: 10px; padding: 9px 14px; align-items: center; }
+  .o-g .thumb { width: 48px; height: 48px; border-radius: 8px; }
+  .o-g .thumb svg { width: 48%; height: 48%; }
+  .o-g .nm { flex: 1; min-width: 0; }
+  .o-g .nm b { display: block; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .o-g .nm small { font-size: 10.5px; color: var(--ink3); }
+  .o-g .qty { font-size: 12px; color: var(--ink3); width: 34px; text-align: right; font-variant-numeric: tabular-nums; }
+  .o-g .amt { font-size: 13px; font-weight: 600; width: 58px; text-align: right; font-variant-numeric: tabular-nums; }
+
+  .o-sum { padding: 8px 0 10px; }
+  .o-sum .cell { min-height: 34px; padding: 6px 14px; }
+  .o-sum .cell-label { font-size: 12.5px; color: var(--ink3); }
+  .o-sum .cell-value { font-size: 12.5px; }
+  .o-info .cell { min-height: 42px; padding: 10px 14px; }
+  .o-copy {
+    margin-left: 6px; font-size: 11px; color: var(--brandInk);
+    border: 1px solid #f2d6c5; background: var(--brandSoft);
+    padding: 1px 6px; border-radius: 4px;
+  }
+
+  /* ---------- 列表模式 ---------- */
+  .o-filters {
+    position: sticky; top: 0; z-index: 15;
+    display: flex; gap: 6px;
+    padding: 10px 14px;
+    background: linear-gradient(var(--bg) 76%, rgba(247, 243, 238, 0));
+  }
+  .o-filters button {
+    height: 29px; padding: 0 13px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--line);
+    font-size: 12.5px; color: var(--ink2);
+  }
+  .o-filters button.is-on { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 600; }
+
+  .o-item { margin: 0 14px 10px; overflow: hidden; }
+  .o-item-top { display: flex; align-items: center; padding: 12px 14px 8px; gap: 7px; }
+  .o-item-top b { font-size: 13px; }
+  .o-item-top .st { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--brandInk); }
+  .o-item-top .st.is-done { color: var(--ink3); font-weight: 400; }
+  .o-thumbs { display: flex; gap: 6px; padding: 0 14px 10px; }
+  .o-thumbs .thumb { width: 52px; height: 52px; border-radius: 8px; }
+  .o-thumbs .thumb svg { width: 46%; height: 46%; }
+  .o-thumbs .more {
+    width: 52px; height: 52px; border-radius: 8px;
+    background: #f5f0ea; color: var(--ink3);
+    display: grid; place-items: center; font-size: 12px;
+  }
+  .o-item-foot {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--line2);
+  }
+  .o-item-foot .sum { flex: 1; font-size: 12px; color: var(--ink3); }
+  .o-item-foot .sum b { font-size: 15px; color: var(--ink); font-weight: 700; margin-left: 2px; }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--solid" id="nav"></nav>
+  <main class="mp-main" id="scroller"><div id="body"></div><div style="height:16px"></div></main>
+  <div class="bar" id="bar" hidden></div>
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  const id = QY.qs('id');
+  const SVC_NO = (BIZ.deliver || BIZ_ID === 'food') ? '取餐号' : '服务单号';
+
+  /* 首次进入补两条历史订单，让列表不是空的（纯演示数据，不覆盖用户已下的单） */
+  function seed() {
+    if (QY.store.get('seeded', false)) return;
+    const now = Date.now();
+    const mk = (ago, items, mode, status, statusText, no, outNo) => ({
+      no, outNo, ts: now - ago,
+      items, goods: items.reduce((n, i) => n + i.unit * i.qty, 0),
+      pack: 2, delivery: 0, promo: 5,
+      total: items.reduce((n, i) => n + i.unit * i.qty, 0) + 2 - 5,
+      mode, pickupTime: '尽快（约 15 分钟）',
+      addr: SHOP.address, remark: '', payMethod: '微信支付',
+      status, statusText
+    });
+    const demo = [
+      mk(2 * 864e5, [
+        { name: PRODUCTS[0].name, specText: PRODUCTS[0].specs.length ? PRODUCTS[0].specs[0].opts[0].label : '标准', qty: 1, unit: PRODUCTS[0].price, ico: PRODUCTS[0].ico, cls: PRODUCTS[0].cls },
+        { name: PRODUCTS[4].name, specText: PRODUCTS[4].specs.length ? PRODUCTS[4].specs[0].opts[0].label : '标准', qty: 2, unit: PRODUCTS[4].price, ico: PRODUCTS[4].ico, cls: PRODUCTS[4].cls }
+      ], 'pickup', 'done', '已完成', 'QY202610190021', 'A42'),
+      mk(26 * 36e5, [
+        { name: PRODUCTS[1].name, specText: PRODUCTS[1].specs.length ? PRODUCTS[1].specs[0].opts[0].label : '标准', qty: 1, unit: PRODUCTS[1].price, ico: PRODUCTS[1].ico, cls: PRODUCTS[1].cls }
+      ], 'pickup', 'done', '已完成', 'QY202610200008', 'A17')
+    ];
+    const cur = QY.store.get('orders', []);
+    const has = new Set(cur.map(o => o.no));
+    demo.forEach(o => { if (!has.has(o.no)) cur.push(o); });
+    QY.store.set('orders', cur);
+    QY.store.set('seeded', true);
+  }
+
+  /* ==================== 详情 ==================== */
+  function detail(order) {
+    document.getElementById('nav').innerHTML =
+      `<button class="nav-btn" data-back aria-label="返回">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5-7 7 7 7"/></svg>
+       </button>
+       <div class="nav-title">订单详情</div><div class="nav-side"></div>`;
+
+    const isPickup = order.mode === 'pickup';
+    const done = order.status === 'done';
+    const steps = done
+      ? [['已下单', 1], ['已支付', 1], ['已出餐', 1], ['已完成', 1]]
+      : [['已下单', 1], ['已支付', 1], ['制作中', 2], ['可取餐', 0]];
+
+    const d = new Date(order.ts);
+    const t = n => {
+      const x = new Date(d.getTime() + n * 6e4);
+      return `${String(x.getHours()).padStart(2, '0')}:${String(x.getMinutes()).padStart(2, '0')}`;
+    };
+
+    const tl = `<div class="o-tl">${steps.map(([lb, state], i) => `
+      <div class="o-step ${state === 1 ? 'done' : state === 2 ? 'now' : ''}">
+        <div class="o-dot"></div>
+        <div class="lb">${lb}</div>
+        <div class="tm">${state ? t(i === 0 ? 0 : i === 1 ? 1 : 8) : '—'}</div>
+      </div>`).join('')}</div>`;
+
+    const goodsHTML = order.items.map(g => `
+      <div class="o-g">
+        <div class="thumb ${g.cls}"><svg viewBox="0 0 24 24" fill="currentColor">${ICO[g.ico] || ICO.bowl}</svg></div>
+        <div class="nm"><b>${QY.esc(g.name)}</b><small>${QY.esc(g.specText)}</small></div>
+        <span class="qty">×${g.qty}</span>
+        <span class="amt">¥${QY.money(g.unit * g.qty)}</span>
+      </div>`).join('');
+
+    document.getElementById('body').innerHTML = `
+      <div class="o-status fade-up">
+        <div class="st">${QY.esc(order.statusText)}</div>
+        <div class="ds">${done ? '感谢光临，期待下次见面' : (isPickup ? '出餐后会通过微信通知你' : '骑手接单后会短信通知你')}</div>
+        <div class="outno">${isPickup ? SVC_NO : '订单号'} <b>${isPickup ? order.outNo : order.no}</b></div>
+      </div>
+
+      <div class="card fade-up d1" style="margin:10px 14px 0">${tl}</div>
+
+      <div class="card o-card fade-up d2">
+        <div class="o-shop-h">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="var(--brandInk)" style="flex:0 0 auto"><path d="M12 2.4c-4 0-7.2 3-7.2 6.8 0 5.1 7.2 12.4 7.2 12.4s7.2-7.3 7.2-12.4c0-3.8-3.2-6.8-7.2-6.8Zm0 9.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"/></svg>
+          <b>${isPickup ? SHOP.name + ' ' + SHOP.branch : '配送地址'}</b>
+          <span class="st">${isPickup ? order.pickupTime : '约 30–40 分钟'}</span>
+        </div>
+        <div style="padding:0 14px 12px;font-size:12px;color:var(--ink3);line-height:1.55">${QY.esc(order.addr)}</div>
+        <div class="hair"></div>
+        ${goodsHTML}
+      </div>
+
+      <div class="card o-card">
+        <div class="o-sum">
+          <div class="cell"><span class="cell-label">商品金额</span><span class="cell-value num">¥${QY.money(order.goods)}</span></div>
+          <div class="cell"><span class="cell-label">打包费</span><span class="cell-value num">¥${QY.money(order.pack)}</span></div>
+          ${order.delivery ? `<div class="cell"><span class="cell-label">配送费</span><span class="cell-value num">¥${QY.money(order.delivery)}</span></div>` : ''}
+          ${order.promo ? `<div class="cell"><span class="cell-label">满减优惠</span><span class="cell-value num" style="color:var(--brandInk)">-¥${QY.money(order.promo)}</span></div>` : ''}
+          ${order.couponCut ? `<div class="cell"><span class="cell-label">优惠券${order.couponName ? '（' + QY.esc(order.couponName) + '）' : ''}</span><span class="cell-value num" style="color:var(--brandInk)">-¥${QY.money(order.couponCut)}</span></div>` : ''}
+          <div class="cell" style="border-top:1px solid var(--line2);padding-top:9px">
+            <span class="cell-label" style="color:var(--ink);font-weight:600">实付款</span>
+            <span class="cell-value" style="font-size:16px;font-weight:700">¥${QY.money(order.total)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card o-card o-info">
+        <div class="cell">
+          <span class="cell-label">订单号</span>
+          <span class="cell-value num">${order.no}</span>
+          <button class="o-copy" id="copyBtn">复制</button>
+        </div>
+        <div class="cell"><span class="cell-label">下单时间</span><span class="cell-value num">${QY.fmtTime(order.ts)}</span></div>
+        <div class="cell"><span class="cell-label">支付方式</span><span class="cell-value">${order.payMethod}</span></div>
+        <div class="cell"><span class="cell-label">备注</span><span class="cell-value">${order.remark ? QY.esc(order.remark) : '<span class="muted">无</span>'}</span></div>
+      </div>
+      <div style="height:12px"></div>`;
+
+    const bar = document.getElementById('bar');
+    bar.hidden = false;
+    bar.innerHTML = `
+      <button class="icon-btn" id="csBtn" aria-label="联系门店">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16.4v2.2a1.8 1.8 0 0 1-2 1.8 17.6 17.6 0 0 1-7.7-2.7 17.3 17.3 0 0 1-5.3-5.3A17.6 17.6 0 0 1 3.3 4.7 1.8 1.8 0 0 1 5.1 2.7h2.2a1.8 1.8 0 0 1 1.8 1.6c.1.9.3 1.7.6 2.5a1.8 1.8 0 0 1-.4 1.9l-.9.9a14 14 0 0 0 5.3 5.3l.9-.9a1.8 1.8 0 0 1 1.9-.4c.8.3 1.6.5 2.5.6a1.8 1.8 0 0 1 1.6 1.8Z"/></svg>
+      </button>
+      <div style="flex:1"></div>
+      <button class="btn btn--ghost btn--sm" id="againBtn" style="height:40px;padding:0 16px">再来一单</button>
+      <button class="btn btn--primary" id="homeBtn" style="min-width:118px">继续点餐</button>`;
+
+    bar.addEventListener('click', e => {
+      if (e.target.closest('#againBtn')) {
+        order.items.forEach(g => {
+          const p = PRODUCTS.find(x => x.name === g.name);
+          if (p) QY.cart.add(p.id);
+        });
+        QY.toast('已加入购物车');
+        setTimeout(() => location.href = 'cart.html', 700);
+      }
+      if (e.target.closest('#homeBtn')) location.href = 'home.html';
+      if (e.target.closest('#csBtn')) QY.toast(SHOP.phone, 1800);
+    });
+
+    const cp = document.getElementById('copyBtn');
+    cp.addEventListener('click', () => {
+      const txt = order.no;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(() => QY.toast('订单号已复制', 1200),
+          () => QY.toast(txt, 1800));
+      } else QY.toast(txt, 1800);
+    });
+
+    QY.tabbar('order');
+  }
+
+  /* ==================== 列表 ==================== */
+  function listView() {
+    document.getElementById('nav').innerHTML =
+      `<div class="nav-side"></div><div class="nav-title">我的订单</div><div class="nav-side"></div>`;
+    document.getElementById('bar').hidden = true;
+
+    let filter = 'all';
+    const filters = [['all', '全部'], ['doing', '进行中'], ['done', '已完成']];
+
+    function render() {
+      const all = QY.orders.list();
+      const arr = filter === 'all' ? all : all.filter(o => filter === 'done' ? o.status === 'done' : o.status !== 'done');
+
+      const head = `<div class="o-filters">${filters.map(([k, n]) =>
+        `<button data-f="${k}" class="${k === filter ? 'is-on' : ''}">${n}</button>`).join('')}</div>`;
+
+      if (!arr.length) {
+        document.getElementById('body').innerHTML = head + `
+          <div class="empty" style="padding-top:54px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M6 2.6h12a1 1 0 0 1 1 1v17.8l-3-1.7-2.4 1.7L12 19.7l-1.6 1.7L8 19.7l-3 1.7V3.6a1 1 0 0 1 1-1Z"/></svg>
+            <div class="empty-t">${filter === 'all' ? '还没有订单' : '这个状态下没有订单'}</div>
+            <div class="empty-s">下一单就能在这里看到进度</div>
+            <a class="btn btn--primary btn--sm" href="home.html#menu" style="margin-top:16px">去点餐</a>
+          </div>`;
+        return;
+      }
+
+      document.getElementById('body').innerHTML = head + arr.map(o => {
+        const isDone = o.status === 'done';
+        const thumbs = o.items.slice(0, 3).map(g =>
+          `<div class="thumb ${g.cls}"><svg viewBox="0 0 24 24" fill="currentColor">${ICO[g.ico] || ICO.bowl}</svg></div>`).join('');
+        const rest = o.items.length > 3 ? `<div class="more">+${o.items.length - 3}</div>` : '';
+        return `<div class="card o-item">
+          <div class="o-item-top">
+            <b>${SHOP.name} ${SHOP.branch}</b>
+            <span class="st ${isDone ? 'is-done' : ''}">${QY.esc(o.statusText)}</span>
+          </div>
+          <div class="o-thumbs">${thumbs}${rest}</div>
+          <div class="o-item-foot">
+            <span class="sum">${QY.fmtTime(o.ts).slice(5)} · ${o.items.reduce((n, i) => n + i.qty, 0)} 件 合计<b>¥${QY.money(o.total)}</b></span>
+            <a class="btn btn--ghost btn--sm" href="order.html?id=${o.no}">详情</a>
+            <button class="btn btn--primary btn--sm" data-again="${o.no}">再来一单</button>
+          </div>
+        </div>`;
+      }).join('') + '<div style="height:8px"></div>';
+    }
+
+    document.getElementById('body').addEventListener('click', e => {
+      const f = e.target.closest('[data-f]');
+      if (f) { filter = f.dataset.f; render(); return; }
+      const a = e.target.closest('[data-again]');
+      if (a) {
+        const o = QY.orders.get(a.dataset.again);
+        o.items.forEach(g => {
+          const p = PRODUCTS.find(x => x.name === g.name);
+          if (p) QY.cart.add(p.id);
+        });
+        QY.toast('已加入购物车');
+        setTimeout(() => location.href = 'cart.html', 700);
+      }
+    });
+
+    render();
+    QY.tabbar('order');
+  }
+
+  seed();
+  if (id) {
+    const o = QY.orders.get(id);
+    if (o) detail(o);
+    else { QY.toast('订单不存在', 1200); setTimeout(listView, 400); }
+  } else {
+    listView();
+  }
+})();
+</script>
+</body>
+</html>

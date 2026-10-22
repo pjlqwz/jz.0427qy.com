@@ -1,0 +1,111 @@
+---
+// 站2 案例栏目页 /case/（2026-10-18 新增，原站无此 URL）
+import Base from '../../layouts/Base.astro';
+import { TEL, CASES } from '../../data/cases.js';
+---
+
+<Base
+  title="企业AI落地案例·数字孪生·一人公司平台｜千羽"
+  description="OPC一人公司一体化服务平台、制造业AI值班工程师、自有自动获客流水线——做出来的东西，直接给你看。电话/微信18624274046。"
+  canonical="https://jz.0427qy.com/case/"
+  keywords="千羽网络案例,一人公司平台,数字孪生,自动获客,企业AI落地案例"
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumbs"><a href="/">首页</a> › 案例展示</nav>
+      <div class="sec-head">
+        <span class="kicker">交付案例</span>
+        <h1 style="font-size:clamp(26px,3.4vw,36px);line-height:1.3;font-weight:700;letter-spacing:-0.01em;margin:0 0 16px;">做出来的东西，直接给你看</h1>
+        <p>以下为千羽自有项目与已交付项目的功能概述，客户项目已作脱敏处理，不披露企业名称与经营数据。<b>这些项目都在盘锦完成</b>——我们不在锦州编造本地案例，锦州的项目按同样的方法做，差别在行业流程，不在能力本身。想了解某个案例的完整细节，直接电话聊。</p>
+      </div>
+      <div class="case-list">
+        {CASES.map((c) => (
+          <article class="case-card" id={`case-${c.tag}`}>
+            <div class="case-media">
+              {c.images.map((img) => (
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  width={img.w ?? 560}
+                  height={img.h ?? 350}
+                  class={img.wide ? 'is-wide' : undefined}
+                  loading="lazy"
+                />
+              ))}
+            </div>
+            <div class="case-body">
+              <span class="case-tag">{c.tag}</span>
+              <h2 style="font-size:21px;font-weight:700;margin:0 0 16px;letter-spacing:-0.01em;">{c.title}</h2>
+
+              <p>{c.desc}</p>
+              <ul class="case-points">
+                {c.points.map((p) => <li>{p}</li>)}
+              </ul>
+              {c.stats && (
+                <div class="case-stats">
+                  {c.stats.map((s) => (
+                    <div class="case-stat">
+                      <b>{s.num}<small>{s.unit}</small></b>
+                      <span>{s.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {c.statsNote && <p class="case-stats-note">{c.statsNote}</p>}
+              <p style="margin-top:20px;">
+                <a class="btn btn-primary" href={`tel:${TEL}`}>电话了解这个案例</a>
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap cta-inner">
+      <div class="cta-copy">
+        <span class="kicker kicker-light">你的项目</span>
+        <h2>下一个案例，可以是你的</h2>
+        <p>把业务说一遍，我来判断从哪一步开始、值不值得做。不推销、不铺垫。</p>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href={`tel:${TEL}`}>电话 / 微信 186-2427-4046</a>
+        </div>
+      </div>
+      <div class="cta-qr">
+        <img src="/images/wecom-qr.png" alt="企业微信二维码" width="132" height="132" loading="lazy" />
+        <span>企业微信扫码咨询</span>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* 复用 Base 中的 .section / .kicker / .sec-head / .case-list / .case-card / .cta 等组件类 */
+  .case-list { display: flex; flex-direction: column; gap: 32px; }
+  .case-card {
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center;
+    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 32px;
+  }
+  .case-card:nth-child(even) .case-media { order: 2; }
+  .case-media { display: flex; gap: 16px; align-items: center; justify-content: center; }
+  .case-media img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-warm); }
+  .case-media img.is-wide { width: 100%; }
+  .case-tag {
+    display: inline-block; font-size: 12.5px; font-weight: 600; color: var(--brand);
+    background: var(--brand-soft); border-radius: 999px; padding: 4px 14px; margin-bottom: 16px;
+  }
+  .case-body p { font-size: 14.5px; color: var(--ink-2); margin: 0 0 16px; }
+  .case-points { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .case-points li { font-size: 13px; color: var(--ink-2); background: var(--bg-warm); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+  .case-stats { display: flex; gap: 32px; margin: 24px 0 0; padding-top: 24px; border-top: 1px solid var(--line); }
+  .case-stat b { display: block; font-size: 22px; font-weight: 700; color: var(--brand); letter-spacing: -0.01em; line-height: 1.2; }
+  .case-stat b small { font-size: 13px; font-weight: 600; }
+  .case-stat span { display: block; font-size: 12px; color: var(--ink-3); margin-top: 3px; line-height: 1.5; max-width: 18ch; }
+  .case-stats-note { font-size: 12px; color: var(--ink-3); margin: 16px 0 0; }
+  @media (max-width: 560px) { .case-stats { flex-direction: column; gap: 16px; } }
+  @media (max-width: 900px) {
+    .case-card { grid-template-columns: 1fr; gap: 24px; }
+    .case-card:nth-child(even) .case-media { order: 0; }
+  }
+</style>

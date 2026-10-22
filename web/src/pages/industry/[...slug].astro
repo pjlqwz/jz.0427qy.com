@@ -1,0 +1,228 @@
+---
+// 锦州行业落地页（由 data/industries.js 生成，一个行业一页）
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config/site.js';
+import { INDUSTRIES, DATA_SOURCE } from '../../data/industries.js';
+
+export function getStaticPaths() {
+  return INDUSTRIES.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const others = INDUSTRIES.filter((x) => x.slug !== entry.slug);
+const pageTitle = `锦州${entry.name}：网站 / 小程序 / 系统怎么做｜千羽网络`;
+const description = `${entry.pain}锦州${entry.name}企业做网站、小程序与业务系统的落地思路：常见痛点、三层做法、我们的建议。${entry.stat}。服务锦州及辽西地区。`;
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: `锦州${entry.name}的信息化落地思路`,
+  description,
+  author: { '@type': 'Organization', name: SITE.brand },
+  publisher: { '@type': 'Organization', name: SITE.brand },
+  about: { '@type': 'Thing', name: entry.name },
+  areaServed: { '@type': 'City', name: '锦州市' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE.domain}/industry/${entry.slug}.html` },
+};
+---
+
+<Base
+  title={pageTitle}
+  description={description}
+  canonical={`${SITE.domain}/industry/${entry.slug}.html`}
+  keywords={`锦州${entry.name},锦州${entry.name}企业网站,锦州${entry.name}小程序,锦州${entry.name}系统开发,锦州信息化建设`}
+  jsonld={jsonld}
+>
+  <div class="wrap">
+    <nav class="crumbs">
+      <a href="/">首页</a> › <a href="/industry/">锦州行业方案</a> › {entry.name}
+    </nav>
+
+    <header class="hd">
+      <span class="tag">{entry.group}</span>
+      <h1 class="page-title">锦州{entry.name}：网站、小程序、系统怎么做</h1>
+      <p class="lead">{entry.lead}</p>
+      <div class="stat-card">
+        <div class="stat-main">
+          <b>{entry.stat}</b>
+          <span>{entry.statNote}</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="block">
+      <h2>这类企业常见的四个卡点</h2>
+      <ul class="pain-list">
+        {entry.pains.map((p) => <li>{p}</li>)}
+      </ul>
+      <p class="note">以上是我们在同类企业里反复见到的情况，不等于每一家都如此。实际情况需要坐下来把流程过一遍才清楚。</p>
+    </section>
+
+    <section class="block">
+      <h2>通常怎么做：三层分开看</h2>
+      <div class="layer-grid">
+        <article class="layer">
+          <span class="layer-no">01</span>
+          <h3>网站</h3>
+          <p>{entry.build.site}</p>
+        </article>
+        <article class="layer">
+          <span class="layer-no">02</span>
+          <h3>小程序</h3>
+          <p>{entry.build.mini}</p>
+        </article>
+        <article class="layer">
+          <span class="layer-no">03</span>
+          <h3>业务系统</h3>
+          <p>{entry.build.system}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>千羽的建议</h2>
+      <ol class="advice">
+        {entry.advice.map((a) => <li>{a}</li>)}
+      </ol>
+    </section>
+
+    <section class="block">
+      <h2>常见问题</h2>
+      {entry.faq.map((f) => (
+        <details class="faq">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+
+    <section class="cta-box">
+      <div>
+        <h2>先聊清楚值不值得做</h2>
+        <p>把你的流程和问题说一遍，我来判断从哪一步开始、大概要多少投入。不推销、不铺垫——不适合做的我会直说。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href={`tel:${SITE.tel}`}>电话 / 微信 {SITE.tel}</a>
+        <a class="btn btn-ghost" href="/contect/">看联系方式</a>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>其他行业</h2>
+      <div class="other">
+        {others.map((o) => <a href={`/industry/${o.slug}.html`}>{o.name}</a>)}
+      </div>
+    </section>
+
+    <nav class="rel">
+      <span>相关服务</span>
+      <a href="/prodect/wzjs.html">网站建设怎么交付 →</a>
+      <a href="/prodect/wzyw.html">小程序与业务系统 →</a>
+      <a href="/prodect/wztg.html">SEO 与 GEO 推广 →</a>
+      <a href="/industry/">全部行业方案 →</a>
+    </nav>
+
+    <p class="src">{DATA_SOURCE}</p>
+  </div>
+</Base>
+
+<style>
+  .crumbs { font-size: 13px; color: var(--ink-3); margin: var(--s3) 0 0; }
+  .crumbs a { color: var(--ink-3); }
+  .crumbs a:hover { color: var(--brand); }
+  .hd { max-width: 78ch; }
+  .tag {
+    display: inline-block; font-size: 12.5px; font-weight: 600; color: var(--brand);
+    background: var(--brand-soft); border-radius: 999px; padding: 4px 12px; margin: var(--s3) 0 var(--s2);
+  }
+  .page-title {
+    font-size: clamp(24px, 3.2vw, 34px); line-height: 1.32; font-weight: 700;
+    letter-spacing: -0.01em; margin: 0 0 var(--s3);
+  }
+  .lead { font-size: 15.5px; line-height: 1.85; color: var(--ink-2); margin: 0 0 var(--s4); }
+  .stat-card {
+    display: flex; gap: var(--s3); flex-wrap: wrap;
+    background: var(--bg-warm); border: 1px solid var(--line); border-radius: var(--r2);
+    padding: var(--s3); margin: 0 0 var(--s5);
+  }
+  .stat-main b { display: block; font-size: 19px; font-weight: 700; color: var(--brand); }
+  .stat-main span { font-size: 13px; color: var(--ink-3); }
+
+  .block { margin-bottom: var(--s5); max-width: 78ch; }
+  .block h2 {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.01em;
+    margin: 0 0 var(--s3); padding-left: 11px; border-left: 3px solid var(--brand);
+  }
+  .pain-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+  .pain-list li {
+    position: relative; padding-left: 20px; font-size: 14.5px; line-height: 1.8; color: var(--ink-2);
+  }
+  .pain-list li::before {
+    content: ''; position: absolute; left: 4px; top: 11px;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--brand); opacity: 0.55;
+  }
+  .note {
+    font-size: 12.5px; color: var(--ink-3); line-height: 1.7;
+    border-left: 3px solid var(--line); padding-left: 12px; margin: var(--s3) 0 0;
+  }
+
+  .layer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--s2); }
+  .layer {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r2); padding: var(--s3);
+  }
+  .layer-no { font-size: 12px; font-weight: 700; color: var(--brand); letter-spacing: 0.06em; }
+  .layer h3 { font-size: 16px; font-weight: 700; margin: 4px 0 8px; }
+  .layer p { font-size: 14px; line-height: 1.8; color: var(--ink-2); margin: 0; }
+
+  .advice { margin: 0; padding-left: 22px; display: grid; gap: var(--s2); }
+  .advice li { font-size: 14.5px; line-height: 1.85; color: var(--ink-2); }
+
+  .faq { border: 1px solid var(--line); border-radius: var(--r2); padding: 0 var(--s3); margin-bottom: var(--s2); background: #fff; }
+  .faq summary {
+    cursor: pointer; font-size: 14.5px; font-weight: 600; padding: 14px 0; list-style: none;
+    display: flex; align-items: center; justify-content: space-between; gap: var(--s2);
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; color: var(--brand); font-size: 18px; font-weight: 600; }
+  .faq[open] summary::after { content: '−'; }
+  .faq p {
+    font-size: 14px; line-height: 1.85; color: var(--ink-2); margin: 0;
+    padding: 0 0 16px; border-top: 1px solid var(--line); padding-top: 14px;
+  }
+
+  .cta-box {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--s4); flex-wrap: wrap;
+    background: var(--bg-warm); border: 1px solid var(--line); border-radius: var(--r3);
+    padding: var(--s4); margin: 0 0 var(--s5);
+  }
+  .cta-box h2 { font-size: 19px; font-weight: 700; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .cta-box p { font-size: 14px; color: var(--ink-2); margin: 0; max-width: 56ch; line-height: 1.8; }
+  .cta-actions { display: flex; gap: var(--s2); flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 600;
+    padding: 11px 20px; border-radius: var(--r1); border: 1px solid transparent; white-space: nowrap;
+    transition: background 0.15s var(--ease), color 0.15s var(--ease), border-color 0.15s var(--ease);
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { background: var(--brand-deep); color: #fff; }
+  .btn-ghost { border-color: var(--line); color: var(--ink-2); background: #fff; }
+  .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
+
+  .other { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); }
+  .other a {
+    font-size: 14px; color: var(--ink-2); background: var(--bg-warm);
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px;
+    transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
+  }
+  .other a:hover { color: var(--brand); border-color: var(--brand); }
+
+  .rel {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    border-top: 1px solid var(--line); padding-top: var(--s3); font-size: 14px; margin-bottom: var(--s3);
+  }
+  .rel span { color: var(--ink-3); }
+  .rel a { color: var(--brand); font-weight: 600; }
+  .src { font-size: 12.5px; color: var(--ink-3); line-height: 1.7; margin: 0 0 var(--s5); }
+</style>

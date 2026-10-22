@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /d/
-Disallow: /e/
-Sitemap: https://jz.0427qy.com/sitemap/index.txt
+Allow: /
+
+Sitemap: https://jz.0427qy.com/sitemap.xml

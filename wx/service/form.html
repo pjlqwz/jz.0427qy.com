@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>需求表单</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  .f-wrap { padding: 14px 14px 0; }
+  .f-card { background: #fff; border-radius: var(--r); box-shadow: var(--sh); padding: 14px; margin-bottom: 12px; }
+  .f-label { font-size: 13.5px; font-weight: 600; margin-bottom: 9px; display: flex; align-items: center; gap: 5px; }
+  .f-label em { font-style: normal; color: var(--red); font-size: 12px; }
+  .f-label span { margin-left: auto; font-size: 11px; font-weight: 400; color: var(--ink3); }
+
+  .f-input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: #fdfbf9;
+    font-size: 13.5px;
+    outline: 0;
+    transition: all .16s ease;
+  }
+  .f-input:focus { border-color: var(--brand); background: #fff; box-shadow: 0 0 0 3px var(--brandSoft); }
+  .f-input::placeholder { color: var(--ink4); }
+  .f-input.is-err { border-color: var(--red); background: #fdf5f4; }
+  .f-err { margin-top: 6px; font-size: 11px; color: var(--red); display: none; }
+  .f-err.is-on { display: block; }
+
+  .f-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .f-chip {
+    height: 34px; padding: 0 14px;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: #fdfbf9;
+    font-size: 12.5px;
+    color: var(--ink2);
+    transition: all .16s ease;
+  }
+  .f-chip.is-on { border-color: var(--brand); background: var(--brandSoft); color: var(--brandInk); font-weight: 600; box-shadow: 0 0 0 1px var(--brand) inset; }
+  .f-chip:active { transform: scale(.97); }
+
+  /* 滑块 */
+  .f-range { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: #eee5dc; outline: 0; margin: 14px 0 6px; }
+  .f-range::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; border: 4px solid var(--brand);
+    box-shadow: 0 2px 8px rgba(224, 99, 44, .3);
+    cursor: pointer;
+  }
+  .f-range-val { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--ink3); }
+  .f-range-val b { color: var(--brandInk); font-size: 14px; font-variant-numeric: tabular-nums; }
+
+  .f-area {
+    width: 100%; min-height: 84px;
+    padding: 11px 12px;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: #fdfbf9;
+    font-size: 13.5px;
+    line-height: 1.6;
+    outline: 0;
+    resize: none;
+    transition: all .16s ease;
+  }
+  .f-area:focus { border-color: var(--brand); background: #fff; box-shadow: 0 0 0 3px var(--brandSoft); }
+
+  .f-agree { display: flex; align-items: flex-start; gap: 8px; padding: 2px 2px 4px; font-size: 11.5px; color: var(--ink3); line-height: 1.6; }
+  .f-cb {
+    flex: 0 0 auto;
+    width: 17px; height: 17px;
+    margin-top: 1px;
+    border-radius: 5px;
+    border: 1.5px solid var(--ink4);
+    display: grid; place-items: center;
+  }
+  .f-cb svg { width: 11px; height: 11px; color: #fff; opacity: 0; }
+  .f-cb.is-on { background: var(--brand); border-color: var(--brand); }
+  .f-cb.is-on svg { opacity: 1; }
+
+  .f-ok { padding: 46px 24px 24px; text-align: center; }
+  .f-ok .ico {
+    width: 62px; height: 62px; margin: 0 auto 15px;
+    border-radius: 50%; display: grid; place-items: center;
+    background: var(--greenSoft); color: var(--green);
+  }
+  .f-ok .ico svg { width: 30px; height: 30px; }
+  .f-ok h2 { margin: 0; font-size: 17px; font-weight: 700; }
+  .f-ok p { margin: 8px 0 0; font-size: 12.5px; color: var(--ink3); line-height: 1.7; }
+  .f-ok .sum {
+    margin: 18px 0 0; padding: 14px; border-radius: 12px;
+    background: #fff; box-shadow: var(--sh); text-align: left;
+  }
+  .f-ok .sum .r { display: flex; font-size: 12.5px; padding: 5px 0; }
+  .f-ok .sum .r span { width: 72px; flex: 0 0 auto; color: var(--ink3); }
+  .f-ok .sum .r b { font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--solid">
+    <button class="nav-btn" data-back aria-label="返回">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5-7 7 7 7"/></svg>
+    </button>
+    <div class="nav-title" id="ttl">需求登记</div>
+    <div class="nav-side"></div>
+  </nav>
+
+  <main class="mp-main" id="main">
+    <div class="f-wrap">
+      <div class="f-card">
+        <div class="f-label">您的称呼 <em>*</em></div>
+        <input class="f-input" id="fName" maxlength="12" placeholder="怎么称呼您">
+        <div class="f-err" id="eName">请填写称呼</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">手机号 <em>*</em><span>用于回电确认</span></div>
+        <input class="f-input" id="fPhone" maxlength="11" inputmode="numeric" placeholder="11 位手机号">
+        <div class="f-err" id="ePhone">手机号格式不对</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">需求类型 <em>*</em></div>
+        <div class="f-chips" id="type">
+          <button class="f-chip" data-v="新做一个小程序">新做一个小程序</button>
+          <button class="f-chip" data-v="改造现有小程序">改造现有小程序</button>
+          <button class="f-chip" data-v="只要方案与报价">只要方案与报价</button>
+          <button class="f-chip" data-v="其他">其他</button>
+        </div>
+        <div class="f-err" id="eType">请选择一项</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">预算范围<span>不会作为报价依据</span></div>
+        <input type="range" class="f-range" id="fBudget" min="1000" max="30000" step="1000" value="8000">
+        <div class="f-range-val"><span>¥1,000</span><b id="budgetN">¥8,000</b><span>¥30,000+</span></div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">关注功能<span>可多选</span></div>
+        <div class="f-chips" id="feats">
+          <button class="f-chip" data-v="在线交易">在线交易</button>
+          <button class="f-chip" data-v="会员积分">会员积分</button>
+          <button class="f-chip" data-v="抽奖营销">抽奖营销</button>
+          <button class="f-chip" data-v="预约到店">预约到店</button>
+          <button class="f-chip" data-v="表单收集">表单收集</button>
+          <button class="f-chip" data-v="分销裂变">分销裂变</button>
+        </div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">补充说明</div>
+        <textarea class="f-area" id="fNote" maxlength="200" placeholder="行业、门店数量、有没有现成的商品资料……写清楚能省一轮沟通"></textarea>
+      </div>
+
+      <div class="f-agree">
+        <button class="f-cb" id="agree">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+        </button>
+        <span>同意千羽网络就本次需求与我联系。演示环境，提交内容只存在本机浏览器。</span>
+      </div>
+
+      <div style="padding:8px 0 24px">
+        <button class="btn btn--primary btn--block" id="submit">提交需求</button>
+      </div>
+    </div>
+  </main>
+
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  let type = '', feats = new Set(), agree = false;
+
+  const budget = document.getElementById('fBudget');
+  budget.addEventListener('input', () => {
+    document.getElementById('budgetN').textContent = '¥' + Number(budget.value).toLocaleString('zh-CN');
+  });
+
+  document.getElementById('type').addEventListener('click', e => {
+    const b = e.target.closest('[data-v]');
+    if (!b) return;
+    type = b.dataset.v;
+    document.querySelectorAll('#type .f-chip').forEach(x => x.classList.toggle('is-on', x === b));
+    document.getElementById('eType').classList.remove('is-on');
+  });
+
+  document.getElementById('feats').addEventListener('click', e => {
+    const b = e.target.closest('[data-v]');
+    if (!b) return;
+    const v = b.dataset.v;
+    if (feats.has(v)) { feats.delete(v); b.classList.remove('is-on'); }
+    else { feats.add(v); b.classList.add('is-on'); }
+  });
+
+  document.getElementById('agree').addEventListener('click', e => {
+    agree = !agree;
+    e.currentTarget.classList.toggle('is-on', agree);
+  });
+
+  document.getElementById('submit').addEventListener('click', () => {
+    const name = document.getElementById('fName');
+    const phone = document.getElementById('fPhone');
+    let bad = null;
+
+    const setErr = (el, err, on) => {
+      err.classList.toggle('is-on', on);
+      if (el) el.classList.toggle('is-err', on);
+      if (on && !bad) bad = el || err;
+    };
+
+    setErr(name, document.getElementById('eName'), !name.value.trim());
+    setErr(phone, document.getElementById('ePhone'), !/^1[3-9]\d{9}$/.test(phone.value.trim()));
+    const typeErr = document.getElementById('eType');
+    if (!type) { typeErr.classList.add('is-on'); if (!bad) bad = typeErr; }
+    else typeErr.classList.remove('is-on');
+
+    if (!agree) { QY.toast('请先勾选同意', 1400); return; }
+    if (bad) {
+      bad.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
+
+    const budgetTxt = '¥' + Number(budget.value).toLocaleString('zh-CN');
+    const featTxt = Array.from(feats);
+    QY.store.set('form_last', {
+      name: name.value.trim(), phone: phone.value.trim(), type,
+      budget: budgetTxt, feats: featTxt,
+      note: document.getElementById('fNote').value.trim(), ts: Date.now()
+    });
+
+    document.getElementById('ttl').textContent = '提交成功';
+    document.getElementById('main').innerHTML = `
+      <div class="f-ok">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+        <h2>已收到，24 小时内回电</h2>
+        <p>你的需求已记录。下面是提交内容，可截图留存。</p>
+        <div class="sum">
+          <div class="r"><span>称呼</span><b>${QY.esc(name.value.trim())}</b></div>
+          <div class="r"><span>手机号</span><b>${phone.value.trim()}</b></div>
+          <div class="r"><span>需求类型</span><b>${QY.esc(type)}</b></div>
+          <div class="r"><span>预算</span><b>${budgetTxt}</b></div>
+          <div class="r"><span>关注功能</span><b>${featTxt.length ? QY.esc(featTxt.join('、')) : '未选择'}</b></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:18px">
+          <a class="btn btn--ghost" style="flex:1" href="${QY.root}trade/home.html">返回首页</a>
+          <a class="btn btn--primary" style="flex:1" href="${QY.root}service/contact.html">联系客服</a>
+        </div>
+      </div>`;
+    QY.toast('提交成功', 1400);
+  });
+
+  QY.tabbar('mine');
+})();
+</script>
+</body>
+</html>

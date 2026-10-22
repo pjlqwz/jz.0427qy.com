@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>拾光小馆 · 首页</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  /* ---- Hero ---- */
+  .h-hero {
+    position: relative;
+    padding: 18px 16px 26px;
+    background:
+      radial-gradient(120% 80% at 88% 6%, rgba(255, 255, 255, .75), transparent 55%),
+      linear-gradient(158deg, #f7ddc0 0%, #efc39a 46%, #f2cfae 100%);
+    border-radius: 0 0 22px 22px;
+    overflow: hidden;
+  }
+  .h-hero::before {
+    content: "";
+    position: absolute;
+    width: 190px; height: 190px;
+    right: -60px; top: -70px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .3);
+  }
+  .h-hero::after {
+    content: "";
+    position: absolute;
+    width: 110px; height: 110px;
+    right: 26px; bottom: -62px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .18);
+  }
+  .h-top { position: relative; display: flex; align-items: flex-start; gap: 10px; }
+  .h-brand { flex: 1; min-width: 0; display: flex; gap: 11px; align-items: center; }
+  .h-logo {
+    flex: 0 0 auto;
+    width: 46px; height: 46px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    background: linear-gradient(150deg, #fff, #fdf1e5);
+    box-shadow: 0 4px 12px rgba(120, 66, 26, .18);
+    color: #c2551f;
+  }
+  .h-logo svg { width: 27px; height: 27px; }
+  .h-name { font-size: 19px; font-weight: 700; letter-spacing: .3px; line-height: 1.25; }
+  .h-name em {
+    font-style: normal;
+    margin-left: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #8a5a34;
+    background: rgba(255, 255, 255, .62);
+    padding: 2px 6px;
+    border-radius: 5px;
+    vertical-align: 2px;
+  }
+  .h-slogan { margin-top: 3px; font-size: 11.5px; color: #7d5a3c; letter-spacing: .3px; }
+  .h-state {
+    flex: 0 0 auto;
+    display: inline-flex; align-items: center; gap: 4px;
+    height: 24px; padding: 0 9px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .72);
+    font-size: 11px; font-weight: 600; color: #22704b;
+  }
+  .h-state i { width: 5px; height: 5px; border-radius: 50%; background: #2e9e6b; }
+  .h-meta {
+    position: relative;
+    margin-top: 14px;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 7px;
+    font-size: 11.5px; color: #7d5a3c;
+  }
+  .h-meta .score {
+    font-size: 17px; font-weight: 700; color: #b44c1c;
+    font-variant-numeric: tabular-nums;
+  }
+  .h-meta .score small { font-size: 10px; font-weight: 600; margin-left: 1px; }
+  .h-meta .pip { width: 1px; height: 10px; background: rgba(125, 90, 60, .28); }
+
+  /* ---- 公告 ---- */
+  .h-notice {
+    position: relative;
+    display: flex; align-items: center; gap: 7px;
+    margin: 12px 14px 0;
+    padding: 9px 12px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(34, 29, 25, .05);
+    font-size: 12px;
+    color: var(--ink2);
+    overflow: hidden;
+  }
+  .h-notice > svg { flex: 0 0 auto; width: 14px; height: 14px; color: var(--brand); }
+  .h-ticker { position: relative; flex: 1; height: 17px; overflow: hidden; }
+  .h-ticker span {
+    position: absolute; left: 0; top: 0; right: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    opacity: 0; transform: translateY(9px);
+    transition: opacity .3s ease, transform .35s ease;
+  }
+  .h-ticker span.is-on { opacity: 1; transform: none; }
+  .h-notice .more { flex: 0 0 auto; color: var(--ink4); font-size: 11px; }
+
+  /* ---- 快捷入口 ---- */
+  .h-quick {
+    position: relative;
+    margin: 12px 14px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 15px 4px 13px;
+    background: #fff;
+    border-radius: var(--r);
+    box-shadow: var(--sh);
+  }
+  .h-quick a {
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    text-decoration: none; color: var(--ink2);
+    font-size: 11.5px;
+    transition: transform .14s ease;
+  }
+  .h-quick a:active { transform: scale(.94); }
+  .h-quick .qi {
+    width: 40px; height: 40px; border-radius: 13px;
+    display: grid; place-items: center;
+  }
+  .h-quick .qi svg { width: 21px; height: 21px; }
+  .qi-1 { background: #fdeee1; color: #d2622c; }
+  .qi-2 { background: #eaf3e8; color: #3c8a54; }
+  .qi-3 { background: #fdf0d9; color: #c08a3e; }
+  .qi-4 { background: #eceaf6; color: #6a63a8; }
+
+  /* ---- 促销条 ---- */
+  .h-promo {
+    margin: 12px 14px 0;
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 13px;
+    border-radius: var(--r);
+    background: linear-gradient(100deg, #2b2320, #4a3a2f 62%, #6b4f38);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(43, 35, 32, .22);
+  }
+  .h-promo .pt { flex: 1; min-width: 0; }
+  .h-promo .pt b { display: block; font-size: 13px; letter-spacing: .4px; }
+  .h-promo .pt span { font-size: 11px; color: rgba(255, 255, 255, .62); }
+  .h-promo .pb {
+    flex: 0 0 auto;
+    height: 27px; padding: 0 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f2914a, #e0632c);
+    font-size: 12px; font-weight: 600; color: #fff;
+    display: inline-flex; align-items: center;
+    text-decoration: none;
+  }
+  .h-promo .pb:active { transform: scale(.96); }
+
+  /* ---- 分类栏 ---- */
+  .h-cats {
+    position: sticky; top: 0; z-index: 15;
+    display: flex; gap: 18px;
+    padding: 8px 16px 9px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: linear-gradient(var(--bg) 72%, rgba(247, 243, 238, 0));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .h-cats::-webkit-scrollbar { display: none; }
+  .h-cats button {
+    position: relative;
+    flex: 0 0 auto;
+    padding: 5px 0 8px;
+    font-size: 13.5px;
+    color: var(--ink3);
+    letter-spacing: .3px;
+    transition: color .2s ease;
+  }
+  .h-cats button.is-on { color: var(--ink); font-weight: 700; }
+  .h-cats button.is-on::after {
+    content: "";
+    position: absolute; left: 50%; bottom: 2px;
+    width: 16px; height: 3px; margin-left: -8px;
+    border-radius: 2px;
+    background: var(--brand);
+  }
+
+  /* ---- 商品列表 ---- */
+  .h-list { margin: 0 14px 2px; background: #fff; border-radius: var(--r); box-shadow: var(--sh); overflow: hidden; }
+  .h-list .item:active { background: #fdfaf7; }
+  .h-empty { padding: 34px 0; text-align: center; font-size: 13px; color: var(--ink3); }
+
+  /* ---- 评价 ---- */
+  .h-rv { margin: 0 14px; padding: 13px 14px; }
+  .h-rv + .h-rv { border-top: 1px solid var(--line2); }
+  .h-rv-top { display: flex; align-items: center; gap: 7px; }
+  .h-av {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: #f3ece5; color: var(--ink2);
+    font-size: 10.5px; font-weight: 600;
+  }
+  .h-stars { color: #e9a13c; font-size: 11px; letter-spacing: 1px; }
+  .h-rv p { margin: 7px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--ink2); }
+  .h-rv time { display: block; margin-top: 5px; font-size: 11px; color: var(--ink4); }
+
+  /* ---- 门店信息 ---- */
+  .h-shop { margin: 0 14px 18px; }
+  .h-shop .cell-value { font-size: 12.5px; color: var(--ink2); }
+</style>
+</head>
+<body>
+<div class="mp">
+  <main class="mp-main" id="scroller">
+
+    <!-- 门店头图 -->
+    <header class="h-hero">
+      <div class="h-top">
+        <div class="h-brand">
+          <div class="h-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 11h20c0 5.52-4.48 10-10 10S2 16.52 2 11Z"/><rect x="1" y="21.4" width="22" height="1.8" rx=".9"/><path d="M8.4 3.4c1.5 1.2 1.5 2.7 0 3.9M12 2.6c1.5 1.2 1.5 2.7 0 3.9M15.6 3.4c1.5 1.2 1.5 2.7 0 3.9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </div>
+          <div style="min-width:0">
+            <div class="h-name" id="hName"></div>
+            <div class="h-slogan" id="slogan"></div>
+          </div>
+        </div>
+        <div class="h-state"><i></i><span id="hState">营业中</span></div>
+      </div>
+      <div class="h-meta">
+        <span class="score" id="hScore"></span>
+        <span class="pip"></span>
+        <span id="hSold"></span>
+        <span class="pip"></span>
+        <span id="hEta"></span>
+        <span class="pip"></span>
+        <span id="hMode">到店自取</span>
+      </div>
+    </header>
+
+    <!-- 公告 -->
+    <div class="h-notice">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3.2 6.4 8H3.8A1.8 1.8 0 0 0 2 9.8v4.4A1.8 1.8 0 0 0 3.8 16h2.6L13 20.8a1 1 0 0 0 1.6-.8V4a1 1 0 0 0-1.6-.8Z"/><path d="M17.4 8.6a4.6 4.6 0 0 1 0 6.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <div class="h-ticker" id="ticker"></div>
+      <span class="more">›</span>
+    </div>
+
+    <!-- 快捷入口 -->
+    <nav class="h-quick">
+      <a href="#menu">
+        <span class="qi qi-1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 11h20c0 5.52-4.48 10-10 10S2 16.52 2 11Z"/><rect x="1" y="21.4" width="22" height="1.8" rx=".9"/></svg></span>
+        <span id="ctaMenu">马上点餐</span>
+      </a>
+      <a href="cart.html">
+        <span class="qi qi-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 3.6h2.2l2.5 10.1a1.8 1.8 0 0 0 1.75 1.37h8.1a1.8 1.8 0 0 0 1.75-1.33l1.5-5.6H6.2"/><circle cx="9.4" cy="19.6" r="1.5" fill="currentColor"/><circle cx="17.4" cy="19.6" r="1.5" fill="currentColor"/></svg></span>
+        购物车
+      </a>
+      <a href="order.html">
+        <span class="qi qi-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 2.6h12a1 1 0 0 1 1 1v17.8l-3-1.7-2.4 1.7L12 19.7l-1.6 1.7L8 19.7l-3 1.7V3.6a1 1 0 0 1 1-1Z"/><path d="M8.6 8h6.8M8.6 11.6h6.8" stroke-linecap="round"/></svg></span>
+        我的订单
+      </a>
+      <a href="#" id="shopEntry">
+        <span class="qi qi-4"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.4c-4 0-7.2 3-7.2 6.8 0 5.1 7.2 12.4 7.2 12.4s7.2-7.3 7.2-12.4c0-3.8-3.2-6.8-7.2-6.8Zm0 9.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"/></svg></span>
+        门店地址
+      </a>
+    </nav>
+
+    <!-- 促销条 -->
+    <div class="h-promo">
+      <div class="pt">
+        <b id="promoMain"></b>
+        <span id="promoSub"></span>
+      </div>
+      <a class="pb" href="#menu">去凑单</a>
+    </div>
+
+    <!-- 分类 -->
+    <div class="h-cats" id="cats"></div>
+
+    <!-- 商品 -->
+    <section id="menu">
+      <div class="h-list" id="list"></div>
+      <div class="h-empty" id="listEmpty" hidden>这个分类暂时没有商品</div>
+    </section>
+
+    <!-- 评价 -->
+    <div class="sec"><span class="sec-t">顾客说</span><span class="sec-s" id="rvSum"></span></div>
+    <div class="card" id="reviews" style="margin:0 14px 4px"></div>
+
+    <!-- 门店信息 -->
+    <div class="sec"><span class="sec-t">门店信息</span></div>
+    <div class="card h-shop">
+      <div class="cell">
+        <span class="cell-label">地址</span>
+        <span class="cell-value" id="shAddr"></span>
+        <span class="cell-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+      </div>
+      <div class="cell">
+        <span class="cell-label">营业时间</span>
+        <span class="cell-value" id="shHours"></span>
+      </div>
+      <div class="cell">
+        <span class="cell-label">联系电话</span>
+        <span class="cell-value" id="shPhone"></span>
+        <span class="cell-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+  </main>
+
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  /* ---- 门店信息注入：换行业即换店，杜绝硬编码 ---- */
+  document.getElementById('hName').innerHTML =
+    QY.esc(SHOP.name) + '<em>' + QY.esc(SHOP.branch) + '</em>';
+  document.getElementById('slogan').textContent = SHOP.slogan;
+  document.getElementById('hScore').innerHTML = SHOP.rating + '<small>分</small>';
+  document.getElementById('hSold').textContent = '月售 ' + SHOP.sold;
+  document.getElementById('hEta').textContent = SHOP.eta;
+  document.getElementById('shAddr').textContent = SHOP.address;
+  document.getElementById('shHours').textContent = SHOP.hours;
+  document.getElementById('shPhone').textContent = SHOP.phone;
+  document.getElementById('hMode').textContent = MODE_WORD;
+  document.getElementById('rvSum').textContent = `${SHOP.rating} 分 · ${SHOP.sold} 条`;
+  document.getElementById('promoMain').textContent =
+    `满 ${PROMO.threshold} 减 ${PROMO.minus}` + (PROMO.freeAt < 900 ? ` · 满 ${PROMO.freeAt} 免配送` : '');
+  document.getElementById('promoSub').textContent = SHOP.notices[1] || SHOP.notices[0] || '';
+  const CTA = { food: '马上点餐', beauty: '看项目', dental: '看项目', edu: '看课程', fitness: '看课程', retail: '去逛逛' };
+  document.getElementById('ctaMenu').textContent = CTA[BIZ_ID] || '马上点餐';
+
+  /* 公告轮播 */
+  const tk = document.getElementById('ticker');
+  tk.innerHTML = SHOP.notices.map((t, i) =>
+    `<span class="${i === 0 ? 'is-on' : ''}">${QY.esc(t)}</span>`).join('');
+  let ti = 0;
+  const spans = tk.querySelectorAll('span');
+  if (spans.length > 1) {
+    setInterval(() => {
+      spans[ti].classList.remove('is-on');
+      ti = (ti + 1) % spans.length;
+      spans[ti].classList.add('is-on');
+    }, 3200);
+  }
+
+  /* 门店地址：演示用，弹 toast */
+  document.getElementById('shopEntry').addEventListener('click', e => {
+    e.preventDefault();
+    QY.toast(SHOP.address, 2000);
+  });
+
+  /* 商品行 */
+  const icoOf = p => `<svg viewBox="0 0 24 24" fill="currentColor">${ICO[p.ico] || ICO.bowl}</svg>`;
+
+  function rowHTML(p) {
+    const tags = p.tags.slice(0, 2).map((t, i) =>
+      `<span class="tag${i === 1 ? ' tag--gold' : ''}">${QY.esc(t)}</span>`).join('');
+    return `<div class="item" data-pid="${p.id}">
+      <div class="thumb ${p.cls}">${icoOf(p)}</div>
+      <div class="item-body">
+        <div class="item-name">${QY.esc(p.name)}</div>
+        <div class="item-sub">${QY.esc(p.sub)}</div>
+        <div class="item-tags">${tags}</div>
+        <div class="item-foot">
+          <div>
+            <span class="price"><i>¥</i><b>${p.price}</b></span>
+            ${p.oldPrice ? `<span class="price-old">¥${p.oldPrice}</span>` : ''}
+            <span class="item-meta" style="margin-left:6px">月售 ${p.sales}</span>
+          </div>
+          <button class="add-btn" data-add="${p.id}" aria-label="加入购物车">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  const catsEl = document.getElementById('cats');
+  const listEl = document.getElementById('list');
+  let cur = 'all';
+
+  catsEl.innerHTML = CATS.map((c, i) =>
+    `<button data-cat="${c.id}" class="${i === 0 ? 'is-on' : ''}">${c.name}</button>`).join('');
+
+  function render() {
+    const arr = cur === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === cur);
+    listEl.innerHTML = arr.map(rowHTML).join('');
+    document.getElementById('listEmpty').hidden = arr.length > 0;
+  }
+  render();
+
+  catsEl.addEventListener('click', e => {
+    const b = e.target.closest('[data-cat]');
+    if (!b) return;
+    catsEl.querySelectorAll('button').forEach(x => x.classList.toggle('is-on', x === b));
+    cur = b.dataset.cat;
+    render();
+  });
+
+  /* 加购 / 进详情 */
+  document.addEventListener('click', e => {
+    const add = e.target.closest('[data-add]');
+    if (add) {
+      e.stopPropagation();
+      QY.cart.add(add.dataset.add);
+      QY.toast('已加入购物车');
+      return;
+    }
+    const row = e.target.closest('.item');
+    if (row && row.dataset.pid) location.href = 'product.html?id=' + row.dataset.pid;
+  });
+
+  /* 评价 */
+  document.getElementById('reviews').innerHTML = REVIEWS.map(r => `
+    <div class="h-rv">
+      <div class="h-rv-top">
+        <span class="h-av">${QY.esc(r.name.slice(0, 1))}</span>
+        <span class="h-stars">${'★'.repeat(r.stars)}</span>
+        <span class="small muted" style="margin-left:auto">${r.date}</span>
+      </div>
+      <p>${QY.esc(r.text)}</p>
+    </div>`).join('');
+
+  QY.tabbar('home');
+})();
+</script>
+</body>
+</html>

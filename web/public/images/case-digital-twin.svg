@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" role="img" aria-label="制造业数字孪生平台原型示意图">
+  <defs>
+    <linearGradient id="dt-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#faf7f4"/>
+      <stop offset="1" stop-color="#f4efe9"/>
+    </linearGradient>
+    <linearGradient id="dt-scan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b32c29" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#b32c29" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#b32c29" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 画布 -->
+  <rect width="800" height="500" fill="url(#dt-sky)"/>
+
+  <!-- 顶部标题栏 -->
+  <rect x="0" y="0" width="800" height="52" fill="#ffffff"/>
+  <line x1="0" y1="52" x2="800" y2="52" stroke="#e8e0d8" stroke-width="1"/>
+  <rect x="24" y="17" width="18" height="18" rx="4" fill="#b32c29"/>
+  <path d="M29 26 l4 4 7 -8" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="52" y="31" font-size="15" font-weight="600" fill="#26201c">数字孪生 · 产线实时视图</text>
+  <text x="640" y="31" font-size="12" fill="#8a7f74">原型示意 · Prototype</text>
+  <circle cx="760" cy="26" r="4" fill="#3d9a50"/>
+  <text x="752" y="45" font-size="10" fill="#8a7f74" text-anchor="middle">在线</text>
+
+  <!-- ===== 左侧：等距工厂视图 ===== -->
+  <rect x="24" y="68" width="496" height="404" rx="12" fill="#ffffff" stroke="#e8e0d8"/>
+  <text x="44" y="96" font-size="13" font-weight="600" fill="#26201c">车间三维映射</text>
+  <text x="470" y="96" font-size="11" fill="#8a7f74" text-anchor="end">视角：产线南向</text>
+
+  <!-- 地面网格（等距） -->
+  <g stroke-linecap="round">
+    <!-- 地面菱形 -->
+    <path d="M272 168 L468 258 L272 348 L76 258 Z" fill="#f7f2ec" stroke="#e3d9cf" stroke-width="1"/>
+    <!-- 网格线 -->
+    <g stroke="#ece4db" stroke-width="1">
+      <line x1="174" y1="213" x2="370" y2="303"/>
+      <line x1="174" y1="303" x2="370" y2="213"/>
+      <line x1="223" y1="235.5" x2="223" y2="280.5"/>
+      <line x1="321" y1="235.5" x2="321" y2="280.5"/>
+      <line x1="126" y1="235.5" x2="126" y2="280.5"/>
+      <line x1="418" y1="235.5" x2="418" y2="280.5"/>
+    </g>
+  </g>
+
+  <!-- 设备立方体 1：CNC 加工中心 -->
+  <g>
+    <path d="M196 208 L240 182 L284 208 L240 234 Z" fill="#c9b8ab"/>
+    <path d="M196 208 L196 268 L240 294 L240 234 Z" fill="#a08d7e"/>
+    <path d="M284 208 L284 268 L240 294 L240 234 Z" fill="#b5a091"/>
+    <rect x="207" y="222" width="30" height="12" rx="2" fill="#3d9a50"/>
+    <text x="222" y="231.5" font-size="8" fill="#ffffff" text-anchor="middle">RUN</text>
+  </g>
+  <!-- 设备立方体 2：原料仓 -->
+  <g>
+    <path d="M330 232 L368 210 L406 232 L368 254 Z" fill="#cbb9a4"/>
+    <path d="M330 232 L330 282 L368 304 L368 254 Z" fill="#9d8a76"/>
+    <path d="M406 232 L406 282 L368 304 L368 254 Z" fill="#b09b86"/>
+  </g>
+  <!-- 设备立方体 3：装配台 -->
+  <g>
+    <path d="M150 258 L184 240 L218 258 L184 276 Z" fill="#c4b2a3"/>
+    <path d="M150 258 L150 292 L184 310 L184 276 Z" fill="#967f6d"/>
+    <path d="M218 258 L218 292 L184 310 L184 276 Z" fill="#a89384"/>
+  </g>
+  <!-- 设备立方体 4：成品仓 -->
+  <g>
+    <path d="M386 288 L420 270 L454 288 L420 306 Z" fill="#cbb9a4"/>
+    <path d="M386 288 L386 330 L420 348 L420 306 Z" fill="#9d8a76"/>
+    <path d="M454 288 L454 330 L420 348 L420 306 Z" fill="#b09b86"/>
+  </g>
+  <!-- AGV 小车 -->
+  <g>
+    <rect x="248" y="272" width="26" height="14" rx="3" fill="#b32c29"/>
+    <circle cx="255" cy="289" r="3" fill="#26201c"/>
+    <circle cx="267" cy="289" r="3" fill="#26201c"/>
+  </g>
+  <!-- 传送带 -->
+  <path d="M218 300 L386 300" stroke="#8a7f74" stroke-width="2" stroke-dasharray="6 4"/>
+  <path d="M218 300 L386 300" stroke="#b32c29" stroke-width="1.5" stroke-dasharray="4 10" opacity="0.7"/>
+
+  <!-- 实时扫描线 -->
+  <rect x="100" y="176" width="344" height="180" fill="url(#dt-scan)" opacity="0.5">
+    <animate attributeName="y" from="150" to="330" dur="3.2s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- 左下数据条 -->
+  <rect x="44" y="420" width="456" height="36" rx="8" fill="#faf6f1" stroke="#ece4db"/>
+  <text x="60" y="442" font-size="11" fill="#6b5f54">在产工单</text>
+  <text x="60" y="442" font-size="11" fill="#6b5f54" dx="52">3</text>
+  <text x="60" y="442" font-size="11" fill="#6b5f54" dx="100">稼动率</text>
+  <text x="60" y="442" font-size="11" fill="#6b5f54" dx="152">87%</text>
+  <text x="60" y="442" font-size="11" fill="#6b5f54" dx="220">今日告警</text>
+  <text x="60" y="442" font-size="11" fill="#b32c29" dx="282">1</text>
+
+  <!-- ===== 右侧：设备状态面板 ===== -->
+  <rect x="536" y="68" width="240" height="404" rx="12" fill="#ffffff" stroke="#e8e0d8"/>
+  <text x="556" y="96" font-size="13" font-weight="600" fill="#26201c">设备状态</text>
+  <circle cx="756" cy="92" r="4" fill="#3d9a50"/>
+
+  <!-- 设备行 -->
+  <g font-size="11">
+    <rect x="552" y="112" width="208" height="46" rx="8" fill="#f7f2ec"/>
+    <circle cx="572" cy="135" r="5" fill="#3d9a50"/>
+    <text x="588" y="131" fill="#26201c" font-weight="500">CNC-01 加工中心</text>
+    <text x="588" y="147" fill="#8a7f74">运行中 · 负荷 82%</text>
+    <text x="748" y="135" fill="#3d9a50" text-anchor="end">正常</text>
+
+    <rect x="552" y="166" width="208" height="46" rx="8" fill="#f7f2ec"/>
+    <circle cx="572" cy="189" r="5" fill="#d99a2b"/>
+    <text x="588" y="185" fill="#26201c" font-weight="500">机械臂 ARM-02</text>
+    <text x="588" y="201" fill="#8a7f74">待机 · 等待上料</text>
+    <text x="748" y="189" fill="#d99a2b" text-anchor="end">待机</text>
+
+    <rect x="552" y="220" width="208" height="46" rx="8" fill="#f7f2ec"/>
+    <circle cx="572" cy="243" r="5" fill="#b32c29"/>
+    <text x="588" y="239" fill="#26201c" font-weight="500">AGV-03 搬运车</text>
+    <text x="588" y="255" fill="#8a7f74">告警 · 路径遮挡</text>
+    <text x="748" y="243" fill="#b32c29" text-anchor="end">告警</text>
+
+    <rect x="552" y="274" width="208" height="46" rx="8" fill="#f7f2ec"/>
+    <circle cx="572" cy="297" r="5" fill="#3d9a50"/>
+    <text x="588" y="293" fill="#26201c" font-weight="500">装配线 LINE-04</text>
+    <text x="588" y="309" fill="#8a7f74">运行中 · 节拍 42s</text>
+    <text x="748" y="297" fill="#3d9a50" text-anchor="end">正常</text>
+  </g>
+
+  <!-- 孪生偏差提示 -->
+  <rect x="552" y="336" width="208" height="56" rx="8" fill="#fdf3f2" stroke="#f0d4d2"/>
+  <text x="568" y="356" font-size="11" font-weight="600" fill="#b32c29">孪生偏差 0.8s</text>
+  <text x="568" y="372" font-size="10" fill="#8a6a66">物理产线 MES 回传延迟</text>
+  <text x="568" y="386" font-size="10" fill="#8a6a66">低于阈值 2.0s，无需干预</text>
+
+  <!-- 图表占位 -->
+  <rect x="552" y="404" width="208" height="52" rx="8" fill="#faf6f1" stroke="#ece4db"/>
+  <polyline points="564,436 584,428 604,432 624,420 644,424 664,414 684,418 704,408 724,412 744,404"
+    fill="none" stroke="#b32c29" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="564" y="420" font-size="10" fill="#8a7f74">近 12 小时设备综合效率</text>
+</svg>

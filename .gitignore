@@ -1,17 +1,20 @@
-*.php
-e/
-ecachefiles/
-search/
-s/
-t/
-z/
-.htaccess
-.user.ini
-.gitignore
-web.config
-*.zip
-*.tar
-*.rar
-*.gz
-web.config
-CNAME
+# === Astro 生成器 ===
+web/node_modules/
+web/dist/
+web/.astro/
+web/src/data/*.tmp
+
+# === 构建残留：Astro 的 SSR 中间产物会漏到仓库根 ===
+# 仓库根 = 线上公开目录，这几样绝不许进版本库（2026-10-22 实测出现过）
+/chunks/
+/pages/
+/*.mjs
+
+# === 内部资料的中间产物（截图拼图单张数 MB，不进版本库）===
+.docs/tmp/
+
+# === 系统文件 ===
+.DS_Store
+Thumbs.db
+*.log
+tools/__pycache__/

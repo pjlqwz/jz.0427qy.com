@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jz.0427qy.com/sitemap.xml

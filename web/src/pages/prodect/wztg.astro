@@ -1,0 +1,173 @@
+---
+// 站2 产品页：网站推广 /prodect/wztg.html（2026-10-18 随新设计重做，URL 不变）
+import Base from '../../layouts/Base.astro';
+import { TEL } from '../../data/cases.js';
+
+const SERVICES = [
+  { name: '站内 SEO 优化', desc: '建站时同步做：标题、描述、结构化数据、URL 规范、速度优化。不是上线后再补。' },
+  { name: '站群内容生产', desc: '多城市站群布局，SEO 文章持续产出，智能体流水线起草 + 人工审稿，日更 5 篇的节奏我们自己在跑。' },
+  { name: '百度主动推送', desc: '发布即推送百度站长平台，sitemap 同步维护，新内容收录快人一步。' },
+  { name: '多平台分发', desc: '官网 + 公众号 + 抖音 + 小红书，一套内容多端触达，客户在哪内容就在哪。' },
+];
+
+const PRINCIPLES = [
+  { title: '纯白帽，不碰快排', desc: '专家级团队亲自做，不是代理转手。拒绝快排诈骗——K 站了哭都来不及。' },
+  { title: '先诊断再动手', desc: '看现有收录、排名、流量结构，找出最可能出单的词，再定内容计划。' },
+  { title: '效果可验证', desc: '收录量、排名、推送记录都在百度站长平台可查，不玩只有我们看得懂的数据。' },
+];
+---
+
+<Base
+  title="锦州网站优化推广·纯白帽SEO｜千羽网络"
+  description="纯白帽SEO，拒绝快排。站内优化、主动推送、多平台分发，先诊断再动手。锦州网站优化推广找千羽网络。电话/微信18624274046。"
+  canonical="https://jz.0427qy.com/prodect/wztg.html"
+  keywords="锦州网站优化,锦州网站推广,锦州SEO,白帽SEO,百度主动推送"
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumbs"><a href="/">首页</a> › 网络推广</nav>
+      <div class="sec-head">
+        <span class="kicker">网站推广</span>
+        <h1 class="page-title">专家级纯白帽 SEO 团队，不是代理</h1>
+        <p>拒绝快排诈骗。推广是长期工程：站内打底、内容供给、收录推送、多端分发，四件事做扎实了，排名和询盘是结果。</p>
+      </div>
+
+      <!-- 四项服务 -->
+      <div class="svc-grid">
+        {SERVICES.map((s) => (
+          <div class="svc-card">
+            <h2>{s.name}</h2>
+            <p>{s.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- 三条原则 -->
+      <div class="principle-block">
+        <div class="sec-head">
+          <span class="kicker">我们的原则</span>
+          <h2>推广这件事，我们的分寸</h2>
+        </div>
+        <div class="principle-grid">
+          {PRINCIPLES.map((p) => (
+            <div class="principle-card">
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- GEO：AI 搜索时代的第二入口（导航二级「GEO · AI 搜索优化」落这儿） -->
+      <div class="geo-block" id="geo">
+        <div class="sec-head">
+          <span class="kicker">GEO · 生成式引擎优化</span>
+          <h2>客户开始问 AI，而不是翻十条链接</h2>
+          <p>豆包、DeepSeek、Kimi、ChatGPT、Google 的 AI 概览，现在都是直接给一段答案，再列几个来源。你排在第一页但没进这几条来源，对提问的人来说就等于不存在。GEO 管的是这件事——让 AI 在回答里提到你，而且说得对。</p>
+        </div>
+        <ol class="geo-list">
+          <li>
+            <h3>内容先能被机器读懂</h3>
+            <p>结论放前面，数字和事实写清楚，一段只讲一件事。AI 摘的是「能直接回答这句话的那一段」，绕三圈的排比句摘不出来。</p>
+          </li>
+          <li>
+            <h3>把「你是谁」写死</h3>
+            <p>公司名、地址、电话、服务范围、服务对象，全站用同一套说法，配上结构化数据。AI 判断一家公司是否存在，靠的是各处信息能不能对上。</p>
+          </li>
+          <li>
+            <h3>覆盖问题，不只是关键词</h3>
+            <p>人问 AI 用的是完整的句子：锦州做企业官网多少钱、锦州哪家能做小程序对接现有系统。内容要按这些真问题写，不是把关键词塞进段落。</p>
+          </li>
+          <li>
+            <h3>站外也得有你的名字</h3>
+            <p>AI 对新出现的名字很谨慎，多个独立来源都提到同一家、说法一致，才敢引用。所以站外的行业目录、问答、公开资料要一起做。</p>
+          </li>
+          <li>
+            <h3>得让 AI 爬虫进得来</h3>
+            <p>robots 别把 AI 抓取挡死，页面要能渲染出正文，别让首屏几秒钟白屏。内容写得再好，抓不到就等于没写。</p>
+          </li>
+          <li>
+            <h3>和 SEO 一起做，不是替换</h3>
+            <p>传统搜索还在，AI 引用的来源也大量来自排名靠前的页面。SEO 打底、GEO 抢引用，两件事共用一个内容库。</p>
+          </li>
+        </ol>
+        <p class="geo-note">
+          <b>边界说在前面：</b>GEO 没有官方排名查询工具，效果没法像关键词排名那样一眼查出来。我们能给的验证方式是——每月固定一组问题（比如「盘锦做企业官网哪家靠谱」「盘锦小程序开发怎么选」），在主流 AI 里各问一遍，记录有没有提到你、说的是不是事实。这份记录你可以自己去复核，不是我们自己编的分数。
+        </p>
+      </div>
+
+      <!-- 自有实践佐证 -->
+      <div class="evidence">
+        <h2>这套方法，千羽自己用了十几年</h2>
+        <p>你现在看的这个站，以及我们运营的站群，就跑在这套流水线上：智能体起草内容 → 人工审稿 → 帝国CMS 发布 → 百度主动推送 → 数据回流改选题。不是给你画饼的示意图，是每天在跑的生产线。</p>
+        <a class="btn btn-primary" href={`tel:${TEL}`}>电话聊聊你的站</a>
+      </div>
+
+      <nav class="sibling" aria-label="其他产品">
+        <span>其他产品：</span>
+        <a href="/prodect/wzjs.html">网站建设</a>
+        <a href="/prodect/wzyw.html">软件开发</a>
+        <a href="/prodect/wzcz.html">企业 AI 服务</a>
+        <a href="/prodect/">全部服务总览 →</a>
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-title { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.3; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 16px; }
+  .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 64px; scroll-margin-top: 92px; }
+  .svc-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 28px;
+    transition: border-color 0.2s var(--ease);
+  }
+  .svc-card:hover { border-color: oklch(0.82 0.05 27); }
+  .svc-card h2 { font-size: 18px; font-weight: 700; margin: 0 0 10px; }
+  .svc-card p { font-size: 14px; color: var(--ink-2); margin: 0; }
+  .principle-block { margin-bottom: 64px; }
+  .principle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .principle-card { background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+  .principle-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 8px; }
+  .principle-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; }
+  .evidence {
+    background: var(--dark); color: #fff; border-radius: 16px; padding: 40px; margin-bottom: 40px;
+  }
+  /* ── GEO 小节 ── */
+  .geo-block {
+    scroll-margin-top: 92px; margin-bottom: 64px;
+    background: var(--bg-warm); border: 1px solid var(--line); border-radius: 16px; padding: 36px 40px 30px;
+  }
+  .geo-block:target { border-color: var(--brand); box-shadow: 0 8px 34px oklch(0.55 0.14 27 / 0.12); }
+  .geo-block .sec-head { margin-bottom: 24px; }
+  .geo-list {
+    counter-reset: geo; list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .geo-list li {
+    counter-increment: geo; position: relative;
+    background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px 20px 52px;
+  }
+  .geo-list li::before {
+    content: counter(geo); position: absolute; left: 18px; top: 20px;
+    width: 22px; height: 22px; border-radius: 50%; background: var(--brand-soft); color: var(--brand);
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  }
+  .geo-list h3 { font-size: 15.5px; font-weight: 700; margin: 0 0 6px; }
+  .geo-list p { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.75; }
+  .geo-note {
+    margin: 18px 0 0; font-size: 13.5px; line-height: 1.8; color: var(--ink-2);
+    background: #fff; border: 1px dashed oklch(0.85 0.03 45); border-radius: 10px; padding: 14px 18px;
+  }
+  .geo-note b { color: var(--ink); }
+  .evidence h2 { font-size: 21px; font-weight: 700; margin: 0 0 12px; }
+  .evidence p { font-size: 14px; color: oklch(0.75 0.01 60); margin: 0 0 24px; max-width: 64ch; }
+  .sibling { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 13.5px; color: var(--ink-3); }
+  .sibling a { color: var(--brand); text-decoration: underline; }
+  @media (max-width: 900px) {
+    .svc-grid { grid-template-columns: 1fr; }
+    .principle-grid { grid-template-columns: 1fr; }
+    .evidence { padding: 28px; }
+    .geo-block { padding: 26px 20px 22px; }
+    .geo-list { grid-template-columns: 1fr; }
+  }
+</style>

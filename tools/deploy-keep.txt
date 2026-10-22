@@ -1,0 +1,22 @@
+# 营口站（yk.0427qy.com）发布保护清单 —— tools/deploy.py 同步时永不删除的路径（前缀匹配）
+#
+# 与主站不同的地方：这个仓库是新建的，没有帝国CMS 遗留资产（d/ dl/ html/ skin/ search/），
+# 所以清单很短。凡是「不是 Astro 产物、但要在仓库里留着」的东西，都必须登记在这里，
+# 否则 deploy 会按「产物里没有就删」把它删掉。
+
+# 源码与工具（仓库根 = 网站根，这两个目录必须保住）
+web/
+tools/
+
+# 内部资料（dot 目录线上 404，但本地要留）
+.docs/
+
+# 根目录文件
+README.md
+.gitignore
+CNAME
+robots.txt
+sitemap.xml
+
+# sitemap 历史备份兜底
+sitemap.bak-

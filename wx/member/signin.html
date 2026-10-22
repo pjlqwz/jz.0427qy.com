@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>每日签到</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  .s-top {
+    padding: 24px 16px 18px;
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(150deg, var(--brand2), var(--brand) 66%, var(--brandInk));
+    border-radius: 0 0 20px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .s-top::after {
+    content: "";
+    position: absolute; width: 170px; height: 170px;
+    left: -60px; bottom: -90px; border-radius: 50%;
+    background: rgba(255, 255, 255, .1);
+  }
+  .s-top .n { position: relative; font-size: 40px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .s-top .n small { font-size: 14px; font-weight: 600; margin-left: 3px; }
+  .s-top .t { position: relative; margin-top: 8px; font-size: 12px; color: rgba(255, 255, 255, .78); }
+
+  /* 7 天格 */
+  .s-days {
+    display: flex;
+    gap: 6px;
+    margin: -16px 14px 0;
+    padding: 14px 10px 12px;
+    background: #fff;
+    border-radius: var(--r);
+    box-shadow: var(--sh);
+    position: relative;
+  }
+  .s-day {
+    flex: 1;
+    text-align: center;
+    padding: 7px 0 8px;
+    border-radius: 10px;
+    background: #f8f4ef;
+    border: 1px solid transparent;
+  }
+  .s-day .d { font-size: 10px; color: var(--ink3); }
+  .s-day .p {
+    margin-top: 4px;
+    font-size: 12px; font-weight: 700;
+    color: var(--ink2);
+    font-variant-numeric: tabular-nums;
+  }
+  .s-day .ic { height: 13px; margin-top: 3px; display: grid; place-items: center; }
+  .s-day .ic svg { width: 13px; height: 13px; }
+  .s-day.is-done { background: var(--brandSoft); border-color: #f6dcc9; }
+  .s-day.is-done .d, .s-day.is-done .p { color: var(--brandInk); }
+  .s-day.is-done .ic { color: var(--brand); }
+  .s-day.is-today {
+    background: #fff;
+    border-color: var(--brand);
+    box-shadow: 0 3px 10px rgba(224, 99, 44, .16);
+  }
+  .s-day.is-today .p { color: var(--brandInk); }
+  .s-day.is-today .ic::after {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--brand);
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+  .s-btn-wrap { padding: 18px 16px 0; }
+  .s-btn-wrap .btn { height: 48px; font-size: 16px; }
+
+  .s-rule { margin: 14px 16px 0; font-size: 11.5px; line-height: 1.9; color: var(--ink3); }
+  .s-rule b { color: var(--ink2); }
+
+  /* 明细 */
+  .s-log { padding: 4px 0 8px; }
+  .s-log .r {
+    display: flex; align-items: center;
+    padding: 9px 14px;
+    font-size: 12.5px;
+  }
+  .s-log .r + .r { border-top: 1px solid var(--line2); }
+  .s-log .r .t { flex: 1; color: var(--ink2); }
+  .s-log .r .n { font-weight: 700; color: var(--brandInk); font-variant-numeric: tabular-nums; }
+  .s-log .r .d { width: 44px; text-align: right; font-size: 11px; color: var(--ink4); }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--solid">
+    <button class="nav-btn" data-back aria-label="返回">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5-7 7 7 7"/></svg>
+    </button>
+    <div class="nav-title">每日签到</div>
+    <div class="nav-side"></div>
+  </nav>
+
+  <main class="mp-main">
+    <div class="s-top">
+      <div class="n" id="streakN">0<small>天</small></div>
+      <div class="t" id="streakT">连续签到，第 7 天领 60 积分</div>
+    </div>
+
+    <div class="s-days" id="days"></div>
+
+    <div class="s-btn-wrap">
+      <button class="btn btn--primary btn--block" id="signBtn">立即签到</button>
+    </div>
+
+    <p class="s-rule">
+      · 每天 <b>0:00</b> 后可签一次，跨天后自动重置为可签<br>
+      · 连续第 7 天额外奖励 <b>60 积分</b>，中断则从第 1 天重新计算<br>
+      · 积分可在会员中心查看，1 元消费 = 1 分
+    </p>
+
+    <div class="sec"><span class="sec-t">积分明细</span></div>
+    <div class="card" style="margin:0 14px 16px"><div class="s-log" id="log"></div></div>
+  </main>
+
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  const REWARDS = [10, 10, 15, 15, 20, 20, 60];
+
+  function render() {
+    const m = QY.member.get();
+    const signed = QY.member.signedToday();
+    const n = m.streak || 0;
+
+    document.getElementById('streakN').innerHTML = `${n}<small>天</small>`;
+    document.getElementById('streakT').textContent = signed
+      ? `今天已签到，明天再来可续签`
+      : (n === 0 ? '今天签一次，开始累计' : `再签 1 天，连签 ${n + 1} 天`);
+
+    document.getElementById('days').innerHTML = REWARDS.map((r, i) => {
+      const day = i + 1;
+      const isDone = day <= Math.min(n, 7);
+      const isToday = !signed && day === Math.min(n + 1, 7);
+      return `<div class="s-day ${isDone ? 'is-done' : ''} ${isToday ? 'is-today' : ''}">
+        <div class="d">第${day}天</div>
+        <div class="ic">${isDone
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>'
+          : ''}</div>
+        <div class="p">+${r}</div>
+      </div>`;
+    }).join('');
+
+    const btn = document.getElementById('signBtn');
+    if (signed) {
+      btn.textContent = '今日已签到';
+      btn.disabled = true;
+      btn.classList.add('is-off');
+    } else {
+      btn.disabled = false;
+      btn.classList.remove('is-off');
+      btn.textContent = n >= 6 ? '签到 +60 积分（连签第 7 天）' : '立即签到 +10 积分';
+    }
+
+    const log = QY.member.plog();
+    document.getElementById('log').innerHTML = log.length
+      ? log.map(x => `
+        <div class="r">
+          <span class="t">${QY.esc(x.t)}</span>
+          <span class="n">+${x.n}</span>
+          <span class="d">${QY.fmtTime(x.ts).slice(5, 10).replace('-', '/')}</span>
+        </div>`).join('')
+      : '<div style="padding:22px 0;text-align:center;font-size:12.5px;color:var(--ink3)">还没有积分记录，签到后就有了</div>';
+  }
+
+  document.getElementById('signBtn').addEventListener('click', () => {
+    const r = QY.member.signin();
+    if (!r.ok) return QY.toast(r.msg, 1200);
+    QY.toast(r.bonus ? `连签 ${r.streak} 天，额外 +${r.bonus} 积分` : `签到成功 +${r.points} 积分`, 1600);
+    render();
+  });
+
+  render();
+  QY.tabbar('mine');
+})();
+</script>
+</body>
+</html>

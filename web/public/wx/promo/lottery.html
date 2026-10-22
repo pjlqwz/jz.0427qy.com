@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>幸运大转盘</title>
+<link rel="stylesheet" href="../_shared/demo.css">
+<style>
+  .l-hero {
+    padding: 20px 16px 54px;
+    text-align: center;
+    color: #fff;
+    background:
+      radial-gradient(120% 78% at 50% -8%, rgba(255, 255, 255, .26), transparent 62%),
+      linear-gradient(158deg, var(--brand2), var(--brand) 58%, var(--brandInk));
+    border-radius: 0 0 22px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .l-hero::before, .l-hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .1);
+  }
+  .l-hero::before { width: 150px; height: 150px; left: -56px; top: -40px; }
+  .l-hero::after { width: 90px; height: 90px; right: -28px; bottom: -20px; }
+  .l-hero h1 { position: relative; margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+  .l-hero p { position: relative; margin: 7px 0 0; font-size: 12px; color: rgba(255, 255, 255, .78); }
+
+  /* 转盘 */
+  .l-wheel-wrap {
+    position: relative;
+    width: 306px; height: 306px;
+    margin: -38px auto 0;
+    z-index: 2;
+  }
+  .l-plate {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(150deg, #fff, #f6ece2);
+    box-shadow: 0 14px 34px rgba(120, 66, 26, .18), 0 0 0 1px rgba(255, 255, 255, .7) inset;
+    padding: 9px;
+  }
+  .l-ring {
+    position: absolute; inset: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd9a8, #e8a35c 40%, #ffd9a8 70%, #d98f45);
+    opacity: .9;
+  }
+  .l-rotor {
+    position: absolute; inset: 9px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: transform 4.3s cubic-bezier(.16, .68, .12, 1);
+    will-change: transform;
+  }
+  .l-rotor svg { display: block; width: 100%; height: 100%; }
+
+  .l-pointer {
+    position: absolute;
+    left: 50%; top: -4px;
+    width: 30px; height: 42px;
+    margin-left: -15px;
+    z-index: 4;
+    filter: drop-shadow(0 3px 6px rgba(140, 70, 30, .3));
+  }
+  .l-pointer svg { width: 100%; height: 100%; }
+
+  .l-go {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 84px; height: 84px;
+    margin: -42px 0 0 -42px;
+    border-radius: 50%;
+    z-index: 3;
+    display: grid; place-items: center;
+    background: linear-gradient(150deg, #fff, #ffe9d5);
+    box-shadow: 0 6px 18px rgba(120, 66, 26, .24), 0 0 0 3px rgba(255, 255, 255, .6);
+    color: var(--brandInk);
+    font-size: 15px; font-weight: 800;
+    letter-spacing: 1px;
+    transition: transform .12s ease;
+  }
+  .l-go:active { transform: scale(.94); }
+  .l-go:disabled { color: var(--ink3); }
+  .l-go small { display: block; font-size: 9.5px; font-weight: 600; letter-spacing: 0; color: var(--ink3); margin-top: 1px; }
+
+  .l-count {
+    position: relative;
+    margin: -18px 28px 0;
+    z-index: 3;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink3);
+  }
+  .l-count b { color: var(--brandInk); font-weight: 700; }
+
+  /* 记录 */
+  .l-rec { padding: 2px 0 8px; }
+  .l-rec .r {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+  }
+  .l-rec .r + .r { border-top: 1px solid var(--line2); }
+  .l-rec .r .ic {
+    width: 22px; height: 22px; border-radius: 7px;
+    display: grid; place-items: center;
+    background: var(--brandSoft); color: var(--brandInk);
+    font-size: 10px; font-weight: 700;
+  }
+  .l-rec .r .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .l-rec .r .d { font-size: 11px; color: var(--ink4); }
+  .l-rec .none { padding: 22px 0; text-align: center; font-size: 12.5px; color: var(--ink3); }
+
+  /* 中奖弹窗 */
+  .l-pop {
+    position: absolute;
+    left: 50%; top: 50%;
+    z-index: 96;
+    width: 268px;
+    margin: -136px 0 0 -134px;
+    padding: 22px 20px 18px;
+    border-radius: 18px;
+    background: #fff;
+    text-align: center;
+    transform: scale(.92);
+    opacity: 0;
+    transition: all .26s cubic-bezier(.2, .9, .3, 1);
+    pointer-events: none;
+  }
+  .l-pop.is-on { transform: none; opacity: 1; pointer-events: auto; }
+  .l-pop .cup {
+    width: 54px; height: 54px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: linear-gradient(150deg, #ffe2c4, #f0b877);
+    color: #8a4a15;
+  }
+  .l-pop .cup svg { width: 28px; height: 28px; }
+  .l-pop h3 { margin: 0; font-size: 17px; font-weight: 700; }
+  .l-pop .nm {
+    margin-top: 8px;
+    font-size: 15px; font-weight: 700;
+    color: var(--brandInk);
+  }
+  .l-pop .sub { margin-top: 6px; font-size: 11.5px; color: var(--ink3); line-height: 1.6; }
+  .l-pop .acts { display: flex; gap: 9px; margin-top: 16px; }
+  .l-pop .acts .btn { flex: 1; height: 40px; font-size: 14px; }
+  .l-rule { margin: 14px 16px 18px; font-size: 11px; line-height: 1.85; color: var(--ink4); }
+</style>
+</head>
+<body>
+<div class="mp">
+  <nav class="nav nav--float" style="position:relative;background:transparent">
+    <button class="nav-btn" data-back aria-label="返回" style="background:rgba(255,255,255,.22);color:#fff">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5-7 7 7 7"/></svg>
+    </button>
+    <div class="nav-title" style="color:#fff">幸运大转盘</div>
+    <div class="nav-side"></div>
+  </nav>
+
+  <main class="mp-main" style="background:var(--bg)">
+    <div class="l-hero">
+      <h1>幸运大转盘</h1>
+      <p>每日 3 次机会 · 抽中即到账</p>
+    </div>
+
+    <div class="l-wheel-wrap">
+      <div class="l-plate">
+        <div class="l-ring"></div>
+        <div class="l-rotor" id="rotor"></div>
+      </div>
+      <div class="l-pointer">
+        <svg viewBox="0 0 30 42" fill="none">
+          <path d="M15 42 2.5 14A12.5 12.5 0 1 1 27.5 14L15 42Z" fill="#fff"/>
+          <path d="M15 36 6 13.6A9 9 0 1 1 24 13.6L15 36Z" fill="#d94a3d"/>
+        </svg>
+      </div>
+      <button class="l-go" id="goBtn">抽奖<small id="goLeft">剩 3 次</small></button>
+    </div>
+
+    <div class="l-count">今日剩余 <b id="leftN">3</b> 次 · 合计 <b>6</b> 个奖项</div>
+
+    <div class="sec" style="margin-top:6px"><span class="sec-t">中奖记录</span><span class="sec-s" id="recCnt"></span></div>
+    <div class="card" style="margin:0 14px 0"><div class="l-rec" id="recs"></div></div>
+
+    <p class="l-rule">
+      · 每天 0:00 重置 3 次机会，未用不累计<br>
+      · 实物/服务类奖品凭记录到店核销，券类自动进券包<br>
+      · 有奖销售活动最高奖金额不超过 5 万元，本演示奖品为虚构
+    </p>
+  </main>
+
+  <div class="mask" id="mask" hidden></div>
+  <div class="l-pop" id="pop"></div>
+
+  <nav id="tabbar"></nav>
+</div>
+
+<script src="../_shared/data.js"></script>
+<script src="../_shared/demo.js"></script>
+<script>
+(function () {
+  const N = PRIZES.length;              // 6
+  const SEG = 360 / N;
+  const CX = 150, CY = 150, R = 132;
+
+  /* ---- 画扇区 ---- */
+  const pt = (a, r) => {
+    const rad = (a - 90) * Math.PI / 180;
+    return [CX + r * Math.cos(rad), CY + r * Math.sin(rad)];
+  };
+
+  function buildWheel() {
+    let s = '';
+    PRIZES.forEach((p, i) => {
+      const a1 = i * SEG, a2 = (i + 1) * SEG;
+      const [x1, y1] = pt(a1, R), [x2, y2] = pt(a2, R);
+      const fill = i % 2 === 0 ? '#fffaf5' : '#fdece0';
+      s += `<path d="M${CX} ${CY} L${x1.toFixed(2)} ${y1.toFixed(2)} A${R} ${R} 0 0 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z" fill="${fill}" stroke="#f6e2d2" stroke-width="1"/>`;
+
+      // 文字放在扇区中线 0.62R 处
+      const mid = a1 + SEG / 2;
+      const [tx, ty] = pt(mid, R * 0.63);
+      const label = p.label.length > 5 ? p.label.slice(0, 5) : p.label;
+      const isNone = p.type === 'none';
+      s += `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+        font-size="11.5" font-weight="700" fill="${isNone ? '#b3a89f' : '#8a3f16'}"
+        transform="rotate(${mid} ${tx.toFixed(1)} ${ty.toFixed(1)})"
+        style="font-family:inherit">${label}</text>`;
+    });
+    // 外圈齿
+    for (let i = 0; i < 24; i++) {
+      const a = i * 15;
+      const [bx, by] = pt(a, R + 1);
+      const [cx2, cy2] = pt(a, 18);
+      s += `<circle cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="1.8" fill="#fff" opacity=".55"/>`;
+    }
+    document.getElementById('rotor').innerHTML =
+      `<svg viewBox="0 0 300 300">${s}</svg>`;
+  }
+
+  /* ---- 状态 ---- */
+  let rot = 0, spinning = false;
+
+  function paintCount() {
+    const left = QY.lottery.left();
+    document.getElementById('leftN').textContent = left;
+    const btn = document.getElementById('goBtn');
+    document.getElementById('goLeft').textContent = left ? `剩 ${left} 次` : '明天再来';
+    btn.disabled = left === 0 || spinning;
+  }
+
+  function paintRecords() {
+    const recs = QY.lottery.records();
+    document.getElementById('recCnt').textContent = recs.length ? `共 ${recs.length} 条` : '';
+    document.getElementById('recs').innerHTML = recs.length
+      ? recs.slice(0, 8).map(r => `
+        <div class="r">
+          <span class="ic">${r.type === 'none' ? '—' : '✓'}</span>
+          <span class="t">${QY.esc(r.label)}</span>
+          <span class="d">${QY.fmtTime(r.ts).slice(5, 16)}</span>
+        </div>`).join('')
+      : '<div class="none">还没有记录，转一次试试</div>';
+  }
+
+  /* ---- 抽奖 ---- */
+  function spin() {
+    if (spinning) return;
+    if (QY.lottery.left() <= 0) { QY.toast('今日次数已用完，明天再来', 1600); return; }
+
+    const r = QY.lottery.draw();
+    if (!r) return;
+
+    spinning = true;
+    paintCount();
+    document.getElementById('goLeft').textContent = '转动中…';
+
+    const mid = r.idx * SEG + SEG / 2;
+    const jitter = (Math.random() - .5) * (SEG - 26);   // 不总是正中，更真实
+    // 要让扇区中线停在 12 点：旋转量 ≡ -(mid) (mod 360)
+    const base = 360 * 5;
+    const target = base + ((360 - mid + jitter) % 360 + 360) % 360;
+    rot += target;
+    document.getElementById('rotor').style.transform = `rotate(${rot}deg)`;
+
+    setTimeout(() => {
+      spinning = false;
+      paintCount();
+      paintRecords();
+      showPop(r);
+    }, 4400);
+  }
+
+  function showPop(r) {
+    const p = r.prize;
+    const win = p.type !== 'none';
+    const mask = document.getElementById('mask');
+    const pop = document.getElementById('pop');
+
+    pop.innerHTML = `
+      <div class="cup">
+        ${win
+          ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12v3a6 6 0 0 1-12 0V3Zm-2.4 0H2.2a3.8 3.8 0 0 0 3.4 4.6V3Zm15.8 0h1.4a3.8 3.8 0 0 1-3.4 4.6V3ZM10.8 12.6v4.2H8.4V19h7.2v-2.2h-2.4v-4.2h-2.4Z"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.6 14.4a4.4 4.4 0 0 1 6.8 0M9 9.6h.01M15 9.6h.01"/></svg>'}
+      </div>
+      <h3>${win ? '恭喜中奖' : '差一点点'}</h3>
+      <div class="nm" style="${win ? '' : 'color:var(--ink3);font-weight:500'}">${QY.esc(p.label)}</div>
+      <div class="sub">${
+        p.type === 'coupon' ? '已放入「我的 → 优惠券」，结算时可用'
+        : p.type === 'points' ? `已到账 ${p.value} 积分，可在会员中心查看`
+        : p.type === 'gift' ? '凭中奖记录到店核销'
+        : '再试一次，还有机会'
+      }</div>
+      <div class="acts">
+        <button class="btn btn--ghost" id="popClose">知道了</button>
+        <button class="btn btn--primary" id="popAgain">${QY.lottery.left() ? `再抽一次(${QY.lottery.left()})` : '明天再来'}</button>
+      </div>`;
+
+    mask.hidden = false;
+    requestAnimationFrame(() => { mask.classList.add('is-on'); pop.classList.add('is-on'); });
+
+    const close = () => {
+      mask.classList.remove('is-on');
+      pop.classList.remove('is-on');
+      setTimeout(() => { mask.hidden = true; }, 200);
+    };
+    document.getElementById('popClose').addEventListener('click', close);
+    document.getElementById('popAgain').addEventListener('click', () => {
+      close();
+      if (QY.lottery.left()) setTimeout(spin, 260);
+    });
+    mask.addEventListener('click', close, { once: true });
+
+    /* 奖品落账 */
+    if (p.type === 'points') QY.member.addPoints(p.value);
+  }
+
+  document.getElementById('goBtn').addEventListener('click', spin);
+
+  buildWheel();
+  paintCount();
+  paintRecords();
+  QY.tabbar('mine');
+})();
+</script>
+</body>
+</html>

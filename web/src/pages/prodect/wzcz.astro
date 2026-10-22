@@ -1,0 +1,309 @@
+---
+// 站2 产品页：AI 企业服务 /prodect/wzcz.html（2026-10-18 随新设计重做，URL 不变）
+// ★ 导航一级「企业 AI 服务」落地页。内容来自原 wzcz 页（线上在服内容），结构化重排
+import Base from '../../layouts/Base.astro';
+import { TEL } from '../../data/cases.js';
+
+const OPC_SERVICES = [
+  { name: '工商注册', desc: '主体类型怎么选（个体 / 一人公司）、经营范围怎么写才不影响后续接单开票。' },
+  { name: '财税代办', desc: '记账、报税、年度公示，按月托底，不让你在税务上踩坑。' },
+  { name: '线上门面', desc: '网站 / 商城 / 小程序，客户搜得到、看得到、能联系上。' },
+  { name: '网络推广', desc: 'SEO 排名、内容生产、多平台分发，解决「东西做出来了没人知道」。' },
+  { name: '智能体搭建', desc: '把你日常最耗时的环节（文案、设计、客服、数据处理）配成智能体，一个人也能转起来。' },
+];
+
+const STEPS = [
+  { name: '流程梳理', deliver: '把业务流程写成明确规则：谁在什么环节做什么、什么条件触发什么动作', out: '流程文档' },
+  { name: '信息化补齐', deliver: '哪些数据还在纸上、在微信里、在个人电脑里，先让它们进系统', out: '系统 / 表单' },
+  { name: '智能体接入', deliver: '把最耗时、最高频的环节配成智能体，接进现有工作流', out: '可运行的智能体' },
+  { name: '长期维护', deliver: '业务变了，流程和智能体跟着改；日常出问题有人兜底', out: '持续服务' },
+];
+
+const SCENES = [
+  { name: '办公', desc: '填单、审批、合同、报销多级流转；企业知识库检索', gain: '少填少等' },
+  { name: '客服', desc: '高频咨询自动应答、工单自动分派与跟进', gain: '接得住' },
+  { name: '数据', desc: '多来源数据汇总、自动生成报表与看板', gain: '看得清' },
+  { name: '业务', desc: '内容生产与发布、客户线索整理、订单与售后流程', gain: '跑得顺' },
+];
+
+const RESULTS = [
+  '内容制作类企业：原先要几十人分工完成的制作流程，把 AI 工具链接进生产环节后，核心工序几个人就能完成，产出没有下降。',
+  '财税服务类机构：把记账、报税这类重复流程交给智能体之后，一位会计能服务的客户数量从数十家提升到数百家。',
+];
+
+// v4 新增 5 词的正文载体（keyword-plan v4 / 2.1b、6.2）：转型 / 培训 / 大模型部署 / FDE
+const EXT_SERVICES = [
+  { name: '企业 AI 转型陪跑', desc: '传统企业转型缺的不是决心，是路线图。先做一次轻量诊断，按「小范围试点—效果验证—规模化推广」推进，不要求你一次性投入一大笔，也不拿互联网玩法硬套传统业务。' },
+  { name: '企业 AI 培训', desc: '分层培训：管理层看清 AI 的投入产出边界，业务层把自己环节的 AI 用起来，执行层拿到能上手的工具和用法。培训就在我们真实在跑的流程旁进行，不讲课件里的案例。' },
+  { name: '大模型部署选型', desc: '数据敏感、合规要求高的场景走私有化部署；通用场景走 API 控成本。我们帮你算清哪种合适、各自要搭什么、后期谁维护，而不是一味推重的。' },
+  { name: 'FDE 驻场交付', desc: 'FDE（Forward Deployed Engineer，前沿部署工程师）：工程师直接进驻你的业务现场，把 AI 接进真实流程，跑通了才算交付完——不是交一套系统就撤。' },
+];
+---
+
+<Base
+  title="企业AI效能提升与一人公司服务｜锦州千羽网络"
+  description="企业AI效能提升与落地：四步把AI装进业务流程，兼有一人公司（OPC）创业护航、企业AI培训、大模型私有化部署与FDE驻场交付。电话/微信18624274046。"
+  canonical="https://jz.0427qy.com/prodect/wzcz.html"
+  keywords="企业AI效能提升,企业AI落地,企业AI转型,企业AI培训,AI大模型部署,FDE工程师,一人公司,一人公司注册,辽宁一人公司"
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumbs"><a href="/">首页</a> › 企业 AI 服务</nav>
+      <div class="sec-head">
+        <span class="kicker">企业 AI 服务</span>
+        <h1 class="page-title">帮想创业的人起步，帮已开业的公司提效</h1>
+        <p>千羽的 AI 企业服务只做两件事：<b>帮想创业的人，用一人公司的模式把生意搭起来；帮已经开业的公司，把 AI 装进业务流程里。</b>两类客户的起点不同，走的却是同一条路——先把业务流程理清楚，再把智能体放进流程，最后长期维护迭代。我们不卖概念，交付的是能跑起来的系统。</p>
+      </div>
+
+      <!-- 客户自选 -->
+      <div class="pick-grid">
+        <div class="pick-card">
+          <span class="pick-who">想创业</span>
+          <h3>想创业 → 一人公司全流程护航</h3>
+          <p>从注册到获客的全流程护航。</p>
+          <span class="pick-out">交付重点：能开张</span>
+          <a class="btn btn-ghost" href="#opc">看这条线</a>
+        </div>
+        <div class="pick-card is-main">
+          <span class="pick-who">已有公司</span>
+          <h3>已开业 → 企业 AI 效能提升</h3>
+          <p>把重复性工作交给智能体。</p>
+          <span class="pick-out">交付重点：能提效</span>
+          <a class="btn btn-primary" href="#eff">看这条线</a>
+        </div>
+      </div>
+      <p class="pick-note">两条服务线用的是同一套方法：业务流程怎么走 → 数据存在哪 → 哪一步可以交给智能体 → 上线后谁来维护。</p>
+
+      <!-- ===== OPC 线 ===== -->
+      <div class="line-block" id="opc">
+        <div class="sec-head">
+          <span class="kicker">服务线一</span>
+          <h2>一人公司（OPC）服务</h2>
+          <p>OPC（One Person Company）指的是<b>一个人 + 一整套 AI 智能体</b>，独立完成从产品设计、内容生产到市场运营、客户服务的全链路业务。它不是「没人帮忙的单干」，而是把原本要养一个团队的活，交给智能体去干。</p>
+        </div>
+        <div class="policy-note">
+          <b>政策背景：</b>2026 年《政府工作报告》提出「打造智能经济新形态、深化拓展人工智能+」；工信部等部门已明确提出要加快培育人工智能一人公司；辽宁省也印发了《人工智能 OPC 培育发展实施方案（2026—2028 年）》。现在入场，踩的是政策正在铺的路，不是孤军奋战。
+        </div>
+        <div class="five-grid">
+          {OPC_SERVICES.map((s, i) => (
+            <div class="five-card">
+              <span class="five-no">{i + 1}</span>
+              <h3>{s.name}</h3>
+              <p>{s.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div class="why-box">
+          <h3>为什么找千羽：因为我们就在用这套方法干活</h3>
+          <p>建站、开发、内容生产、客户沟通，千羽内部这些环节本身就跑在智能体工作流上。这条路上的坑我们踩过一遍，所以给你的不是理论，是我们自己每天在用的那套东西。</p>
+          <p class="who"><b>适合谁：</b>准备离职创业的技术人、想做副业变现的职场人、有专长想发挥的退休人员，以及刚毕业想低成本起步的年轻人。</p>
+        </div>
+      </div>
+
+      <!-- ===== 效能提升线 ===== -->
+      <div class="line-block" id="eff">
+        <div class="sec-head">
+          <span class="kicker">服务线二</span>
+          <h2>企业 AI 效能提升</h2>
+          <p>已经在经营的公司，问题通常不在「要不要用 AI」，而在<b>「从哪一步开始、谁来落地、上线后谁维护」</b>。我们把它拆成四步走：</p>
+        </div>
+        <div class="step-table">
+          {STEPS.map((s) => (
+            <div class="step-row">
+              <div class="step-name">
+                <h3>{s.name}</h3>
+                <span>交付：{s.out}</span>
+              </div>
+              <p>{s.deliver}</p>
+            </div>
+          ))}
+        </div>
+        <h3 class="sub-title">能落地的环节，通常在下面这几处</h3>
+        <div class="scene-grid">
+          {SCENES.map((s) => (
+            <div class="scene-card">
+              <div class="scene-head">
+                <h4>{s.name}</h4>
+                <span>{s.gain}</span>
+              </div>
+              <p>{s.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div class="why-box">
+          <h3>推进方式：小步快跑</h3>
+          <p>先做一次轻量诊断，找出最痛、最高频的 1—2 个场景；把它拆成能独立交付的模块；先上线一个，跑出结果再往下铺。不一上来就上大平台，也不要求你一次投一大笔。</p>
+          <h3 class="mt">已交付项目里，跑出效果的是这两类</h3>
+          <ul>
+            {RESULTS.map((r) => <li>{r}</li>)}
+          </ul>
+          <p class="disclaim">以上为已交付项目的效果概述，已作脱敏处理，不披露企业名称与具体数据。</p>
+          <p class="who"><b>适合谁：</b>重复性事务吃掉大量人力的中小企业、想用 AI 但不知道从哪下手的传统企业、以及需要把服务标准化后对外输出的团队。</p>
+        </div>
+      </div>
+
+      <!-- ===== 延伸服务（v4 新词正文载体） ===== -->
+      <div class="line-block">
+        <div class="sec-head">
+          <span class="kicker">延伸服务</span>
+          <h2>转型、培训、部署、驻场，一次说清</h2>
+          <p>效能提升是一条主线，顺着这条线最常被问到的还有四件事——转型怎么起步、团队怎么学会、大模型怎么部署、交付怎么驻场。它们归同一套方法管：<b>先理流程，再谈技术。</b></p>
+        </div>
+        <div class="ext-grid">
+          {EXT_SERVICES.map((s, i) => (
+            <div class="ext-card">
+              <span class="five-no">{i + 1}</span>
+              <h3>{s.name}</h3>
+              <p>{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 为什么选择千羽 -->
+      <div class="reason-block">
+        <div class="sec-head">
+          <span class="kicker">为什么选择千羽</span>
+          <h2>四条理由，句句可验证</h2>
+        </div>
+        <div class="reason-grid">
+          <div class="reason-card"><h3>讲的能力，自己先跑通了才拿给你</h3><p>从流程梳理到智能体接入，每套方法先在千羽自己的业务里跑过一遍，确认能用，再交付给客户。</p></div>
+          <div class="reason-card"><h3>不卖工具，交付的是服务</h3><p>AI 工具谁都能买，难的是把它接到你的数据、权限和流程上，让它真的干活。我们做的是后面这一段。</p></div>
+          <div class="reason-card"><h3>近 20 年企业信息化经验</h3><p>知道企业里的流程长什么样、坑在哪里，不会拿一套互联网玩法硬套传统业务。</p></div>
+          <div class="reason-card"><h3>一个人从头跟到尾</h3><p>从沟通需求到落地维护由同一位负责人跟进，中间没有转包、没有交接损耗，出问题直接找到人。</p></div>
+        </div>
+      </div>
+
+      <!-- 政策环境 -->
+      <div class="policy-block">
+        <h2>政策环境</h2>
+        <p>AI 一人公司和中小企业 AI 应用，都已经写进了国家和地方的政策文件。以下是已经公开发布的信息：</p>
+        <ul>
+          <li><b>国家层面：</b>2026 年《政府工作报告》提出「打造智能经济新形态，深化拓展人工智能+」；工信部等部门明确「加快培育人工智能一人公司」，并鼓励各地对依托 AI 工具开展敏捷创业的「一人公司」「超级个体」等微型主体给予包容支持。</li>
+          <li><b>辽宁省：</b>《辽宁省人工智能 OPC 培育发展实施方案（2026—2028 年）》提出，到 2028 年打造重点 OPC 社区 20 个以上、培育 OPC 企业 300 家、集聚 OPC 人才超 3000 名；省人社厅对符合条件的 OPC 创业者给予创业场地补贴、一次性创业补贴和创业担保贷款贴息支持。</li>
+          <li><b>锦州市：</b>2024 年经省政府同意，锦州被确定为区域中心城市，定位是带动辽西、辐射黑龙江吉林西部与内蒙古东部、联动京津冀；全市经营主体总量 26.49 万户，拥有专精特新「小巨人」企业 14 家、国家级制造业单项冠军 1 家、高新技术企业 244 家，培育总量位列辽西五市首位；市政府持续推进企业数字化转型，「人工智能+」正在往车间和办公室里落。</li>
+        </ul>
+        <p class="disclaim">以上内容整理自公开发布的政策文件与政府公开报道，仅作背景参考；具体申报条件、补贴标准与办理流程，以主管部门最新文件为准，我们会在你办理时协助核对。</p>
+      </div>
+
+      <!-- CTA -->
+      <div class="final-cta">
+        <h2>聊聊你的情况</h2>
+        <p>想创业，或者想给公司装上 AI？把情况说一遍，我来判断从哪一步开始。<b>不推销、不铺垫</b>，先聊清楚你的业务适不适合、值不值得做。</p>
+        <a class="btn btn-primary" href={`tel:${TEL}`}>电话 / 微信 186-2427-4046</a>
+      </div>
+
+      <nav class="sibling" aria-label="其他产品">
+        <span>其他产品：</span>
+        <a href="/prodect/wzjs.html">网站建设</a>
+        <a href="/prodect/wztg.html">网络推广</a>
+        <a href="/prodect/wzyw.html">软件开发</a>
+        <a href="/prodect/">全部服务总览 →</a>
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-title { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.3; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 16px; }
+  .sec-head b { color: var(--ink); }
+
+  .pick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .pick-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 28px;
+    display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+  }
+  .pick-card.is-main { border-color: var(--brand); background: var(--brand-soft); }
+  .pick-who { font-size: 12.5px; font-weight: 600; color: var(--brand); letter-spacing: 0.06em; }
+  .pick-card :is(h2, h3) { font-size: 20px; font-weight: 700; margin: 0; }
+  .pick-card p { font-size: 14px; color: var(--ink-2); margin: 0; }
+  .pick-out { font-size: 12.5px; color: var(--ink-3); margin-bottom: 8px; }
+  .pick-note { font-size: 13.5px; color: var(--ink-3); margin: 0 0 64px; }
+
+  /* scroll-margin：锚点从导航二级跳进来时别被吸顶的 header 盖掉标题 */
+  .line-block { margin-bottom: 64px; scroll-margin-top: 92px; }
+  .policy-note {
+    background: oklch(0.97 0.04 90); border: 1px solid oklch(0.88 0.07 90); border-radius: 12px;
+    padding: 18px 22px; font-size: 13.5px; color: oklch(0.40 0.06 90); margin-bottom: 24px; line-height: 1.8;
+  }
+  .policy-note b { color: oklch(0.35 0.07 90); }
+  .five-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px; }
+  .five-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .five-no {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--brand-soft); color: var(--brand);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;
+  }
+  .five-card h3 { font-size: 15px; font-weight: 700; margin: 0; }
+  .five-card p { font-size: 12.5px; color: var(--ink-2); margin: 0; line-height: 1.7; }
+  .why-box { background: var(--bg-warm); border: 1px solid var(--line); border-radius: 16px; padding: 28px; }
+  .why-box h3 { font-size: 17px; font-weight: 700; margin: 0 0 10px; }
+  .why-box h3.mt { margin-top: 20px; }
+  .why-box p { font-size: 14px; color: var(--ink-2); margin: 0 0 10px; }
+  .why-box ul { margin: 0 0 12px; padding-left: 20px; }
+  .why-box li { font-size: 13.5px; color: var(--ink-2); margin-bottom: 8px; line-height: 1.7; }
+  .why-box .who { font-size: 13.5px; }
+  .why-box .who b { color: var(--ink); }
+  .disclaim { font-size: 12px; color: var(--ink-3); }
+
+  .sub-title { font-size: 18px; font-weight: 700; margin: 24px 0 16px; }
+  .step-table { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
+  .step-row {
+    display: grid; grid-template-columns: 200px 1fr; gap: 20px; align-items: center;
+    background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 22px;
+  }
+  .step-name { display: flex; flex-direction: column; gap: 4px; }
+  .step-name h3 { font-size: 16px; font-weight: 700; margin: 0; color: var(--brand); }
+  .step-name span { font-size: 12px; color: var(--ink-3); }
+  .step-row p { font-size: 13.5px; color: var(--ink-2); margin: 0; }
+  .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  .ext-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+  .ext-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .ext-card h3 { font-size: 15px; font-weight: 700; margin: 0; color: var(--brand); }
+  .ext-card p { font-size: 12.5px; color: var(--ink-2); margin: 0; line-height: 1.7; }
+  .scene-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .scene-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .scene-head h4 { font-size: 15px; font-weight: 700; margin: 0; }
+  .scene-head span { font-size: 12px; font-weight: 600; color: var(--brand); }
+  .scene-card p { font-size: 12.5px; color: var(--ink-2); margin: 0; line-height: 1.7; }
+
+  .reason-block { margin-bottom: 64px; }
+  .reason-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .reason-card { background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+  .reason-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 8px; }
+  .reason-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; }
+
+  .policy-block { margin-bottom: 48px; }
+  .policy-block h2 { font-size: 22px; font-weight: 700; margin: 0 0 12px; }
+  .policy-block > p { font-size: 14px; color: var(--ink-2); margin: 0 0 16px; }
+  .policy-block ul { margin: 0 0 12px; padding-left: 20px; }
+  .policy-block li { font-size: 13.5px; color: var(--ink-2); margin-bottom: 12px; line-height: 1.8; }
+  .policy-block li b { color: var(--ink); }
+
+  .final-cta {
+    background: var(--brand); color: #fff; border-radius: 16px; padding: 48px 40px; margin-bottom: 40px;
+  }
+  .final-cta h2 { font-size: 26px; font-weight: 700; margin: 0 0 12px; }
+  .final-cta p { font-size: 15px; color: oklch(0.95 0.015 27); margin: 0 0 24px; max-width: 60ch; }
+  .final-cta b { color: #fff; }
+  .final-cta .btn-primary { background: #fff; color: var(--brand-deep); }
+  .final-cta .btn-primary:hover { background: oklch(0.96 0.01 27); color: var(--brand-deep); }
+
+  .sibling { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 13.5px; color: var(--ink-3); }
+  .sibling a { color: var(--brand); text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .pick-grid { grid-template-columns: 1fr; }
+    .five-grid { grid-template-columns: 1fr 1fr; }
+    .ext-grid { grid-template-columns: 1fr 1fr; }
+    .step-row { grid-template-columns: 1fr; gap: 8px; }
+    .scene-grid { grid-template-columns: 1fr 1fr; }
+    .reason-grid { grid-template-columns: 1fr; }
+    .final-cta { padding: 32px 24px; }
+  }
+</style>
