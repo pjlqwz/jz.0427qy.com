@@ -19,7 +19,7 @@ import time
 import urllib.request
 from pathlib import Path
 
-SITE = "yk.0427qy.com"
+SITE = "jz.0427qy.com"
 API = "http://data.zz.baidu.com/urls"
 ROOT = Path(__file__).resolve().parent.parent
 PENDING = ROOT / ".docs" / "push-pending.txt"

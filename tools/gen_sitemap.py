@@ -67,7 +67,7 @@ def parse_old_lastmod():
         loc = re.search(r"<loc>(.*?)</loc>", block)
         mod = re.search(r"<lastmod>(.*?)</lastmod>", block)
         if loc and mod:
-            path = loc.group(1).strip().replace("https://yk.0427qy.com", "").lstrip("/")
+            path = loc.group(1).strip().replace("https://jz.0427qy.com", "").lstrip("/")
             mapping[path] = mod.group(1).strip()
     return mapping
 
@@ -141,7 +141,7 @@ def main():
         'xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">',
     ]
     for path, mod, freq, prio in entries:
-        loc = f"https://yk.0427qy.com/{path}"
+        loc = f"https://jz.0427qy.com/{path}"
         # 目录式 URL（index.html）输出 /xxx/ 形态，与线上一致
         loc = loc.replace("/index.html", "/")
         lines.append("<url>")
