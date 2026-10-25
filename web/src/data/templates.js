@@ -15,6 +15,7 @@ import { P6J } from './tpl-p6j.js';
 import { P6K } from './tpl-p6k.js';
 import { P6L } from './tpl-p6l.js';
 import { P6M } from './tpl-p6m.js';
+import { P6N } from './tpl-p6n.js';
 
 // 建站模板库数据（源自 shop.0427qy.com 的 phome_ecms_chaoshi，369 条）
 // 每条 = 一个模板展示页。旧站只有封面图与三个标签，文字全部重写，不搬运。
@@ -158,7 +159,7 @@ const P1 = [
 // 2026-10-24 同步总站：补入 P6D~P6J 共 7 条（370 宠物医院 / 371 家政 /
 // 372 生态农场 / 373 健康轻食 / 374 手作烘焙 / 375 瑜伽普拉提 / 376 电商产品摄影）。
 // 后五条是 site-kit 组件库自建路线的演示站，截图与数据从总站原样复制。
-export const TEMPLATES = [...P1, ...P2, ...P3, ...P4, ...P5, ...P6A, ...P6B, ...P6C, ...P6D, ...P6E, ...P6F, ...P6G, ...P6H, ...P6I, ...P6J, ...P6K, ...P6L, ...P6M];
+export const TEMPLATES = [...P1, ...P2, ...P3, ...P4, ...P5, ...P6A, ...P6B, ...P6C, ...P6D, ...P6E, ...P6F, ...P6G, ...P6H, ...P6I, ...P6J, ...P6K, ...P6L, ...P6M, ...P6N];
 
 // 按行业取同组其他模板，用于详情页底部推荐
 export function siblings(list, item, n = 3) {
