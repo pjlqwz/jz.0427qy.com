@@ -93,13 +93,16 @@ const GROUPS = [
   },
 ];
 
+// 服务条目数从 GROUPS 现算，description 与 ItemList 共用，避免两处手写对不上
+const SVC_N = GROUPS.reduce((n, g) => n + g.items.length, 0);
+
 // 目录页正确类型：ItemList（服务清单），不是报价 OfferCatalog——报价在 /prodect/wzjs.html
 const ITEMLIST = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: '千羽网络服务总览',
   url: 'https://jz.0427qy.com/prodect/',
-  numberOfItems: GROUPS.reduce((n, g) => n + g.items.length, 0),
+  numberOfItems: SVC_N,
   itemListElement: GROUPS.flatMap((g) =>
     g.items.map((it) => ({
       '@type': 'ListItem',
@@ -112,8 +115,8 @@ const ITEMLIST = {
 ---
 
 <Base
-  title="全部服务总览·网站建设/SEO/小程序/企业AI｜千羽网络"
-  description={`千羽网络的 8 项服务总览（服务锦州及辽西地区）：企业 AI 效能提升、一人公司陪跑、网站建设三档报价、锦州行业方案（${IND_N} 个行业）、SEO 与 GEO、小程序、APP 与系统开发。按阶段挑，不打包推销。电话/微信 18624274046。`}
+  title="报价与交付周期一览｜锦州业务·千羽网络"
+  description={`千羽网络 ${SVC_N} 项服务一览：网站建设三档报价（500/1000/3000）、交付标准与周期、小程序与系统开发、SEO 与 GEO、企业 AI 效能提升、一人公司陪跑。价格与周期都写在页上，每项标清交付边界，按阶段挑，不打包推销。电话/微信 18624274046。`}
   canonical="https://jz.0427qy.com/prodect/"
   keywords="锦州网络公司,锦州网站建设,锦州SEO优化,锦州小程序开发,企业AI服务,一人公司"
   jsonld={ITEMLIST}
