@@ -102,9 +102,24 @@ def main():
 
     data = json.loads(Path(args.src).read_text(encoding='utf-8'))
     arts = data if isinstance(data, list) else data.get('articles', data.get('list', []))
-    jz = [a for a in arts if a.get('city') == '锦州']
+
+    # ⚠️ 2026-10-27 修：必须过滤 blocked。
+    # 原实现只有 city 过滤，导致主站每封禁一篇，子站就把它照发出去（seo_check 的 T4
+    # "子站正在发布主站已封稿" 就是这条漏的）。当晚 23:49–23:51 三分钟内发生了两次
+    # "主站封稿 → 人工去子站删数据" 的手工同步，说明这不是理论风险而是持续复发。
+    # 过滤必须放在导入这一步：子站 news.js 的条目字段里没有 blocked，
+    # 输出后再筛是筛不出来的（字段在这一步就丢了）。
+    jz_all = [a for a in arts if a.get('city') == '锦州']
+    jz = [a for a in jz_all if not a.get('blocked')]
+    excluded_blocked = [a for a in jz_all if a.get('blocked')]
     if not jz:
         raise SystemExit('未找到 city=锦州 的文章')
+
+    # 断言：产物里不允许出现任何主站已封禁的 slug（防以后有人改动这段逻辑）
+    blocked_slugs = {a.get('slug') for a in arts if a.get('blocked')}
+    leaked = {a.get('slug') for a in jz} & blocked_slugs
+    if leaked:
+        raise SystemExit(f'✗ 导入结果里出现主站已封禁文章，拒绝写出：{sorted(leaked)}')
 
     entries = []
     risk_lines = []
@@ -159,7 +174,8 @@ def main():
     report = [
         '# 锦州站文章导入质检报告（2026-10-22）',
         '',
-        f'- 导入篇数：**{len(entries)}**（主站 city=锦州 全量）',
+        f'- 导入篇数：**{len(entries)}**（主站 city=锦州 且 **未封禁**）',
+        f'- 已排除主站封禁稿：**{len(excluded_blocked)}** 篇（不生成页面）',
         f'- 路径：与主站一致 `/news/industry/<slug>.html`',
         f'- 清洗：删 `<img>` 占位图（alt 关键词堆砌）、删「【服务热线】本页关键词」模板头、删文末「服务热线/转载注明来源」站群尾巴',
         f'- **硬线删句：共 {deleted_count} 处**（编造千羽客户业绩、虚构具名人物——左总既定边界「不编造案例与数据」）',
@@ -175,6 +191,10 @@ def main():
     Path(args.report).write_text('\n'.join(report + risk_lines), encoding='utf-8')
 
     print(f'导入 {len(entries)} 篇 → {args.out}')
+    print(f'已排除主站封禁稿 {len(excluded_blocked)} 篇')
+    if excluded_blocked:
+        for a in excluded_blocked:
+            print(f'  - 跳过（blocked）{a.get("slug")}  {(a.get("title") or "")[:30]}')
     print(f'质检报告 → {args.report}')
     print(f'硬线删句 {deleted_count} 处；涉及篇章 {total_hit} 篇')
 
