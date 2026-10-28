@@ -18,3 +18,5 @@ web/src/data/*.tmp
 Thumbs.db
 *.log
 tools/__pycache__/
+
+tools/backup/*.xml
