@@ -116,6 +116,8 @@ def main():
         raise SystemExit('未找到 city=锦州 的文章')
 
     # 断言：产物里不允许出现任何主站已封禁的 slug（防以后有人改动这段逻辑）
+    # 用 raise 而不是 assert：assert 在 python -O / PYTHONOPTIMIZE=1 下会被整条剥离，
+    # 防泄漏属于 fail-closed 逻辑，不能挂在"运行者不传 -O"这个假设上。
     blocked_slugs = {a.get('slug') for a in arts if a.get('blocked')}
     leaked = {a.get('slug') for a in jz} & blocked_slugs
     if leaked:

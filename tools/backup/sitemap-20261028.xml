@@ -415,13 +415,6 @@ xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">
 <priority>0.6</priority>
 </url>
 <url>
-<loc>https://jz.0427qy.com/news/industry/Jinzhou-WebPromoMiniApp-4902.html</loc>
-<mobile:mobile type="pc,mobile"/>
-<lastmod>2026-10-25</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
 <loc>https://jz.0427qy.com/news/industry/Jinzhou-WebRankSysDev-8372.html</loc>
 <mobile:mobile type="pc,mobile"/>
 <lastmod>2026-10-25</lastmod>

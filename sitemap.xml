@@ -184,20 +184,6 @@ xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">
 <priority>0.6</priority>
 </url>
 <url>
-<loc>https://jz.0427qy.com/news/industry/17472300412546.html</loc>
-<mobile:mobile type="pc,mobile"/>
-<lastmod>2026-10-25</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://jz.0427qy.com/news/industry/17472302182547.html</loc>
-<mobile:mobile type="pc,mobile"/>
-<lastmod>2026-10-25</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
 <loc>https://jz.0427qy.com/news/industry/17812509662696.html</loc>
 <mobile:mobile type="pc,mobile"/>
 <lastmod>2026-10-25</lastmod>
@@ -206,20 +192,6 @@ xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">
 </url>
 <url>
 <loc>https://jz.0427qy.com/news/industry/17814363102708.html</loc>
-<mobile:mobile type="pc,mobile"/>
-<lastmod>2026-10-25</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://jz.0427qy.com/news/industry/17828898012716.html</loc>
-<mobile:mobile type="pc,mobile"/>
-<lastmod>2026-10-25</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://jz.0427qy.com/news/industry/17830431182723.html</loc>
 <mobile:mobile type="pc,mobile"/>
 <lastmod>2026-10-25</lastmod>
 <changefreq>daily</changefreq>
@@ -304,13 +276,6 @@ xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">
 </url>
 <url>
 <loc>https://jz.0427qy.com/news/industry/5fed8309f69a8c4c9bbec3b85e0fe47d.html</loc>
-<mobile:mobile type="pc,mobile"/>
-<lastmod>2026-10-25</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://jz.0427qy.com/news/industry/6b921d89f7073696fbf69cc7261834f7.html</loc>
 <mobile:mobile type="pc,mobile"/>
 <lastmod>2026-10-25</lastmod>
 <changefreq>daily</changefreq>
