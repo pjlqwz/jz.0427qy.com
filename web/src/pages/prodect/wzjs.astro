@@ -57,6 +57,25 @@ const FLOW = [
         ))}
       </div>
 
+      <!-- 锦州本地交付方式 -->
+      <div class="local-block">
+        <div class="sec-head">
+          <span class="kicker">锦州项目怎么落地</span>
+          <h2>现场对接怎么安排，档位怎么定</h2>
+        </div>
+        <div class="local-grid">
+          <div class="local-card">
+            <h3>现场对接分三步</h3>
+            <p>团队在盘锦，锦州是主要服务城市，公路里程约 101 公里，所以锦州项目按「线上先对齐、线下集中到场」推进，不让客户陪着来回折腾。第一步线上开会，把现有材料、要解决的问题、目标客户过一遍，列成清单；第二步到场只看需要看的东西——车间、台账、报价流程，不做参观式走场；第三步现场记的问题当天整理成文字，双方确认后再动手。第一轮沟通就能把需求问清的，很多项目后面不再需要人到场。</p>
+          </div>
+          <div class="local-card">
+            <h3>为什么档位在锦州会有差别</h3>
+            <p>锦州工业以中小企业集群为主，太和区特种合金集群是工信部认定的国家级中小企业特色产业集群，这类企业多是多品种、小批量，官网真正要解决的是「产品参数能被采购查到、能下单」，不是品牌故事。所以三档里成品建站在锦州适配面最广，先把产品目录、参数表和联系方式立起来往往就够用；档位往上走的需求，通常出现在牌号规格多、要做英文版面向外贸客户的冶金新材料与光伏配套企业，以及需要把经销订货、批次查询放进同一个系统的食品加工与农产品企业——这些场景才需要定制化栏目和自定义流程。</p>
+          </div>
+        </div>
+        <p class="local-note">具体档位和报价按工作量算，我们不按城市定价。谈的时候先把要做的页面清单和功能点列清楚，再给档位建议，避免拍脑袋选一个用不上的。</p>
+      </div>
+
       <!-- 合作流程 -->
       <div class="flow-block">
         <div class="sec-head">
@@ -126,6 +145,13 @@ const FLOW = [
   .tier-fit { font-size: 12.5px; color: var(--ink-3); }
   .tier-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; flex: 1; }
   .flow-block { margin-bottom: 64px; }
+  /* 锦州本地交付方式 */
+  .local-block { margin-bottom: 64px; }
+  .local-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .local-card { background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px; padding: 26px; }
+  .local-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 10px; color: var(--ink); }
+  .local-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.85; }
+  .local-note { font-size: 13px; color: var(--ink-3); margin: 14px 0 0; line-height: 1.8; }
   .flow-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
   .flow-list li {
     display: flex; gap: 16px; align-items: flex-start; background: var(--bg-warm);
@@ -150,6 +176,7 @@ const FLOW = [
   .sibling a { color: var(--brand); text-decoration: underline; }
   @media (max-width: 900px) {
     .tier-grid { grid-template-columns: 1fr; }
+    .local-grid { grid-template-columns: 1fr; }
     .cross-cta { flex-direction: column; align-items: flex-start; padding: 28px; }
     .cross-actions { flex-direction: row; }
   }

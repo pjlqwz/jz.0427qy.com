@@ -42,6 +42,24 @@ const PRINCIPLES = [
         ))}
       </div>
 
+      <!-- 锦州本地推广约束 -->
+      <div class="local-block">
+        <div class="sec-head">
+          <span class="kicker">在锦州做推广的实际情况</span>
+          <h2>辽西这个词，词的层次和别的城市不一样</h2>
+        </div>
+        <div class="local-grid">
+          <div class="local-card">
+            <h3>服务半径决定词的层次</h3>
+            <p>锦州下辖北镇、凌海两个县级市和黑山、义县两个县，城区之外还有大片县域地带。做锦州的 SEO，第一层是「锦州 + 行业 + 服务」这类直接找供应商的词，需求量集中在城区；第二层是「北镇做网站」「义县小程序」这种带县名的词，需求量小但意图更准，客户通常就在当地找服务商；第三层是围绕本地产业形态的问答型内容，比如「合金企业炉号怎么追溯」「光伏功率分档怎么分档入库」——这类词单量不大，但搜进来的人带着具体问题，内容对上了，成交质量比抢泛词高得多。</p>
+          </div>
+          <div class="local-card">
+            <h3>本地长尾词的三个特点</h3>
+            <p>一是词更口语、更多用「做」和「多少钱」，写内容时要像当地人说话，不要整段书面语；二是同一个行业在锦州能列出好几家同名企业，内容里必须把服务范围、响应方式和交付方式写清楚，否则搜索引擎分不出该推谁；三是县域搜索会带地名，「北镇葡萄电商怎么起步」这类词的意图往往指向具体产业而不是泛行业，答行业通用问题等于没答。我们的做法是从客户真实问法倒推选题，不从关键词工具的词量倒推。</p>
+          </div>
+        </div>
+      </div>
+
       <!-- 三条原则 -->
       <div class="principle-block">
         <div class="sec-head">
@@ -92,7 +110,7 @@ const PRINCIPLES = [
           </li>
         </ol>
         <p class="geo-note">
-          <b>边界说在前面：</b>GEO 没有官方排名查询工具，效果没法像关键词排名那样一眼查出来。我们能给的验证方式是——每月固定一组问题（比如「盘锦做企业官网哪家靠谱」「盘锦小程序开发怎么选」），在主流 AI 里各问一遍，记录有没有提到你、说的是不是事实。这份记录你可以自己去复核，不是我们自己编的分数。
+          <b>边界说在前面：</b>GEO 没有官方排名查询工具，效果没法像关键词排名那样一眼查出来。我们能给的验证方式是——每月固定一组问题（比如「锦州做企业官网哪家靠谱」「锦州小程序开发怎么选」），在主流 AI 里各问一遍，记录有没有提到你、说的是不是事实。这份记录你可以自己去复核，不是我们自己编的分数。
         </p>
       </div>
 
@@ -125,6 +143,12 @@ const PRINCIPLES = [
   .svc-card h2 { font-size: 18px; font-weight: 700; margin: 0 0 10px; }
   .svc-card p { font-size: 14px; color: var(--ink-2); margin: 0; }
   .principle-block { margin-bottom: 64px; }
+  /* 锦州本地推广约束 */
+  .local-block { margin-bottom: 64px; }
+  .local-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .local-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 26px; }
+  .local-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 10px; color: var(--ink); }
+  .local-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.85; }
   .principle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .principle-card { background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
   .principle-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 8px; }
@@ -166,6 +190,7 @@ const PRINCIPLES = [
   @media (max-width: 900px) {
     .svc-grid { grid-template-columns: 1fr; }
     .principle-grid { grid-template-columns: 1fr; }
+    .local-grid { grid-template-columns: 1fr; }
     .evidence { padding: 28px; }
     .geo-block { padding: 26px 20px 22px; }
     .geo-list { grid-template-columns: 1fr; }

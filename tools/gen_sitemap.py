@@ -28,7 +28,7 @@ import os
 import re
 import shutil
 import sys
-from datetime import date
+from datetime import date, datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "web", "src", "data", "articles.json")
@@ -131,7 +131,9 @@ def main():
 
     if os.path.exists(SITEMAP):
         os.makedirs(BACKUP_DIR, exist_ok=True)
-        bak = os.path.join(BACKUP_DIR, f"sitemap-{TODAY.replace('-', '')}.xml")
+        # 同一天多次跑时用时分秒区分，否则第二次会覆盖第一次的备份
+        stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        bak = os.path.join(BACKUP_DIR, f"sitemap-{stamp}.xml")
         shutil.copy2(SITEMAP, bak)
         print(f"原文件已备份: tools/backup/{os.path.basename(bak)}")
 

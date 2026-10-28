@@ -43,7 +43,7 @@ const CYCLES = [
       </div>
 
       <!-- 能力展厅入口 -->
-      <a class="demo-band" href="/wx/">
+      <a class="demo-band" href="https://www.0427qy.com/wx/">
         <div class="demo-band-tx">
           <span class="kicker">能力展厅</span>
           <h2>15 个功能，现在就点给你看</h2>
@@ -51,6 +51,24 @@ const CYCLES = [
         </div>
         <span class="demo-band-go">进入展厅 →</span>
       </a>
+
+      <!-- 锦州本地小程序场景 -->
+      <div class="local-block">
+        <div class="sec-head">
+          <span class="kicker">锦州企业做小程序，常见是这几件事</span>
+          <h2>先看产业，再定要哪些功能</h2>
+        </div>
+        <div class="local-grid">
+          <div class="local-card">
+            <h3>工业链条上的三件常见事</h3>
+            <p>锦州做小程序的企业，多半不是要做一个电商商城，而是要解决厂里那本账：第一是巡检与隐患上报，扫点位、拍照上传、超时提醒，检查时直接导出记录；第二是质检报告自助查，客户输炉次号或批号就能下载对应报告，不用来回发邮件；第三是证照与资质的到期提醒，检测报告、许可证快过期了系统先响一声。这三件事都不需要复杂功能，但都需要后台留痕，经得起检查。</p>
+          </div>
+          <div class="local-card">
+            <h3>农业和文旅那头的场景不一样</h3>
+            <p>食品加工、农产品和文旅这条线，小程序更偏经营侧：北镇葡萄、太和水果这一带的农产品，需要的是产地直销、预售、会员和溯源；文旅则要看预约、票务和导览。锦州这几年的农产品直播电商和产地直发做得挺活跃，线上这套工具是从产地接到销地的中间一环，能顺下来，比单纯做一个展示页有用。具体的功能取舍，我们通常先把客户日常最费人的那一张表说清楚，再倒推该做哪几个模块。</p>
+          </div>
+        </div>
+      </div>
 
       <!-- 开发周期 -->
       <div class="cycle-block">
@@ -135,6 +153,12 @@ const CYCLES = [
   }
   .demo-band:hover .demo-band-go { background: var(--brand-deep); }
   .cycle-block { margin-bottom: 48px; }
+  /* 锦州本地小程序场景 */
+  .local-block { margin-bottom: 64px; }
+  .local-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .local-card { background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px; padding: 26px; }
+  .local-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 10px; color: var(--ink); }
+  .local-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.85; }
   .cycle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .cycle-card {
     background: var(--bg-warm); border: 1px solid var(--line); border-radius: 12px; padding: 24px;
@@ -163,6 +187,7 @@ const CYCLES = [
   @media (max-width: 900px) {
     .scope-grid { grid-template-columns: 1fr; }
     .cycle-grid { grid-template-columns: 1fr; }
+    .local-grid { grid-template-columns: 1fr; }
     .demo-band { flex-direction: column; align-items: flex-start; gap: 16px; padding: 22px; }
     .cross-cta { flex-direction: column; align-items: flex-start; padding: 28px; }
     .cross-actions { flex-direction: row; }

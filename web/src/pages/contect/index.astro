@@ -82,6 +82,23 @@ import { TEL } from '../../data/cases.js';
         </div>
       </div>
 
+      <!-- 服务范围与上门安排 -->
+      <h2 class="block-title">服务范围与上门安排</h2>
+      <div class="serve-grid">
+        <div class="serve-card">
+          <h3>我们在哪</h3>
+          <p>团队在盘锦，锦州是主要服务城市。盘锦到锦州的公路里程约 101 公里，高速直达，不绕路。</p>
+        </div>
+        <div class="serve-card">
+          <h3>哪些能到现场</h3>
+          <p>辽宁省内可以到业务现场；外省以远程方式为主，确实需要时按项目出差。线上咨询全国都接——先在线上把情况聊清楚，再决定要不要见面。</p>
+        </div>
+        <div class="serve-card">
+          <h3>怎么约</h3>
+          <p>工作日可预约。预约时先说清两件事：想看的是哪一段流程、要看哪几张单据（或哪个系统），我们好安排对应的人，不用来了再换人。</p>
+        </div>
+      </div>
+
       <!-- 咨询说明 -->
       <h2 class="block-title">咨询前想清楚这三件事</h2>
       <div class="notice-strip">
@@ -142,5 +159,15 @@ import { TEL } from '../../data/cases.js';
     border-radius: 12px; padding: 18px 24px; font-size: 13.5px; color: oklch(0.40 0.06 90);
   }
   .notice-strip b { color: oklch(0.35 0.07 90); }
-  @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+
+  /* 服务范围与上门安排 */
+  .serve-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+  .serve-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+  .serve-card h3 { font-size: 16px; font-weight: 700; margin: 0 0 10px; color: var(--ink); }
+  .serve-card p { font-size: 13.5px; color: var(--ink-2); margin: 0; line-height: 1.8; }
+
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; }
+    .serve-grid { grid-template-columns: 1fr; }
+  }
 </style>
