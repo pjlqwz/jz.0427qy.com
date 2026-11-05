@@ -3,14 +3,14 @@
 // 路径与主站保持一致：/news/industry/<id>.html（左总 2026-10-22 要求「复制回来、保持路径相同」）
 import Base from '../../../layouts/Base.astro';
 import { SITE } from '../../../config/site.js';
-import { ARTICLES } from '../../../data/news.js';
+import { ALL_ARTICLES } from '../../../data/articles.js';
 
 export function getStaticPaths() {
-  return ARTICLES.map((entry) => ({ params: { id: entry.slug }, props: { entry } }));
+  return ALL_ARTICLES.map((entry) => ({ params: { id: entry.slug }, props: { entry } }));
 }
 
 const { entry } = Astro.props;
-const others = ARTICLES.filter((x) => x.slug !== entry.slug).slice(0, 6);
+const others = ALL_ARTICLES.filter((x) => x.slug !== entry.slug).slice(0, 6);
 const jsonld = {
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -75,6 +75,10 @@ const jsonld = {
   .art-body :global(h2) {
     font-size: 19px; font-weight: 700; letter-spacing: -0.01em;
     margin: var(--s4) 0 var(--s2); padding-left: 11px; border-left: 3px solid var(--brand);
+  }
+  .art-body :global(h3) {
+    font-size: 17px; font-weight: 700; letter-spacing: -0.005em;
+    margin: var(--s3) 0 var(--s2);
   }
   .art-body :global(p) { font-size: 15.5px; line-height: 1.95; color: var(--ink-2); margin: 0 0 var(--s3); }
   .cta-box {

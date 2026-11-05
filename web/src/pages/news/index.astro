@@ -2,7 +2,7 @@
 // 锦州站资讯列表：文章从主站导入（city=锦州，路径与主站一致 /news/industry/<id>.html）
 import Base from '../../layouts/Base.astro';
 import { SITE } from '../../config/site.js';
-import { ARTICLES } from '../../data/news.js';
+import { ALL_ARTICLES } from '../../data/articles.js';
 
 const cut = (s, n) => (s.length > n ? s.slice(0, n) + '…' : s);
 ---
@@ -23,7 +23,7 @@ const cut = (s, n) => (s.length > n ? s.slice(0, n) + '…' : s);
     </p>
 
     <ul class="news-list">
-      {ARTICLES.map((a) => (
+      {ALL_ARTICLES.map((a) => (
         <li class="news-item">
           <a href={`/news/industry/${a.slug}.html`}>
             <h2>{a.title}</h2>

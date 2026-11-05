@@ -95,6 +95,36 @@ def indexable_from_dist():
     return out, excluded
 
 
+def changed_paths():
+    """哪些静态页的内容真的变了 —— 比对构建产物与仓库根已发布版本。
+
+    仓库根 = 线上产物根（EdgeOne 直取）。所以「仓库根里有没有这个文件、内容
+    是否与 dist 一致」就是判断「这一页这次是否真的改了」的可靠依据。
+
+    为什么要这个：静态页的 lastmod 以前硬编码 TODAY，等于每次跑 gen_sitemap
+    就把全站静态页标成「今天改的」，搜索引擎会以为几十个页面同时变了。
+    lastmod 失真比不改更糟。
+    """
+    changed = set()
+    for root, _dirs, files in os.walk(DIST):
+        for f in files:
+            if not f.endswith(".html"):
+                continue
+            full = os.path.join(root, f)
+            rel = os.path.relpath(full, DIST).replace(os.sep, "/")
+            published = os.path.join(ROOT, rel)
+            if not os.path.exists(published):
+                changed.add(rel)
+                continue
+            try:
+                with open(full, "rb") as a, open(published, "rb") as b:
+                    if a.read() != b.read():
+                        changed.add(rel)
+            except OSError:
+                changed.add(rel)
+    return changed
+
+
 def main():
     dry = "--dry-run" in sys.argv
     if not os.path.isdir(DIST):
@@ -112,10 +142,14 @@ def main():
     help_ = [p for p in paths if p.startswith(HELP_PREFIX)]
     static = [p for p in paths if p not in news and p not in help_]
 
+    changed = changed_paths()
+
     old_mod = parse_old_lastmod()
     entries = []  # (path, lastmod, changefreq, priority)
     for path in static:
-        entries.append((path, TODAY, "weekly", PRIORITY.get(path, "0.8")))
+        # 静态页：内容真变了才更新 lastmod，否则沿用旧的（避免 lastmod 失真）
+        mod = TODAY if path in changed else old_mod.get(path, TODAY)
+        entries.append((path, mod, "weekly", PRIORITY.get(path, "0.8")))
     for path in news + help_:
         entries.append((path, old_mod.get(path, TODAY), "daily", "0.6"))
 
@@ -124,6 +158,12 @@ def main():
     print(f"合计: {len(entries)} 条")
     inherited = sum(1 for p, *_ in entries if p in old_mod)
     print(f"继承原 lastmod: {inherited} 条；新页用今天({TODAY}): {len(entries) - inherited} 条")
+    static_changed = [p for p in static if p in changed]
+    print(f"静态页内容真变更 {len(static_changed)} 个 → lastmod 刷今天"
+          f"（其余 {len(static) - len(static_changed)} 个沿用旧值）")
+    if static_changed and len(static_changed) <= 12:
+        for p in static_changed:
+            print("   变更:", p)
 
     if dry:
         print("dry-run，不写文件")
